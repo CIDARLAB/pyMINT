@@ -115,7 +115,7 @@ nodeStat
     ;
 
 channelStat
-    :   'CHANNEL' ufname 'from' source=uftarget 'to' sink=uftarget paramsStat ';'
+    :   entity ufname 'from' source=uftarget 'to' sink=uftarget paramsStat ';'
     ;
 
 netStat
@@ -134,6 +134,11 @@ entity_element
 
 paramsStat
     :   paramStat*
+    ;
+
+connectionParamStat
+    :   lengthParam
+    |   paramsStat
     ;
 
 paramStat
