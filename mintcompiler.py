@@ -1,6 +1,6 @@
-from mintdevice import MINTDevice
-from antlr.mintListener import mintListener
-from antlr.mintParser import mintParser
+from .mintdevice import MINTDevice
+from .antlr.mintListener import mintListener
+from .antlr.mintParser import mintParser
 
 class MINTCompiler(mintListener):
 

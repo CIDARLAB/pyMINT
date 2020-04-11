@@ -1,4 +1,4 @@
-from mint.mintparams import MINTParams
+from .mintparams import MINTParams
 from pyparchmint.component import Component
 
 class MINTComponent(Component):

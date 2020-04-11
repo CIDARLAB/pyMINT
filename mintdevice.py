@@ -1,6 +1,6 @@
 from pyparchmint.device import Device
-from mint.mintcomponent import MINTComponent
-from mint.mintconnection import MINTConnection
+from .mintcomponent import MINTComponent
+from .mintconnection import MINTConnection
 
 
 class MINTDevice(Device):

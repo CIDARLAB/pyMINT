@@ -1,4 +1,3 @@
-from pyparchmint.port import Port
 from pyparchmint.target import Target
 
 
