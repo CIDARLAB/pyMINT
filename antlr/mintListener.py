@@ -1,4 +1,4 @@
-# Generated from /Users/krishna/CIDAR/pyLFR/mint.g4 by ANTLR 4.7.2
+# Generated from /Users/krishna/CIDAR/pyFluigi/pyMINT/mint.g4 by ANTLR 4.7.2
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .mintParser import mintParser
@@ -239,6 +239,15 @@ class mintListener(ParseTreeListener):
 
     # Exit a parse tree produced by mintParser#paramsStat.
     def exitParamsStat(self, ctx:mintParser.ParamsStatContext):
+        pass
+
+
+    # Enter a parse tree produced by mintParser#connectionParamStat.
+    def enterConnectionParamStat(self, ctx:mintParser.ConnectionParamStatContext):
+        pass
+
+    # Exit a parse tree produced by mintParser#connectionParamStat.
+    def exitConnectionParamStat(self, ctx:mintParser.ConnectionParamStatContext):
         pass
 
 

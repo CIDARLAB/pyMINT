@@ -115,11 +115,11 @@ nodeStat
     ;
 
 channelStat
-    :   entity ufname 'from' source=uftarget 'to' sink=uftarget paramsStat ';'
+    :   (entity|'CHANNEL') ufname 'from' source=uftarget 'to' sink=uftarget paramsStat ';'
     ;
 
 netStat
-    :   'NET' ufname 'from' source=uftarget 'to' sinks=uftargets paramsStat ';'
+    :   (entity|'NET') ufname 'from' source=uftarget 'to' sinks=uftargets paramsStat ';'
     ;
 
 //Common Parser Rules
@@ -162,9 +162,9 @@ boolParam
     ;
 
 widthParam
-    :   'width' '=' value
-    |   'w' '=' value
-    |   'channelWidth' '=' value
+    :   key='width' '=' value
+    |   key='w' '=' value
+    |   key='channelWidth' '=' value
     ;
 
 verticalDirectionParam

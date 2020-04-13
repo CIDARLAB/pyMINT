@@ -3,7 +3,7 @@ from pyparchmint.target import Target
 
 class MINTTarget(Target):
     def __init__(self, componentstring:str, portstring:str = None ) -> None:
-        super().__init__()
+        super().__init__(None)
         self.component = componentstring
         self.port = portstring
 

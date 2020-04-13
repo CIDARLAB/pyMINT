@@ -4,7 +4,7 @@ from .minttarget import MINTTarget
 
 class MINTConnection(Connection):
 
-    def __init__(self, name: str, technology: str, params:dict, source: MINTTarget, sinks: [MINTTarget]) -> None:
+    def __init__(self, name: str, technology: str, params:dict, source: MINTTarget, sinks: [MINTTarget], layer:str = '0') -> None:
         
         self.name = name
         self.ID = name
@@ -12,6 +12,7 @@ class MINTConnection(Connection):
         self.params = MINTParams(params)
         self.source = source
         self.sinks = sinks
+        self.layer = layer
 
 
     def toMINT(self) -> str:
