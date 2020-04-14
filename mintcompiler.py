@@ -80,7 +80,6 @@ class MINTCompiler(mintListener):
         #Loop for each of the components that need to be created with this param
         for ufname in ctx.ufnames().ufname():
             self.currentdevice.addComponent(ufname.getText(), entity, self.current_params, str(self.current_layer_id))
-
     
     def exitChannelStat(self, ctx: mintParser.ChannelStatContext):
         entity = self.current_entity
@@ -90,13 +89,19 @@ class MINTCompiler(mintListener):
 
         source_target = ctx.uftarget()[0]
         source_id = source_target.ID().getText()
-        source_port = source_target.INT().getText()
+        if source_target.INT():
+            source_port = source_target.INT().getText()
+        else:
+            source_port = None
 
         source_uftarget = MINTTarget(source_id, source_port)
 
-        sink_target = ctx.uftarget()[0]
+        sink_target = ctx.uftarget()[1]
         sink_id = sink_target.ID().getText()
-        sink_port = sink_target.INT().getText()
+        if sink_target.INT():
+            sink_port = sink_target.INT().getText()
+        else:
+            sink_port = None
 
         sink_uftarget = MINTTarget(sink_id, sink_port)
         
@@ -112,7 +117,12 @@ class MINTCompiler(mintListener):
         
         source_target = ctx.uftarget()
         source_id = source_target.ID().getText()
-        source_port = source_target.INT().getText()
+        if source_target.INT():
+            source_port = source_target.INT().getText()
+        else:
+            source_port = None
+
+
 
         source_uftarget = MINTTarget(source_id, source_port)
 
@@ -121,7 +131,12 @@ class MINTCompiler(mintListener):
         for sink_target in ctx.uftargets().uftarget():
             sink_target = ctx.uftarget()[0]
             sink_id = sink_target.ID().getText()
-            sink_port = sink_target.INT().getText()
+            if sink_target.INT():
+                sink_port = sink_target.INT().getText()
+            else:
+                sink_port = None
+
+
 
             sink_uftargets.append(MINTTarget(sink_id, sink_port))
 
