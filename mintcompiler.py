@@ -141,6 +141,30 @@ class MINTCompiler(mintListener):
 
         self.currentdevice.addConnection(connection_name, entity, self.current_params, source_uftarget, sink_uftargets, str(self.current_layer_id))
 
+    def exitBankStat(self, ctx: mintParser.BankStatContext):
+        raise Exception("Note implemented")
+
+    def exitSpanStat(self, ctx: mintParser.SpanStatContext):
+        raise Exception("Not Implemented")
+
+    def exitGridStat(self, ctx: mintParser.GridStatContext):
+        raise Exception("Not Implemented")
+
+    def exitNodeStat(self, ctx: mintParser.NodeStatContext):
+        raise Exception("Not Implemented")
+
+    def exitValveStat(self, ctx: mintParser.ValveStatContext):
+        raise Exception("Not Implemented")
+
+    def enterOrientation(self, ctx: mintParser.OrientationContext):
+        #TODO: We need to apply the layout constriant
+        raise Exception("Not Implemented")
+
+    def enterViaStat(self, ctx:mintParser.ViaStatContext):
+        raise Exception("Not Implemented")
+
+    def enterTerminalStat(self, ctx:mintParser.TerminalStatContext):
+        raise Exception("Not Implemented")
     
     def exitNetlist(self, ctx: mintParser.NetlistContext):
         self.currentdevice.generateNetwork()

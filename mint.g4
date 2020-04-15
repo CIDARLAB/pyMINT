@@ -63,7 +63,7 @@ integrationBlock
 
 flowStat
     :   primitiveStat
-    |   primitiveWithOrientationConstraintStat
+    // |   primitiveWithOrientationConstraintStat
     |   nodeStat
     |   channelStat
     |   netStat
@@ -72,6 +72,10 @@ flowStat
     |   spanStat
     |   viaStat
     |   positionConstraintStat
+    |   gridStat
+    |   gridGenStat
+    |   bankStat
+    |   terminalStat
     ;
 
 controlStat
@@ -79,10 +83,14 @@ controlStat
     |   channelStat
     |   netStat
     |   bankGenStat
+    |   bankStat
+    |   gridStat
+    |   gridGenStat
     |   primitiveStat
     |   nodeStat
     |   viaStat
     |   positionConstraintStat
+    |   terminalStat
     ;
 
 integrationStat
@@ -116,9 +124,9 @@ spanStat
     :   entity ufnames  indim=INT 'to' outdim=INT paramsStat ';'
     ;
 
-primitiveWithOrientationConstraintStat
-    :   orientation ( bankGenStat | spanStat | primitiveStat )
-    ;
+//primitiveWithOrientationConstraintStat
+//    :   orientation ( bankGenStat | spanStat | primitiveStat )
+//    ;
 
 valveStat
     :   valve_entity=('VALVE'|'3DVALVE') ufname 'on' ufname paramsStat ';'
@@ -130,6 +138,10 @@ nodeStat
 
 viaStat
     :   'VIA' ufnames ';'
+    ;
+
+terminalStat
+    :   'TERMINAL' ufname pin=INT ';'
     ;
 
 channelStat

@@ -109,11 +109,6 @@ class mintVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by mintParser#primitiveWithOrientationConstraintStat.
-    def visitPrimitiveWithOrientationConstraintStat(self, ctx:mintParser.PrimitiveWithOrientationConstraintStatContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by mintParser#valveStat.
     def visitValveStat(self, ctx:mintParser.ValveStatContext):
         return self.visitChildren(ctx)
@@ -126,6 +121,11 @@ class mintVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by mintParser#viaStat.
     def visitViaStat(self, ctx:mintParser.ViaStatContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by mintParser#terminalStat.
+    def visitTerminalStat(self, ctx:mintParser.TerminalStatContext):
         return self.visitChildren(ctx)
 
 

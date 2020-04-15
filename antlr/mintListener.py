@@ -188,15 +188,6 @@ class mintListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by mintParser#primitiveWithOrientationConstraintStat.
-    def enterPrimitiveWithOrientationConstraintStat(self, ctx:mintParser.PrimitiveWithOrientationConstraintStatContext):
-        pass
-
-    # Exit a parse tree produced by mintParser#primitiveWithOrientationConstraintStat.
-    def exitPrimitiveWithOrientationConstraintStat(self, ctx:mintParser.PrimitiveWithOrientationConstraintStatContext):
-        pass
-
-
     # Enter a parse tree produced by mintParser#valveStat.
     def enterValveStat(self, ctx:mintParser.ValveStatContext):
         pass
@@ -221,6 +212,15 @@ class mintListener(ParseTreeListener):
 
     # Exit a parse tree produced by mintParser#viaStat.
     def exitViaStat(self, ctx:mintParser.ViaStatContext):
+        pass
+
+
+    # Enter a parse tree produced by mintParser#terminalStat.
+    def enterTerminalStat(self, ctx:mintParser.TerminalStatContext):
+        pass
+
+    # Exit a parse tree produced by mintParser#terminalStat.
+    def exitTerminalStat(self, ctx:mintParser.TerminalStatContext):
         pass
 
 
