@@ -113,7 +113,7 @@ class MINTCompiler(mintListener):
         if entity is None:
             entity = 'NET'
         
-        connection_name = ctx.ufname.getText()
+        connection_name = ctx.ufname().getText()
         
         source_target = ctx.uftarget()
         source_id = source_target.ID().getText()
@@ -129,7 +129,6 @@ class MINTCompiler(mintListener):
         sink_uftargets = []
 
         for sink_target in ctx.uftargets().uftarget():
-            sink_target = ctx.uftarget()[0]
             sink_id = sink_target.ID().getText()
             if sink_target.INT():
                 sink_port = sink_target.INT().getText()

@@ -1,4 +1,4 @@
-# Generated from /Users/krishna/CIDAR/pyFluigi/pyMINT/mint.g4 by ANTLR 4.7.2
+# Generated from /Users/krishna/CIDAR/pyFluigi/pyMINT/mint.g4 by ANTLR 4.8
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .mintParser import mintParser
@@ -143,12 +143,30 @@ class mintListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by mintParser#bankGenStat.
+    def enterBankGenStat(self, ctx:mintParser.BankGenStatContext):
+        pass
+
+    # Exit a parse tree produced by mintParser#bankGenStat.
+    def exitBankGenStat(self, ctx:mintParser.BankGenStatContext):
+        pass
+
+
     # Enter a parse tree produced by mintParser#bankStat.
     def enterBankStat(self, ctx:mintParser.BankStatContext):
         pass
 
     # Exit a parse tree produced by mintParser#bankStat.
     def exitBankStat(self, ctx:mintParser.BankStatContext):
+        pass
+
+
+    # Enter a parse tree produced by mintParser#gridGenStat.
+    def enterGridGenStat(self, ctx:mintParser.GridGenStatContext):
+        pass
+
+    # Exit a parse tree produced by mintParser#gridGenStat.
+    def exitGridGenStat(self, ctx:mintParser.GridGenStatContext):
         pass
 
 
@@ -194,6 +212,15 @@ class mintListener(ParseTreeListener):
 
     # Exit a parse tree produced by mintParser#nodeStat.
     def exitNodeStat(self, ctx:mintParser.NodeStatContext):
+        pass
+
+
+    # Enter a parse tree produced by mintParser#viaStat.
+    def enterViaStat(self, ctx:mintParser.ViaStatContext):
+        pass
+
+    # Exit a parse tree produced by mintParser#viaStat.
+    def exitViaStat(self, ctx:mintParser.ViaStatContext):
         pass
 
 
@@ -404,6 +431,24 @@ class mintListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by mintParser#positionConstraintStat.
+    def enterPositionConstraintStat(self, ctx:mintParser.PositionConstraintStatContext):
+        pass
+
+    # Exit a parse tree produced by mintParser#positionConstraintStat.
+    def exitPositionConstraintStat(self, ctx:mintParser.PositionConstraintStatContext):
+        pass
+
+
+    # Enter a parse tree produced by mintParser#setCoordinate.
+    def enterSetCoordinate(self, ctx:mintParser.SetCoordinateContext):
+        pass
+
+    # Exit a parse tree produced by mintParser#setCoordinate.
+    def exitSetCoordinate(self, ctx:mintParser.SetCoordinateContext):
+        pass
+
+
     # Enter a parse tree produced by mintParser#orientation.
     def enterOrientation(self, ctx:mintParser.OrientationContext):
         pass
@@ -413,3 +458,5 @@ class mintListener(ParseTreeListener):
         pass
 
 
+
+del mintParser

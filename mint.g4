@@ -67,21 +67,27 @@ flowStat
     |   nodeStat
     |   channelStat
     |   netStat
-    |   bankStat
+    |   bankGenStat
     |   gridStat
     |   spanStat
+    |   viaStat
+    |   positionConstraintStat
     ;
 
 controlStat
     :   valveStat
     |   channelStat
     |   netStat
-    |   bankStat
+    |   bankGenStat
     |   primitiveStat
+    |   nodeStat
+    |   viaStat
+    |   positionConstraintStat
     ;
 
 integrationStat
     :   primitiveStat
+    |   positionConstraintStat
     ;
 
 //Flow and Control Statements
@@ -90,12 +96,20 @@ primitiveStat
     :   entity ufnames paramsStat ';'
     ;
 
+bankGenStat
+    :   orientation? 'BANK' ufname 'of' dim=INT entity paramsStat ';'
+    ;
+
 bankStat
-    :   'BANK' ufnames 'of' dim=INT entity paramsStat ';'
+    :   orientation? 'BANK' ufnames 'of' dim=INT entity paramsStat ';'
+    ;
+
+gridGenStat
+    :   orientation? 'GRID' ufnames 'of' xdim=INT ',' ydim=INT paramsStat ';'
     ;
 
 gridStat
-    :   'GRID' ufnames 'of' xdim=INT ',' ydim=INT paramsStat ';'
+    :   orientation? 'GRID' ufname 'of' xdim=INT ',' ydim=INT paramsStat ';'
     ;
 
 spanStat
@@ -103,7 +117,7 @@ spanStat
     ;
 
 primitiveWithOrientationConstraintStat
-    :   orientation ( bankStat | spanStat | primitiveStat )
+    :   orientation ( bankGenStat | spanStat | primitiveStat )
     ;
 
 valveStat
@@ -112,6 +126,10 @@ valveStat
 
 nodeStat
     :   'NODE' ufnames ';'
+    ;
+
+viaStat
+    :   'VIA' ufnames ';'
     ;
 
 channelStat
@@ -214,6 +232,15 @@ value
 boolvalue
     :   'YES'
     |   'NO'
+    ;
+
+//Constraints
+positionConstraintStat
+    :   ufnames setCoordinate+ ';'
+    ;
+
+setCoordinate
+    :    'SET' ('X'|'Y'|'Z') INT
     ;
 
 orientation : ('V'|'H') ;
