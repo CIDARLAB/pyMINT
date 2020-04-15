@@ -10,34 +10,34 @@ class MINTCompiler(mintListener):
 
     def __init__(self):
         super().__init__()
-        self.currentdevice = None
+        self.current_device: MINTDevice
         self.current_block_id = 0
         self.current_layer_id = 0
-        self.current_entity = None
+        self.current_entity: str
         self.current_params = dict()
 
     def enterNetlist(self, ctx: mintParser.NetlistContext):
-        self.currentdevice = MINTDevice("DEFAULT_NAME")
+        self.current_device = MINTDevice("DEFAULT_NAME")
 
     
     def enterHeader(self, ctx: mintParser.HeaderContext):
-        self.currentdevice.name = ctx.device_name.text
+        self.current_device.name = ctx.device_name.text
 
     def exitLayerBlock(self, ctx: mintParser.LayerBlockContext):
         #Increement teh layer block
         self.current_block_id += 1
 
     def enterFlowBlock(self, ctx: mintParser.FlowBlockContext):
-        self.currentdevice.addLayer(str(self.current_layer_id), str(self.current_block_id), MINTLayerType.FLOW)
+        self.current_device.addLayer(str(self.current_layer_id), str(self.current_block_id), MINTLayerType.FLOW)
 
     def exitLayerBlock(self, ctx: mintParser.FlowBlockContext):
         self.current_layer_id += 1
     
     def enterControlBlock(self, ctx: mintParser.ControlBlockContext):
-        self.currentdevice.addLayer(str(self.current_layer_id), str(self.current_block_id), MINTLayerType.FLOW)
+        self.current_device.addLayer(str(self.current_layer_id), str(self.current_block_id), MINTLayerType.FLOW)
 
     def enterIntegrationBlock(self, ctx: mintParser.IntegrationBlockContext):
-        self.currentdevice.addLayer(str(self.current_layer_id), str(self.current_block_id), MINTLayerType.INTEGRATION)
+        self.current_device.addLayer(str(self.current_layer_id), str(self.current_block_id), MINTLayerType.INTEGRATION)
 
     def enterEntity(self, ctx: mintParser.EntityContext):
         self.current_entity = ctx.getText()
@@ -79,7 +79,7 @@ class MINTCompiler(mintListener):
         
         #Loop for each of the components that need to be created with this param
         for ufname in ctx.ufnames().ufname():
-            self.currentdevice.addComponent(ufname.getText(), entity, self.current_params, str(self.current_layer_id))
+            self.current_device.addComponent(ufname.getText(), entity, self.current_params, str(self.current_layer_id))
     
     def exitChannelStat(self, ctx: mintParser.ChannelStatContext):
         entity = self.current_entity
@@ -106,7 +106,7 @@ class MINTCompiler(mintListener):
         sink_uftarget = MINTTarget(sink_id, sink_port)
         
         #Create a connection between the different components in the device
-        self.currentdevice.addConnection(connection_name, entity, self.current_params, source_uftarget, [sink_uftarget], str(self.current_layer_id))
+        self.current_device.addConnection(connection_name, entity, self.current_params, source_uftarget, [sink_uftarget], str(self.current_layer_id))
 
     def exitNetStat(self, ctx: mintParser.NetStatContext):
         entity = self.current_entity
@@ -139,7 +139,7 @@ class MINTCompiler(mintListener):
 
             sink_uftargets.append(MINTTarget(sink_id, sink_port))
 
-        self.currentdevice.addConnection(connection_name, entity, self.current_params, source_uftarget, sink_uftargets, str(self.current_layer_id))
+        self.current_device.addConnection(connection_name, entity, self.current_params, source_uftarget, sink_uftargets, str(self.current_layer_id))
 
     def exitBankStat(self, ctx: mintParser.BankStatContext):
         raise Exception("Note implemented")
@@ -151,7 +151,11 @@ class MINTCompiler(mintListener):
         raise Exception("Not Implemented")
 
     def exitNodeStat(self, ctx: mintParser.NodeStatContext):
-        raise Exception("Not Implemented")
+        entity = 'NODE'
+        
+        #Loop for each of the components that need to be created with this param
+        for ufname in ctx.ufnames().ufname():
+            self.current_device.addComponent(ufname.getText(), entity, self.current_params, str(self.current_layer_id))
 
     def exitValveStat(self, ctx: mintParser.ValveStatContext):
         raise Exception("Not Implemented")
@@ -167,7 +171,7 @@ class MINTCompiler(mintListener):
         raise Exception("Not Implemented")
     
     def exitNetlist(self, ctx: mintParser.NetlistContext):
-        self.currentdevice.generateNetwork()
+        self.current_device.generateNetwork()
 
 
 
