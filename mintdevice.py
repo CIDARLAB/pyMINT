@@ -1,4 +1,4 @@
-from pyMINT.mintlayer import MINTLayer, MINTLayerType
+from .mintlayer import MINTLayer, MINTLayerType
 from pyparchmint.device import Device
 from .mintcomponent import MINTComponent
 from .mintconnection import MINTConnection

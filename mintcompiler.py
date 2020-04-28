@@ -1,10 +1,10 @@
-from pyMINT.minttarget import MINTTarget
-from pyMINT.mintcomponent import MINTComponent
+from .minttarget import MINTTarget
+from .mintcomponent import MINTComponent
 from pyparchmint.component import Component
 from .mintdevice import MINTDevice
 from .antlr.mintListener import mintListener
 from .antlr.mintParser import mintParser
-from pyMINT.mintlayer import MINTLayer, MINTLayerType
+from .mintlayer import MINTLayer, MINTLayerType
 
 class MINTCompiler(mintListener):
 
