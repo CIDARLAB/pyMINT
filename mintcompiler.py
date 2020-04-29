@@ -5,15 +5,16 @@ from .mintdevice import MINTDevice
 from .antlr.mintListener import mintListener
 from .antlr.mintParser import mintParser
 from .mintlayer import MINTLayer, MINTLayerType
+from typing import Optional
 
 class MINTCompiler(mintListener):
 
     def __init__(self):
         super().__init__()
-        self.current_device: MINTDevice
+        self.current_device: Optional[MINTDevice]
         self.current_block_id = 0
         self.current_layer_id = 0
-        self.current_entity: str
+        self.current_entity: Optional[str]
         self.current_params = dict()
 
     def enterNetlist(self, ctx: mintParser.NetlistContext):
@@ -21,6 +22,8 @@ class MINTCompiler(mintListener):
 
     
     def enterHeader(self, ctx: mintParser.HeaderContext):
+        if ctx.device_name is not None:
+            raise Exception("Could not find Device Name")
         self.current_device.name = ctx.device_name.text
 
     def exitLayerBlock(self, ctx: mintParser.LayerBlockContext):

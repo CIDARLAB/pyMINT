@@ -1,12 +1,13 @@
+from mint.minttarget import MINTTarget
 from .mintlayer import MINTLayer, MINTLayerType
 from pyparchmint.device import Device
 from .mintcomponent import MINTComponent
 from .mintconnection import MINTConnection
-
+from typing import List
 
 class MINTDevice(Device):
 
-    def __init__(self, name) -> None:
+    def __init__(self, name:str) -> None:
         super().__init__()
         self.name = name
 
@@ -14,7 +15,7 @@ class MINTDevice(Device):
         component = MINTComponent(name, technology, params, layer)
         super().addComponent(component)
     
-    def addConnection(self, name, technology, params , source, sinks:[], layer:str):
+    def addConnection(self, name:str, technology:str, params: dict , source:MINTTarget, sinks:List[MINTTarget], layer:str):
         connection = MINTConnection(name, technology, params, source, sinks, layer)
         super().addConnection(connection)
 

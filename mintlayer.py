@@ -14,6 +14,8 @@ class MINTLayerType(Enum):
             return 'CONTROL'
         elif self == MINTLayerType.INTEGRATION:
             return 'INTEGRATION'
+        else:
+            raise Exception("Could not generate MINT Layer string")
 
 class MINTLayer(Layer):
 
