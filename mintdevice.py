@@ -23,6 +23,12 @@ class MINTDevice(Device):
             layer = MINTLayer(name, group, layer_type)
             super().addLayer(layer)
 
+    def getComponent(self, id:str) -> MINTComponent:
+        return super().getComponent(id)
+
+    def getConnection(self, id:str) -> MINTConnection:
+        return super().getConnection(id)
+
     def toMINT(self):
 
         #TODO: Eventually I need to modify the MINT generation to account for all the layout constraints
