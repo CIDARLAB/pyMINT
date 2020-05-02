@@ -11,17 +11,20 @@ class MINTDevice(Device):
         super().__init__()
         self.name = name
 
-    def addComponent(self, name: str, technology: str, params: dict, layer:str):
+    def addComponent(self, name: str, technology: str, params: dict, layer:str) -> MINTComponent:
         component = MINTComponent(name, technology, params, layer)
         super().addComponent(component)
+        return component
     
-    def addConnection(self, name:str, technology:str, params: dict , source:MINTTarget, sinks:List[MINTTarget], layer:str):
+    def addConnection(self, name:str, technology:str, params: dict , source:MINTTarget, sinks:List[MINTTarget], layer:str) -> MINTConnection:
         connection = MINTConnection(name, technology, params, source, sinks, layer)
         super().addConnection(connection)
+        return connection
 
-    def addLayer(self, name, group, layer_type:MINTLayerType):
-            layer = MINTLayer(name, group, layer_type)
-            super().addLayer(layer)
+    def addLayer(self, name, group, layer_type:MINTLayerType) -> MINTLayer:
+        layer = MINTLayer(name, group, layer_type)
+        super().addLayer(layer)
+        return layer
 
     def getComponent(self, id:str) -> MINTComponent:
         return super().getComponent(id)
@@ -30,7 +33,6 @@ class MINTDevice(Device):
         return super().getConnection(id)
 
     def toMINT(self):
-
         #TODO: Eventually I need to modify the MINT generation to account for all the layout constraints
 
         full_layer_text = ""

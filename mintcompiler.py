@@ -11,7 +11,7 @@ class MINTCompiler(mintListener):
 
     def __init__(self):
         super().__init__()
-        self.current_device: Optional[MINTDevice]
+        self.current_device: Optional[MINTDevice] = None
         self.current_block_id = 0
         self.current_layer_id = 0
         self.current_entity: Optional[str]
@@ -22,7 +22,7 @@ class MINTCompiler(mintListener):
 
     
     def enterHeader(self, ctx: mintParser.HeaderContext):
-        if ctx.device_name is not None:
+        if ctx.device_name is None:
             raise Exception("Could not find Device Name")
         self.current_device.name = ctx.device_name.text
 
