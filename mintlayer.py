@@ -23,8 +23,8 @@ class MINTLayer(Layer):
         super().__init__()
         self.ID = id
         self.group = group
-        self.type = layer_type
-
+        self.name = "{}_{}".format(str(layer_type), id)
+        self.type = str(layer_type)
 
     def toMINT(self, content:str) -> str:
         
