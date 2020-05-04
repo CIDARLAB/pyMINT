@@ -9,7 +9,7 @@ class MINTComponent(Component):
         self.ID = name
         self.entity = technology
         self.params = MINTParams(params)
-        self.layer = layer
+        self.layers.append(layer)
 
     def toMINT(self) -> str:
         ret = "{} {} {};".format(self.entity, self.name, self.params.toMINT())

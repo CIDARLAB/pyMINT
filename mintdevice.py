@@ -38,7 +38,7 @@ class MINTDevice(Device):
         full_layer_text = ""
         #Loop Over all the layers
         for layer in self.layers:
-            componenttext = "\n".join([item.toMINT() for item in self.components if item.layer == layer.ID])
+            componenttext = "\n".join([item.toMINT() for item in self.components if item.layers[0] == layer.ID])
             connectiontext = "\n".join([item.toMINT() for item in self.connections if item.layer == layer.ID])
    
             full_layer_text += layer.toMINT("{}\n\n{}".format(componenttext, connectiontext)) +"\n\n"
