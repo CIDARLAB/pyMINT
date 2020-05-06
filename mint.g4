@@ -194,7 +194,6 @@ boolParam
 widthParam
     :   key='width' '=' value
     |   key='w' '=' value
-    |   key='channelWidth' '=' value
     ;
 
 verticalDirectionParam
