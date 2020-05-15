@@ -88,9 +88,9 @@ def serializedATN():
         buf.write("\30\3\2\2\2\u00af\u00b0\7v\2\2\u00b0\u00b1\7q\2\2\u00b1")
         buf.write("\32\3\2\2\2\u00b2\u00b3\7X\2\2\u00b3\u00b4\7C\2\2\u00b4")
         buf.write("\u00b5\7N\2\2\u00b5\u00b6\7X\2\2\u00b6\u00b7\7G\2\2\u00b7")
-        buf.write("\34\3\2\2\2\u00b8\u00b9\7\65\2\2\u00b9\u00ba\7F\2\2\u00ba")
-        buf.write("\u00bb\7X\2\2\u00bb\u00bc\7C\2\2\u00bc\u00bd\7N\2\2\u00bd")
-        buf.write("\u00be\7X\2\2\u00be\u00bf\7G\2\2\u00bf\36\3\2\2\2\u00c0")
+        buf.write("\34\3\2\2\2\u00b8\u00b9\7X\2\2\u00b9\u00ba\7C\2\2\u00ba")
+        buf.write("\u00bb\7N\2\2\u00bb\u00bc\7X\2\2\u00bc\u00bd\7G\2\2\u00bd")
+        buf.write("\u00be\7\65\2\2\u00be\u00bf\7F\2\2\u00bf\36\3\2\2\2\u00c0")
         buf.write("\u00c1\7q\2\2\u00c1\u00c2\7p\2\2\u00c2 \3\2\2\2\u00c3")
         buf.write("\u00c4\7P\2\2\u00c4\u00c5\7Q\2\2\u00c5\u00c6\7F\2\2\u00c6")
         buf.write("\u00c7\7G\2\2\u00c7\"\3\2\2\2\u00c8\u00c9\7X\2\2\u00c9")
@@ -203,7 +203,7 @@ class mintLexer(Lexer):
     literalNames = [ "<INVALID>",
             "'IMPORT'", "'DEVICE'", "';'", "'LAYER FLOW'", "'END LAYER'", 
             "'LAYER CONTROL'", "'LAYER INTEGRATION'", "'BANK'", "'of'", 
-            "'GRID'", "','", "'to'", "'VALVE'", "'3DVALVE'", "'on'", "'NODE'", 
+            "'GRID'", "','", "'to'", "'VALVE'", "'VALVE3D'", "'on'", "'NODE'", 
             "'VIA'", "'TERMINAL'", "'CHANNEL'", "'from'", "'NET'", "'='", 
             "'width'", "'w'", "'dir'", "'RIGHT'", "'LEFT'", "'UP'", "'DOWN'", 
             "'rotation'", "'length'", "'YES'", "'NO'", "'SET'", "'X'", "'Y'", 

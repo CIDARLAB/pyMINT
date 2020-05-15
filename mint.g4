@@ -101,27 +101,27 @@ integrationStat
 //Flow and Control Statements
 
 primitiveStat
-    :   entity ufnames paramsStat ';'
+    :   orientation? entity ufnames paramsStat ';'
     ;
 
 bankGenStat
-    :   orientation? 'BANK' ufname 'of' dim=INT entity paramsStat ';'
-    ;
-
-bankStat
     :   orientation? 'BANK' ufnames 'of' dim=INT entity paramsStat ';'
     ;
 
-gridGenStat
-    :   orientation? 'GRID' ufnames 'of' xdim=INT ',' ydim=INT paramsStat ';'
+bankStat
+    :   orientation? 'BANK' ufname 'of' dim=INT entity paramsStat ';'
     ;
 
-gridStat
+gridGenStat
     :   orientation? 'GRID' ufname 'of' xdim=INT ',' ydim=INT paramsStat ';'
     ;
 
+gridStat
+    :   orientation? 'GRID' ufnames 'of' xdim=INT ',' ydim=INT paramsStat ';'
+    ;
+
 spanStat
-    :   entity ufnames  indim=INT 'to' outdim=INT paramsStat ';'
+    :   orientation? entity ufnames  indim=INT 'to' outdim=INT paramsStat ';'
     ;
 
 //primitiveWithOrientationConstraintStat
@@ -129,7 +129,7 @@ spanStat
 //    ;
 
 valveStat
-    :   valve_entity=('VALVE'|'3DVALVE') ufname 'on' ufname paramsStat ';'
+    :   valve_entity=('VALVE'|'VALVE3D') ufname 'on' ufname paramsStat ';'
     ;
 
 nodeStat
