@@ -1,6 +1,6 @@
 #Is this the align constriant
 
-class SpanConstraint:
+class MirrorConstraint:
 
     def __init__(self) -> None:
         pass

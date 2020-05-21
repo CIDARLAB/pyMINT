@@ -1,15 +1,17 @@
+from pyMINT.constraints.constraint import LayoutConstraint
 from .minttarget import MINTTarget
 from .mintlayer import MINTLayer, MINTLayerType
 from pyparchmint.device import Device
 from .mintcomponent import MINTComponent
 from .mintconnection import MINTConnection
-from typing import List
+from typing import List, Optional
 
 class MINTDevice(Device):
 
     def __init__(self, name:str) -> None:
         super().__init__()
         self.name = name
+        self.__layout_constraints = []
 
     def addComponent(self, name: str, technology: str, params: dict, layer:str) -> MINTComponent:
         component = MINTComponent(name, technology, params, layer)
@@ -26,11 +28,14 @@ class MINTDevice(Device):
         super().addLayer(layer)
         return layer
 
-    def getComponent(self, id:str) -> MINTComponent:
+    def getComponent(self, id:str) -> Optional[MINTComponent]:
         return super().getComponent(id)
 
-    def getConnection(self, id:str) -> MINTConnection:
+    def getConnection(self, id:str) -> Optional[MINTConnection]:
         return super().getConnection(id)
+
+    def addConstraint(self, constraint: LayoutConstraint)-> None:
+        self.__layout_constraints.append(constraint)
 
     def toMINT(self):
         #TODO: Eventually I need to modify the MINT generation to account for all the layout constraints

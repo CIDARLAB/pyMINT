@@ -84,6 +84,11 @@ class mintVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by mintParser#bankDeclStat.
+    def visitBankDeclStat(self, ctx:mintParser.BankDeclStatContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by mintParser#bankGenStat.
     def visitBankGenStat(self, ctx:mintParser.BankGenStatContext):
         return self.visitChildren(ctx)
@@ -96,6 +101,11 @@ class mintVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by mintParser#gridGenStat.
     def visitGridGenStat(self, ctx:mintParser.GridGenStatContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by mintParser#gridDeclStat.
+    def visitGridDeclStat(self, ctx:mintParser.GridDeclStatContext):
         return self.visitChildren(ctx)
 
 
@@ -161,6 +171,31 @@ class mintVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by mintParser#paramStat.
     def visitParamStat(self, ctx:mintParser.ParamStatContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by mintParser#constraintParams.
+    def visitConstraintParams(self, ctx:mintParser.ConstraintParamsContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by mintParser#verticalSpacingParam.
+    def visitVerticalSpacingParam(self, ctx:mintParser.VerticalSpacingParamContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by mintParser#horizontatlSpacingParam.
+    def visitHorizontatlSpacingParam(self, ctx:mintParser.HorizontatlSpacingParamContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by mintParser#spacingParam.
+    def visitSpacingParam(self, ctx:mintParser.SpacingParamContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by mintParser#directionParam.
+    def visitDirectionParam(self, ctx:mintParser.DirectionParamContext):
         return self.visitChildren(ctx)
 
 

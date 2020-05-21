@@ -60,6 +60,14 @@ class MINTCompiler(mintListener):
             value = False
         key = ctx.param_element.getText()
         self.current_params[key] = value
+
+    def enterLengthParam(self, ctx: mintParser.LengthParamContext):
+        value = float(ctx.value().getText())
+        self.current_params['length'] = value
+    
+    def enterSpacingParam(self, ctx: mintParser.SpacingParamContext):
+        value = float(ctx.value().getText())
+        self.current_params['spacing'] = value
     
     def enterWidthParam(self, ctx: mintParser.WidthParamContext):
         value = ctx.value().getText()
@@ -144,14 +152,17 @@ class MINTCompiler(mintListener):
 
         self.current_device.addConnection(connection_name, entity, self.current_params, source_uftarget, sink_uftargets, str(self.current_layer_id))
 
-    def exitBankStat(self, ctx: mintParser.BankStatContext):
-        raise Exception("Note implemented")
-
     def exitSpanStat(self, ctx: mintParser.SpanStatContext):
-        raise Exception("Not Implemented")
+        entity = self.current_entity
+        if entity is None:
+            raise Exception("Could not find the technology for the pimitive")
+        
+        #Loop for each of the components that need to be created with this param
+        for ufname in ctx.ufnames().ufname():
+            self.current_device.addComponent(ufname.getText(), entity, self.current_params, str(self.current_layer_id))
 
-    def exitGridStat(self, ctx: mintParser.GridStatContext):
-        raise Exception("Not Implemented")
+        #TODO: Figure out how to pipe in the in / out format
+
 
     def exitNodeStat(self, ctx: mintParser.NodeStatContext):
         entity = 'NODE'

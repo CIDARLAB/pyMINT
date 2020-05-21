@@ -63,18 +63,20 @@ integrationBlock
 
 flowStat
     :   primitiveStat
-    // |   primitiveWithOrientationConstraintStat
     |   nodeStat
     |   channelStat
     |   netStat
-    |   bankGenStat
+    |   bankDeclStat
     |   gridStat
     |   spanStat
     |   viaStat
     |   positionConstraintStat
     |   gridStat
     |   gridGenStat
+    |   gridDeclStat
     |   bankStat
+    |   bankGenStat
+    |   bankDeclStat
     |   terminalStat
     ;
 
@@ -82,7 +84,7 @@ controlStat
     :   valveStat
     |   channelStat
     |   netStat
-    |   bankGenStat
+    |   bankDeclStat
     |   bankStat
     |   gridStat
     |   gridGenStat
@@ -104,16 +106,24 @@ primitiveStat
     :   orientation? entity ufnames paramsStat ';'
     ;
 
-bankGenStat
+bankDeclStat
     :   orientation? 'BANK' ufnames 'of' dim=INT entity paramsStat ';'
     ;
 
-bankStat
+bankGenStat
     :   orientation? 'BANK' ufname 'of' dim=INT entity paramsStat ';'
     ;
 
+bankStat
+    :   orientation? 'BANK' ufnames 'of' dim=INT paramsStat ';'
+    ;
+
 gridGenStat
-    :   orientation? 'GRID' ufname 'of' xdim=INT ',' ydim=INT paramsStat ';'
+    :   orientation? 'GRID' ufname 'of' xdim=INT ',' ydim=INT entity paramsStat ';'
+    ;
+
+gridDeclStat
+    :   orientation? 'GRID' ufnames 'of' xdim=INT ',' ydim=INT paramsStat ';'
     ;
 
 gridStat
@@ -123,10 +133,6 @@ gridStat
 spanStat
     :   orientation? entity ufnames  indim=INT 'to' outdim=INT paramsStat ';'
     ;
-
-//primitiveWithOrientationConstraintStat
-//    :   orientation ( bankGenStat | spanStat | primitiveStat )
-//    ;
 
 valveStat
     :   valve_entity=('VALVE'|'VALVE3D') ufname 'on' ufname paramsStat ';'
@@ -166,18 +172,34 @@ paramsStat
     :   paramStat*
     ;
 
+//connectionParamStat
+//    :   lengthParam
+//    |   paramsStat
+//    ;
+
 connectionParamStat
-    :   lengthParam
-    |   paramsStat
+    :   paramsStat
     ;
 
 paramStat
     :   intParam
     |   boolParam
-    |   verticalDirectionParam
-    |   horizontalDirectionParam
     |   widthParam
+    |   constraintParams
+    |   lengthParam
+    |   spacingParam
     ;
+
+constraintParams
+    :   rotationParam
+    |   directionParam
+    |   spacingParam
+    |   lengthParam
+    ;
+
+spacingParam: 'spacing' '=' value;
+
+directionParam: 'direction''=' direction=('UP'|'DOWN'|'LEFT'|'RIGHT');
 
 param_element
     :   ID
@@ -238,6 +260,7 @@ ufnames
 
 value
     :   INT
+    |   Real_number
     ;
 
 boolvalue
@@ -247,11 +270,11 @@ boolvalue
 
 //Constraints
 positionConstraintStat
-    :   ufnames setCoordinate+ ';'
+    :   ufname 'SET' setCoordinate+ ';'
     ;
 
 setCoordinate
-    :    'SET' ('X'|'Y'|'Z') INT
+    :   coordinate=('X'|'Y'|'Z') INT
     ;
 
 orientation : ('V'|'H') ;
@@ -267,3 +290,15 @@ INT :   [0-9]+ ; // Define token INT as one or more digits
 WS  :   [ \t\r\n]+ -> skip ; // Define whitespace rule, toss it out
 
 COMMENT :    '#' ~[\r\n]* -> skip ;
+
+Real_number
+   : Unsigned_number '.' Unsigned_number | Unsigned_number ('.' Unsigned_number)? [eE] ([+-])? Unsigned_number
+   ;
+
+fragment Unsigned_number
+   : Decimal_digit ('_' | Decimal_digit)*
+   ;
+
+fragment Decimal_digit
+   : [0-9]
+   ;
