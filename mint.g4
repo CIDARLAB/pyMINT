@@ -135,7 +135,7 @@ spanStat
     ;
 
 valveStat
-    :   valve_entity=('VALVE'|'VALVE3D') ufname 'on' ufname paramsStat ';'
+    :   entity ufname 'on' ufname paramsStat ';'
     ;
 
 nodeStat
@@ -195,6 +195,8 @@ constraintParams
     |   directionParam
     |   spacingParam
     |   lengthParam
+    |   verticalSpacingParam
+    |   horizontalSpacingParam
     ;
 
 spacingParam: 'spacing' '=' value;
@@ -218,12 +220,12 @@ widthParam
     |   key='w' '=' value
     ;
 
-verticalDirectionParam
-    :   'dir''='direction=('RIGHT'|'LEFT')
+verticalSpacingParam
+    :   'horizontalSpacing''=' value
     ;
 
-horizontalDirectionParam
-    :   'dir''='direction=('UP'|'DOWN')
+horizontalSpacingParam
+    :   'horizontalSpacing''=' value
     ;
 
 rotationParam

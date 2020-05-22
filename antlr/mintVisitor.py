@@ -179,16 +179,6 @@ class mintVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by mintParser#verticalSpacingParam.
-    def visitVerticalSpacingParam(self, ctx:mintParser.VerticalSpacingParamContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by mintParser#horizontatlSpacingParam.
-    def visitHorizontatlSpacingParam(self, ctx:mintParser.HorizontatlSpacingParamContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by mintParser#spacingParam.
     def visitSpacingParam(self, ctx:mintParser.SpacingParamContext):
         return self.visitChildren(ctx)
@@ -219,13 +209,13 @@ class mintVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by mintParser#verticalDirectionParam.
-    def visitVerticalDirectionParam(self, ctx:mintParser.VerticalDirectionParamContext):
+    # Visit a parse tree produced by mintParser#verticalSpacingParam.
+    def visitVerticalSpacingParam(self, ctx:mintParser.VerticalSpacingParamContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by mintParser#horizontalDirectionParam.
-    def visitHorizontalDirectionParam(self, ctx:mintParser.HorizontalDirectionParamContext):
+    # Visit a parse tree produced by mintParser#horizontalSpacingParam.
+    def visitHorizontalSpacingParam(self, ctx:mintParser.HorizontalSpacingParamContext):
         return self.visitChildren(ctx)
 
 

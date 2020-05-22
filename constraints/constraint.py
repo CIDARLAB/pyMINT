@@ -15,19 +15,18 @@ class OperationType(Enum):
 class LayoutConstraint(object):
 
     def __init__(self) -> None:
-        self.__components = []
-        self.__connections = []
-        self.__type: OperationType
+        self._components = []
+        self._connections = []
+        self._type: OperationType
 
     def add_component(self, component: MINTComponent):
-        self.__components.append(component)
+        self._components.append(component)
     
     def add_connection(self, connection: MINTConnection):
-        self.__connections.append(connection)
+        self._connections.append(connection)
 
     def get_components(self)->List[MINTComponent]:
-        return self.__components
+        return self._components
 
     def contains_component(self, component:MINTComponent) -> bool:
-        #TODO: Check if the constraint contains the components, return true / false
-        return component in self.__components
+        return component in self._components

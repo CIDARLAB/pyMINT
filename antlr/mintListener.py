@@ -314,24 +314,6 @@ class mintListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by mintParser#verticalSpacingParam.
-    def enterVerticalSpacingParam(self, ctx:mintParser.VerticalSpacingParamContext):
-        pass
-
-    # Exit a parse tree produced by mintParser#verticalSpacingParam.
-    def exitVerticalSpacingParam(self, ctx:mintParser.VerticalSpacingParamContext):
-        pass
-
-
-    # Enter a parse tree produced by mintParser#horizontatlSpacingParam.
-    def enterHorizontatlSpacingParam(self, ctx:mintParser.HorizontatlSpacingParamContext):
-        pass
-
-    # Exit a parse tree produced by mintParser#horizontatlSpacingParam.
-    def exitHorizontatlSpacingParam(self, ctx:mintParser.HorizontatlSpacingParamContext):
-        pass
-
-
     # Enter a parse tree produced by mintParser#spacingParam.
     def enterSpacingParam(self, ctx:mintParser.SpacingParamContext):
         pass
@@ -386,21 +368,21 @@ class mintListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by mintParser#verticalDirectionParam.
-    def enterVerticalDirectionParam(self, ctx:mintParser.VerticalDirectionParamContext):
+    # Enter a parse tree produced by mintParser#verticalSpacingParam.
+    def enterVerticalSpacingParam(self, ctx:mintParser.VerticalSpacingParamContext):
         pass
 
-    # Exit a parse tree produced by mintParser#verticalDirectionParam.
-    def exitVerticalDirectionParam(self, ctx:mintParser.VerticalDirectionParamContext):
+    # Exit a parse tree produced by mintParser#verticalSpacingParam.
+    def exitVerticalSpacingParam(self, ctx:mintParser.VerticalSpacingParamContext):
         pass
 
 
-    # Enter a parse tree produced by mintParser#horizontalDirectionParam.
-    def enterHorizontalDirectionParam(self, ctx:mintParser.HorizontalDirectionParamContext):
+    # Enter a parse tree produced by mintParser#horizontalSpacingParam.
+    def enterHorizontalSpacingParam(self, ctx:mintParser.HorizontalSpacingParamContext):
         pass
 
-    # Exit a parse tree produced by mintParser#horizontalDirectionParam.
-    def exitHorizontalDirectionParam(self, ctx:mintParser.HorizontalDirectionParamContext):
+    # Exit a parse tree produced by mintParser#horizontalSpacingParam.
+    def exitHorizontalSpacingParam(self, ctx:mintParser.HorizontalSpacingParamContext):
         pass
 
 

@@ -14,6 +14,6 @@ class OrientationConstraint(LayoutConstraint):
         self.__orientation_map = dict()
 
     def add_component(self, component:MINTComponent, orientation:ComponentOrientation )->None:
-        self.__components.append(component)
+        super().add_component(component)
         self.__orientation_map[component] = orientation
 

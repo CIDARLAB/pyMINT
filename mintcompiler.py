@@ -100,6 +100,8 @@ class MINTCompiler(mintListener):
 
         source_target = ctx.uftarget()[0]
         source_id = source_target.ID().getText()
+        if self.current_device.componentExists(source_id) is False:
+            raise Exception("Error ! - Could not find the component '{}' in device '{}'".format(source_id, self.current_device.name))
         if source_target.INT():
             source_port = source_target.INT().getText()
         else:
@@ -109,6 +111,8 @@ class MINTCompiler(mintListener):
 
         sink_target = ctx.uftarget()[1]
         sink_id = sink_target.ID().getText()
+        if self.current_device.componentExists(sink_id) is False:
+            raise Exception("Error ! - Could not find the component '{}' in device '{}'".format(sink_id, self.current_device.name))
         if sink_target.INT():
             sink_port = sink_target.INT().getText()
         else:
@@ -133,8 +137,6 @@ class MINTCompiler(mintListener):
         else:
             source_port = None
 
-
-
         source_uftarget = MINTTarget(source_id, source_port)
 
         sink_uftargets = []
@@ -145,8 +147,6 @@ class MINTCompiler(mintListener):
                 sink_port = sink_target.INT().getText()
             else:
                 sink_port = None
-
-
 
             sink_uftargets.append(MINTTarget(sink_id, sink_port))
 
@@ -172,18 +172,24 @@ class MINTCompiler(mintListener):
             self.current_device.addComponent(ufname.getText(), entity, self.current_params, str(self.current_layer_id))
 
     def exitValveStat(self, ctx: mintParser.ValveStatContext):
-        raise Exception("Not Implemented")
-
-    def enterOrientation(self, ctx: mintParser.OrientationContext):
-        #TODO: We need to apply the layout constriant
-        raise Exception("Not Implemented")
+        entity =  self.current_entity
+        valve_name = ctx.ufname()[0].getText()
+        valve_component = self.current_device.addComponent(valve_name, entity, self.current_params, str(self.current_layer_id))
+        connection_name = ctx.ufname()[1].getText()
+        valve_connection = self.current_device.getConnection(connection_name)
+        if valve_connection is None:
+            raise Exception("Error: Could not find connection '{}' in device '{}'".format(connection_name, self.current_device.name))
+        
+        self.current_device.mapValve(valve_component, valve_connection)
 
     def enterViaStat(self, ctx:mintParser.ViaStatContext):
-        raise Exception("Not Implemented")
+        raise Exception("VIA parsing Not Implemented")
 
     def enterTerminalStat(self, ctx:mintParser.TerminalStatContext):
-        raise Exception("Not Implemented")
-    
+        terminal_name = ctx.ufname().getText()
+        pin_number = int(ctx.INT.getText())
+        self.current_device.addTerminal(terminal_name, pin_number, str(self.current_layer_id))
+        
     def exitNetlist(self, ctx: mintParser.NetlistContext):
         self.current_device.generateNetwork()
 

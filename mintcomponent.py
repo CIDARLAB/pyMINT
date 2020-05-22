@@ -14,3 +14,6 @@ class MINTComponent(Component):
     def toMINT(self) -> str:
         ret = "{} {} {};".format(self.entity, self.name, self.params.toMINT())
         return ret
+
+    def __hash__(self) -> int:
+        return hash((self.ID, self.entity))
