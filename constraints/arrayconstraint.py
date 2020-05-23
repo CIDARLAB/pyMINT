@@ -6,11 +6,11 @@ from typing import List
 class ArrayConstraint(LayoutConstraint):
     def __init__(self, components: List[MINTComponent], xdim=None, ydim=1, horizontal_spacing = None, vertical_spacing= None) -> None:
         super().__init__()
-        self.__components.extend(components)
+        self._components.extend(components)
         self.__is1D = False
 
         if xdim is None:
-            self.__xdim = len(self.__components)
+            self.__xdim = len(self._components)
         else:
             self.__xdim = xdim
         

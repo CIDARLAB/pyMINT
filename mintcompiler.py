@@ -92,6 +92,25 @@ class MINTCompiler(mintListener):
         for ufname in ctx.ufnames().ufname():
             self.current_device.addComponent(ufname.getText(), entity, self.current_params, str(self.current_layer_id))
     
+
+    def exitBankDeclStat(self, ctx: mintParser.BankDeclStatContext):
+        entity = self.current_entity
+        if entity is None:
+            raise Exception("Could not find the technology for the primitive")
+
+        for ufname in ctx.ufnames().ufname():
+            component_name = ufname.getText()
+            self.current_device.addComponent(component_name, entity, self.current_params, str(self.current_layer_id))
+
+    def exitGridDeclStat(self, ctx: mintParser.GridDeclStatContext):
+        entity = self.current_entity
+        if entity is None:
+            raise Exception("Could not find the technology for the primitive")
+
+        for ufname in ctx.ufnames().ufname():
+            component_name = ufname.getText()
+            self.current_device.addComponent(component_name, entity, self.current_params, str(self.current_layer_id))
+
     def exitChannelStat(self, ctx: mintParser.ChannelStatContext):
         entity = self.current_entity
         if entity is None:
