@@ -25,7 +25,12 @@ header
     ;
 
 ufmoduleBlock
-    :   ufmoduleStat+
+    :   globalStats+
+    ;
+
+globalStats
+    :   ufmoduleStat
+    |   viaStat
     ;
 
 ufmoduleStat
@@ -69,7 +74,6 @@ flowStat
     |   bankDeclStat
     |   gridStat
     |   spanStat
-    |   viaStat
     |   positionConstraintStat
     |   gridStat
     |   gridGenStat

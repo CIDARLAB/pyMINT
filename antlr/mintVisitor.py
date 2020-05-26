@@ -34,6 +34,11 @@ class mintVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by mintParser#globalStats.
+    def visitGlobalStats(self, ctx:mintParser.GlobalStatsContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by mintParser#ufmoduleStat.
     def visitUfmoduleStat(self, ctx:mintParser.UfmoduleStatContext):
         return self.visitChildren(ctx)

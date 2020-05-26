@@ -1,3 +1,4 @@
+from pyMINT.mintvia import MINTVia
 from pyMINT.mintterminal import MINTTerminal
 from pyMINT.constraints.constraint import LayoutConstraint
 from .minttarget import MINTTarget
@@ -12,10 +13,10 @@ class MINTDevice(Device):
     def __init__(self, name:str) -> None:
         super().__init__()
         self.name = name
-        self.__layout_constraints = []
-        self.__valve_map = dict()
-        self.__terminals = []
-        self.__vias = []
+        self._layout_constraints = []
+        self._valve_map = dict()
+        self._terminals = []
+        self._vias = []
 
     def addComponent(self, name: str, technology: str, params: dict, layer:str) -> MINTComponent:
         component = MINTComponent(name, technology, params, layer)
@@ -39,10 +40,10 @@ class MINTDevice(Device):
         return super().getConnection(id)
 
     def getConstraints(self) -> List[LayoutConstraint]:
-        return self.__layout_constraints
+        return self._layout_constraints
 
     def addConstraint(self, constraint: LayoutConstraint)-> None:
-        self.__layout_constraints.append(constraint)
+        self._layout_constraints.append(constraint)
 
     def toMINT(self):
         #TODO: Eventually I need to modify the MINT generation to account for all the layout constraints
@@ -60,11 +61,17 @@ class MINTDevice(Device):
         return full
 
     def mapValve(self, valve:MINTComponent, connection:MINTConnection) -> None:
-        self.__valve_map[valve] = connection
+        self._valve_map[valve] = connection
 
-    def addTerminal(self, name, pin_number, layer) -> MINTTerminal:
+    def addTerminal(self, name:str, pin_number:int, layer:str) -> MINTTerminal:
         ret = MINTTerminal(name, pin_number, layer)
-        self.__terminals.append(ret)
+        self._terminals.append(ret)
+        return ret
+
+    def addVia(self, name:str) -> MINTVia:
+        ret = MINTVia(name)
+        self._vias.append(ret)
+        self.components.append(ret)
         return ret
 
     

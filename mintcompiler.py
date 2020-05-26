@@ -202,7 +202,8 @@ class MINTCompiler(mintListener):
         self.current_device.mapValve(valve_component, valve_connection)
 
     def enterViaStat(self, ctx:mintParser.ViaStatContext):
-        raise Exception("VIA parsing Not Implemented")
+        for ufname in ctx.ufnames().ufname():
+            self.current_device.addVia(ufname.getText(),)
 
     def enterTerminalStat(self, ctx:mintParser.TerminalStatContext):
         terminal_name = ctx.ufname().getText()

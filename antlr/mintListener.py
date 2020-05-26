@@ -53,6 +53,15 @@ class mintListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by mintParser#globalStats.
+    def enterGlobalStats(self, ctx:mintParser.GlobalStatsContext):
+        pass
+
+    # Exit a parse tree produced by mintParser#globalStats.
+    def exitGlobalStats(self, ctx:mintParser.GlobalStatsContext):
+        pass
+
+
     # Enter a parse tree produced by mintParser#ufmoduleStat.
     def enterUfmoduleStat(self, ctx:mintParser.UfmoduleStatContext):
         pass
