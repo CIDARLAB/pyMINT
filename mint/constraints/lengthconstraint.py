@@ -1,5 +1,5 @@
-from ..mintcomponent import MINTComponent
-from .constraint import LayoutConstraint
+from mint.mintcomponent import MINTComponent
+from mint.constraints.constraint import LayoutConstraint
 
 
 class LengthConstraint(LayoutConstraint):

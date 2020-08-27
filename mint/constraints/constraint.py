@@ -1,6 +1,6 @@
 from enum import Enum
-from ..mintconnection import MINTConnection
-from ..mintcomponent import MINTComponent
+from mint.mintconnection import MINTConnection
+from mint.mintcomponent import MINTComponent
 from typing import List
 
 class OperationType(Enum):

@@ -5,7 +5,7 @@ from .minttarget import MINTTarget
 from .mintlayer import MINTLayer, MINTLayerType
 from parchmint.device import Device
 from .mintcomponent import MINTComponent
-from .mintconnection import MINTConnection
+from mint.mintconnection import MINTConnection
 from typing import List, Optional
 
 class MINTDevice(Device):

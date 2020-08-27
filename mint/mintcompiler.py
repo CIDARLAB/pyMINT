@@ -1,10 +1,11 @@
-from .minttarget import MINTTarget
-from .mintcomponent import MINTComponent
+import logging
+from mint.minttarget import MINTTarget
+from mint.mintcomponent import MINTComponent
 from parchmint.component import Component
-from .mintdevice import MINTDevice
-from .antlr.mintListener import mintListener
-from .antlr.mintParser import mintParser
-from .mintlayer import MINTLayer, MINTLayerType
+from mint.mintdevice import MINTDevice
+from mint.antlr.mintListener import mintListener
+from mint.antlr.mintParser import mintParser
+from mint.mintlayer import MINTLayer, MINTLayerType
 from typing import Optional
 
 class MINTCompiler(mintListener):
@@ -192,6 +193,9 @@ class MINTCompiler(mintListener):
 
     def exitValveStat(self, ctx: mintParser.ValveStatContext):
         entity =  self.current_entity
+        if entity is None:
+            logging.error("Could not find entitry information for valve")
+            raise Exception("Could not find entitry information for valve")
         valve_name = ctx.ufname()[0].getText()
         valve_component = self.current_device.addComponent(valve_name, entity, self.current_params, str(self.current_layer_id))
         connection_name = ctx.ufname()[1].getText()

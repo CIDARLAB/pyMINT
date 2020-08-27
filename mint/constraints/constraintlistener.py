@@ -1,13 +1,14 @@
 from typing import List
-from ..mintcomponent import MINTComponent
-from .orthogonalconstraint import OrthogonalConstraint
-from .arrayconstraint import ArrayConstraint
-from .positionconstraint import PositionConstraint
-from .constraint import LayoutConstraint
-from ..antlr.mintListener import mintListener
-from ..mintdevice import MINTDevice
-from ..antlr.mintParser import mintParser
-from .orientationconstraint import ComponentOrientation, OrientationConstraint
+import logging
+from mint.mintcomponent import MINTComponent
+from mint.constraints.orthogonalconstraint import OrthogonalConstraint
+from mint.constraints.arrayconstraint import ArrayConstraint
+from mint.constraints.positionconstraint import PositionConstraint
+from mint.constraints.constraint import LayoutConstraint
+from mint.antlr.mintListener import mintListener
+from mint.mintdevice import MINTDevice
+from mint.antlr.mintParser import mintParser
+from mint.constraints.orientationconstraint import ComponentOrientation, OrientationConstraint
 
 
 class ConstraintListener(mintListener):
@@ -61,15 +62,28 @@ class ConstraintListener(mintListener):
         self._spacing = float(ctx.value().getText())
 
     def exitGridStat(self, ctx: mintParser.GridStatContext):
-        xdim = int(ctx.xdim.text)
-        ydim = int(ctx.ydim.text)
+        xdim = 1
+        ydim = 1
+
+        if ctx.xdim is not None:
+            xdim = int(ctx.xdim.text)
+        else:
+            logging.warning("No X Dimension found for GRID stat, setting dimension to 1")
+        if ctx.ydim is not None:
+            ydim = int(ctx.ydim.text)
+        else:
+            logging.warning("No Y Dimension found for GRID stat, setting dimension to 1")
         #We need to add all the parameters here
         constraint = ArrayConstraint(self._constrained_components, xdim, ydim, self._horizontal_spacing, self._vertical_spacing)
 
         self.current_device.addConstraint(constraint)
 
     def exitBankStat(self, ctx: mintParser.BankStatContext):
-        dim = int(ctx.dim.text)
+        dim = 1
+        if ctx.xdim is not None:
+            dim = int(ctx.dim.text)
+        else:
+            logging.warning("No dimension found for BANK stat, setting dimension to 1")
         #We need to add all the parameters here
         constraint = ArrayConstraint(self._constrained_components, dim, horizontal_spacing=self._spacing)
 
@@ -80,6 +94,9 @@ class ConstraintListener(mintListener):
             self._orientation = ComponentOrientation.HORIZONTAL
         elif ctx.getText() == 'V':
             self._orientation = ComponentOrientation.VERTICAL
+        else:
+            logging.error("Orientation that is not H or V found. Illegal Syntax")
+            raise Exception("Orientation that is not H or V found. Illegal Syntax")
 
 
     def enterUfname(self, ctx: mintParser.UfnameContext):
