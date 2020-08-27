@@ -1,4 +1,3 @@
-from antlr4 import CommonTokenStream, ParseTreeWalker, FileStream
 from mint.mintvia import MINTVia
 from mint.mintterminal import MINTTerminal
 from mint.constraints.constraint import LayoutConstraint
@@ -75,4 +74,47 @@ class MINTDevice(Device):
         self.components.append(ret)
         return ret
 
-    
+    def from_mint_file(filepath):
+        from antlr4 import CommonTokenStream, ParseTreeWalker, FileStream
+        from mint.constraints.constraintlistener import ConstraintListener
+        from mint.mintErrorListener import MINTErrorListener
+        from mint.antlr.mintLexer import mintLexer
+        from mint.antlr.mintParser import mintParser
+        from mint.mintcompiler import MINTCompiler
+        import io
+
+        finput = FileStream(filepath)
+
+        lexer = mintLexer(finput)
+
+        stream = CommonTokenStream(lexer)
+
+        parser = mintParser(stream)
+
+        #Connect the Error Listener
+        parse_output = io.StringIO()
+        parse_output.write("MINT SYNTAX ERRORS:\n")
+
+        error_listener = MINTErrorListener(parse_output)
+        parser.addErrorListener(error_listener)
+
+        tree = parser.netlist()
+
+        if error_listener.pass_through is False:
+            print('STOPPED: Syntax Error(s) Found')
+            sys.exit(0)
+        
+        walker = ParseTreeWalker()
+
+        listener = MINTCompiler()
+
+        walker.walk(listener, tree)
+
+        constraint_listener = ConstraintListener(listener.current_device)
+
+        walker.walk(constraint_listener, tree)
+
+
+        current_device = listener.current_device
+
+        return current_device
