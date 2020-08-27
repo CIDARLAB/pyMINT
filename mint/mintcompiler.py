@@ -120,7 +120,7 @@ class MINTCompiler(mintListener):
 
         source_target = ctx.uftarget()[0]
         source_id = source_target.ID().getText()
-        if self.current_device.componentExists(source_id) is False:
+        if self.current_device.component_exists(source_id) is False:
             raise Exception("Error ! - Could not find the component '{}' in device '{}'".format(source_id, self.current_device.name))
         if source_target.INT():
             source_port = source_target.INT().getText()
@@ -131,7 +131,7 @@ class MINTCompiler(mintListener):
 
         sink_target = ctx.uftarget()[1]
         sink_id = sink_target.ID().getText()
-        if self.current_device.componentExists(sink_id) is False:
+        if self.current_device.component_exists(sink_id) is False:
             raise Exception("Error ! - Could not find the component '{}' in device '{}'".format(sink_id, self.current_device.name))
         if sink_target.INT():
             sink_port = sink_target.INT().getText()
@@ -215,7 +215,7 @@ class MINTCompiler(mintListener):
         self.current_device.addTerminal(terminal_name, pin_number, str(self.current_layer_id))
         
     def exitNetlist(self, ctx: mintParser.NetlistContext):
-        self.current_device.generateNetwork()
+        self.current_device.generate_network()
 
 
 

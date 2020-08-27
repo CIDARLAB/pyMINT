@@ -1,10 +1,11 @@
-from .mintvia import MINTVia
-from .mintterminal import MINTTerminal
-from .constraints.constraint import LayoutConstraint
-from .minttarget import MINTTarget
-from .mintlayer import MINTLayer, MINTLayerType
+from antlr4 import CommonTokenStream, ParseTreeWalker, FileStream
+from mint.mintvia import MINTVia
+from mint.mintterminal import MINTTerminal
+from mint.constraints.constraint import LayoutConstraint
+from mint.minttarget import MINTTarget
+from mint.mintlayer import MINTLayer, MINTLayerType
 from parchmint.device import Device
-from .mintcomponent import MINTComponent
+from mint.mintcomponent import MINTComponent
 from mint.mintconnection import MINTConnection
 from typing import List, Optional
 
@@ -20,24 +21,24 @@ class MINTDevice(Device):
 
     def addComponent(self, name: str, technology: str, params: dict, layer:str) -> MINTComponent:
         component = MINTComponent(name, technology, params, layer)
-        super().addComponent(component)
+        super().add_component(component)
         return component
     
     def addConnection(self, name:str, technology:str, params: dict , source:MINTTarget, sinks:List[MINTTarget], layer:str) -> MINTConnection:
         connection = MINTConnection(name, technology, params, source, sinks, layer)
-        super().addConnection(connection)
+        super().add_connection(connection)
         return connection
 
     def addLayer(self, name, group, layer_type:MINTLayerType) -> MINTLayer:
         layer = MINTLayer(name, group, layer_type)
-        super().addLayer(layer)
+        super().add_layer(layer)
         return layer
 
     def getComponent(self, id:str) -> Optional[MINTComponent]:
-        return super().getComponent(id)
+        return super().get_component(id)
 
     def getConnection(self, id:str) -> Optional[MINTConnection]:
-        return super().getConnection(id)
+        return super().get_connection(id)
 
     def getConstraints(self) -> List[LayoutConstraint]:
         return self._layout_constraints
