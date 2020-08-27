@@ -1,5 +1,5 @@
 from .mintparams import MINTParams
-from pyparchmint.connection import Connection
+from parchmint.connection import Connection
 from .minttarget import MINTTarget
 from typing import List
 

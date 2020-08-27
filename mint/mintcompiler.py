@@ -1,6 +1,6 @@
 from .minttarget import MINTTarget
 from .mintcomponent import MINTComponent
-from pyparchmint.component import Component
+from parchmint.component import Component
 from .mintdevice import MINTDevice
 from .antlr.mintListener import mintListener
 from .antlr.mintParser import mintParser

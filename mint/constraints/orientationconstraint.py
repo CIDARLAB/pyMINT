@@ -1,7 +1,7 @@
-from pyMINT.constraints.constraint import LayoutConstraint
+from .constraint import LayoutConstraint
 from typing import overload
 from ..mintcomponent import MINTComponent
-from pyparchmint.component import Component
+from parchmint.component import Component
 from enum import Enum
 
 class ComponentOrientation(Enum):

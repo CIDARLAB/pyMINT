@@ -1,5 +1,5 @@
 from enum import Enum
-from pyMINT.mintconnection import MINTConnection
+from ..mintconnection import MINTConnection
 from ..mintcomponent import MINTComponent
 from typing import List
 

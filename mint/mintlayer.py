@@ -1,4 +1,4 @@
-from pyparchmint.layer import Layer
+from parchmint.layer import Layer
 
 from enum import Enum
 

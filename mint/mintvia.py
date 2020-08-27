@@ -1,4 +1,4 @@
-from pyMINT.mintparams import MINTParams
+from .mintparams import MINTParams
 from .mintcomponent import MINTComponent
 
 class MINTVia(MINTComponent):

@@ -1,9 +1,9 @@
-from pyMINT.mintvia import MINTVia
-from pyMINT.mintterminal import MINTTerminal
-from pyMINT.constraints.constraint import LayoutConstraint
+from .mintvia import MINTVia
+from .mintterminal import MINTTerminal
+from .constraints.constraint import LayoutConstraint
 from .minttarget import MINTTarget
 from .mintlayer import MINTLayer, MINTLayerType
-from pyparchmint.device import Device
+from parchmint.device import Device
 from .mintcomponent import MINTComponent
 from .mintconnection import MINTConnection
 from typing import List, Optional

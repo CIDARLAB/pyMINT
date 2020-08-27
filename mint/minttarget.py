@@ -1,4 +1,4 @@
-from pyparchmint.target import Target
+from parchmint.target import Target
 
 
 class MINTTarget(Target):

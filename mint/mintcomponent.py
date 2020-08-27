@@ -1,5 +1,5 @@
 from .mintparams import MINTParams
-from pyparchmint.component import Component
+from parchmint.component import Component
 
 class MINTComponent(Component):
 
