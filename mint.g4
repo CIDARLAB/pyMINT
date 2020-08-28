@@ -111,7 +111,7 @@ primitiveStat
     ;
 
 bankDeclStat
-    :   orientation? 'BANK' ufnames 'of' dim=INT entity paramsStat ';'
+    :   orientation? 'BANK' ufnames 'of' entity paramsStat ';'
     ;
 
 bankGenStat
@@ -127,7 +127,7 @@ gridGenStat
     ;
 
 gridDeclStat
-    :   orientation? 'GRID' ufnames 'of' xdim=INT ',' ydim=INT paramsStat ';'
+    :   orientation? 'GRID' ufnames 'of' xdim=INT ',' ydim=INT entity paramsStat ';'
     ;
 
 gridStat

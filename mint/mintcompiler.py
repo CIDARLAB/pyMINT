@@ -103,6 +103,19 @@ class MINTCompiler(mintListener):
             component_name = ufname.getText()
             self.current_device.addComponent(component_name, entity, self.current_params, str(self.current_layer_id))
 
+    def exitBankGenStat(self, ctx:mintParser.BankGenStatContext):
+        entity = self.current_entity
+        if entity is None:
+            raise Exception("Could not find the technology for the primitive")
+
+        dim = int(ctx.dim.text)
+
+        name = ctx.ufname().getText()
+
+        for i in range(1, dim+1):
+            component_name = name + "_" + str(i)
+            self.current_device.addComponent(component_name, entity, self.current_params, str(self.current_layer_id))
+
     def exitGridDeclStat(self, ctx: mintParser.GridDeclStatContext):
         entity = self.current_entity
         if entity is None:
