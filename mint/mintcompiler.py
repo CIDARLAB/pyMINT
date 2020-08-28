@@ -52,7 +52,7 @@ class MINTCompiler(mintListener):
     def enterIntParam(self, ctx: mintParser.IntParamContext):
         value = ctx.value().getText()
         key = ctx.param_element().getText()
-        self.current_params[key] = value
+        self.current_params[key] = int(value)
 
     def enterBoolParam(self, ctx: mintParser.BoolParamContext):
         if ctx.boolvalue.getText() == 'YES' : 
@@ -78,7 +78,7 @@ class MINTCompiler(mintListener):
         if key =='w' :
             key = 'width'
         
-        self.current_params[key] = value
+        self.current_params[key] = int(value)
 
     def enterFlowStat(self, ctx: mintParser.FlowStatContext):
         self.current_entity = None
