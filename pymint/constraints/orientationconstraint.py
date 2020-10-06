@@ -1,6 +1,6 @@
-from mint.constraints.constraint import LayoutConstraint
+from pymint.constraints.constraint import LayoutConstraint
 from typing import overload
-from mint.mintcomponent import MINTComponent
+from pymint.mintcomponent import MINTComponent
 from parchmint.component import Component
 from enum import Enum
 

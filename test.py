@@ -1,4 +1,4 @@
-from mint.mintdevice import MINTDevice
-import mint
+from pymint.mintdevice import MINTDevice
+import pymint
 
 d = MINTDevice("TEST")

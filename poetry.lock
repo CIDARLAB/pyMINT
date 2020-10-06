@@ -49,22 +49,16 @@ scipy = ["scipy"]
 [[package]]
 category = "main"
 description = ""
-develop = true
 name = "parchmint"
 optional = false
-python-versions = "^3.8"
+python-versions = ">=3.8,<4.0"
 version = "0.1.2"
 
 [package.dependencies]
 networkx = ">=2.5,<3.0"
 
-[package.source]
-reference = ""
-type = "directory"
-url = "../pyparchmint"
-
 [metadata]
-content-hash = "270c86c10cc8cfa053d9797cc0e866626af37bf7a9bcb7030e8fa49c836d0d8e"
+content-hash = "4261138ae9034dcf72cbe925f3519f876f46f6ca0c678d79c6d97954b0f7d5b8"
 lock-version = "1.1"
 python-versions = "~3.8"
 
@@ -84,4 +78,7 @@ networkx = [
     {file = "networkx-2.5-py3-none-any.whl", hash = "sha256:8c5812e9f798d37c50570d15c4a69d5710a18d77bafc903ee9c5fba7454c616c"},
     {file = "networkx-2.5.tar.gz", hash = "sha256:7978955423fbc9639c10498878be59caf99b44dc304c2286162fd24b458c1602"},
 ]
-parchmint = []
+parchmint = [
+    {file = "parchmint-0.1.2-py3-none-any.whl", hash = "sha256:f73aae5f06b02aed455811bd66ed3f4451bab759734bafa0843d55900918f52b"},
+    {file = "parchmint-0.1.2.tar.gz", hash = "sha256:494f24853dd56275ff12e733bdccb4a6d6809218314399e2cd14b646c03b89c0"},
+]

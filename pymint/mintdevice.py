@@ -1,11 +1,11 @@
-from mint.mintvia import MINTVia
-from mint.mintterminal import MINTTerminal
-from mint.constraints.constraint import LayoutConstraint
-from mint.minttarget import MINTTarget
-from mint.mintlayer import MINTLayer, MINTLayerType
+from pymint.mintvia import MINTVia
+from pymint.mintterminal import MINTTerminal
+from pymint.constraints.constraint import LayoutConstraint
+from pymint.minttarget import MINTTarget
+from pymint.mintlayer import MINTLayer, MINTLayerType
 from parchmint.device import Device
-from mint.mintcomponent import MINTComponent
-from mint.mintconnection import MINTConnection
+from pymint.mintcomponent import MINTComponent
+from pymint.mintconnection import MINTConnection
 from typing import List, Optional
 
 class MINTDevice(Device):
@@ -76,11 +76,11 @@ class MINTDevice(Device):
 
     def from_mint_file(filepath):
         from antlr4 import CommonTokenStream, ParseTreeWalker, FileStream
-        from mint.constraints.constraintlistener import ConstraintListener
-        from mint.mintErrorListener import MINTErrorListener
-        from mint.antlr.mintLexer import mintLexer
-        from mint.antlr.mintParser import mintParser
-        from mint.mintcompiler import MINTCompiler
+        from pymint.constraints.constraintlistener import ConstraintListener
+        from pymint.mintErrorListener import MINTErrorListener
+        from pymint.antlr.mintLexer import mintLexer
+        from pymint.antlr.mintParser import mintParser
+        from pymint.mintcompiler import MINTCompiler
         import io
 
         finput = FileStream(filepath)

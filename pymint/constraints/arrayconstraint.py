@@ -1,5 +1,5 @@
-from mint.constraints.constraint import LayoutConstraint
-from mint.mintcomponent import MINTComponent
+from pymint.constraints.constraint import LayoutConstraint
+from pymint.mintcomponent import MINTComponent
 from typing import List
 
 

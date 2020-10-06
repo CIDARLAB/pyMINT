@@ -1,14 +1,14 @@
 from typing import List
 import logging
-from mint.mintcomponent import MINTComponent
-from mint.constraints.orthogonalconstraint import OrthogonalConstraint
-from mint.constraints.arrayconstraint import ArrayConstraint
-from mint.constraints.positionconstraint import PositionConstraint
-from mint.constraints.constraint import LayoutConstraint
-from mint.antlr.mintListener import mintListener
-from mint.mintdevice import MINTDevice
-from mint.antlr.mintParser import mintParser
-from mint.constraints.orientationconstraint import ComponentOrientation, OrientationConstraint
+from pymint.mintcomponent import MINTComponent
+from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
+from pymint.constraints.arrayconstraint import ArrayConstraint
+from pymint.constraints.positionconstraint import PositionConstraint
+from pymint.constraints.constraint import LayoutConstraint
+from pymint.antlr.mintListener import mintListener
+from pymint.mintdevice import MINTDevice
+from pymint.antlr.mintParser import mintParser
+from pymint.constraints.orientationconstraint import ComponentOrientation, OrientationConstraint
 
 
 class ConstraintListener(mintListener):

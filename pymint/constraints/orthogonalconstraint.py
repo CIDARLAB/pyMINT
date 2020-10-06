@@ -1,7 +1,7 @@
-from mint.mintdevice import MINTDevice
+from pymint.mintdevice import MINTDevice
 from parchmint.device import Device
-from mint.mintcomponent import MINTComponent
-from mint.constraints.constraint import LayoutConstraint
+from pymint.mintcomponent import MINTComponent
+from pymint.constraints.constraint import LayoutConstraint
 from typing import List
 import networkx as nx
 

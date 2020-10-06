@@ -1,5 +1,5 @@
-from mint.mintparams import MINTParams
-from mint.mintcomponent import MINTComponent
+from pymint.mintparams import MINTParams
+from pymint.mintcomponent import MINTComponent
 
 class MINTTerminal(MINTComponent):
 

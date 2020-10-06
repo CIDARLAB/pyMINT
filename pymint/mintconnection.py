@@ -1,6 +1,6 @@
-from mint.mintparams import MINTParams
+from pymint.mintparams import MINTParams
 from parchmint.connection import Connection
-from mint.minttarget import MINTTarget
+from pymint.minttarget import MINTTarget
 from typing import List
 
 class MINTConnection(Connection):
