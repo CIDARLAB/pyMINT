@@ -17,11 +17,11 @@ importBlock
     ;
 
 importStat
-    :   'IMPORT' ufmodulename
+    :   'IMPORT' WS+ ufmodulename
     ;
 
 header
-    :   'DEVICE' device_name=ID
+    :   'DEVICE' WS+ device_name=ID
     ;
 
 ufmoduleBlock
@@ -107,31 +107,31 @@ integrationStat
 //Flow and Control Statements
 
 primitiveStat
-    :   orientation? entity ufnames paramsStat ';'
+    :   (orientation WS+)?  entity WS+ ufnames WS+ paramsStat ';'
     ;
 
 bankDeclStat
-    :   orientation? 'BANK' ufnames 'of' entity paramsStat ';'
+    :   (orientation WS+)? 'BANK' WS+ ufnames WS+ 'of' WS+ entity WS+ paramsStat ';'
     ;
 
 bankGenStat
-    :   orientation? 'BANK' ufname 'of' dim=INT entity paramsStat ';'
+    :   (orientation WS+)? 'BANK' WS+ ufname 'of' dim=INT WS+ entity WS+ paramsStat ';'
     ;
 
 bankStat
-    :   orientation? 'BANK' ufnames 'of' dim=INT paramsStat ';'
+    :   (orientation WS+)? 'BANK' WS+ ufnames WS+ 'of' WS+ dim=INT WS+ paramsStat ';'
     ;
 
 gridGenStat
-    :   orientation? 'GRID' ufname 'of' xdim=INT ',' ydim=INT entity paramsStat ';'
+    :   (orientation WS+)? 'GRID' WS+ ufname WS+ 'of' WS+ xdim=INT WS* ',' WS* ydim=INT WS+ entity WS+ paramsStat ';'
     ;
 
 gridDeclStat
-    :   orientation? 'GRID' ufnames 'of' xdim=INT ',' ydim=INT entity paramsStat ';'
+    :   (orientation WS+)? 'GRID' WS+ ufnames WS+ 'of' WS+ xdim=INT WS* ',' WS* ydim=INT WS+ entity WS+ paramsStat ';'
     ;
 
 gridStat
-    :   orientation? 'GRID' ufnames 'of' xdim=INT ',' ydim=INT paramsStat ';'
+    :   orientation? 'GRID' WS+ ufnames WS+  'of' WS+ xdim=INT ',' ydim=INT paramsStat ';'
     ;
 
 spanStat
@@ -143,19 +143,19 @@ valveStat
     ;
 
 nodeStat
-    :   'NODE' ufnames ';'
+    :   'NODE' WS+ ufnames ';'
     ;
 
 viaStat
-    :   'VIA' ufnames ';'
+    :   'VIA' WS+ ufnames ';'
     ;
 
 terminalStat
-    :   'TERMINAL' ufname pin=INT ';'
+    :   'TERMINAL' WS+ ufname WS+ pin=INT ';'
     ;
 
 channelStat
-    :   (entity|'CHANNEL') ufname 'from' source=uftarget 'to' sink=uftarget paramsStat ';'
+    :   (entity|'CHANNEL') WS+ ufname WS+ 'from' WS+ source=uftarget WS+ 'to' WS+ sink=uftarget WS* paramsStat ';'
     ;
 
 netStat
@@ -165,7 +165,7 @@ netStat
 //Common Parser Rules
 
 entity
-    :   entity_element+
+    :   entity_element (WS entity_element)*
     ;
 
 entity_element
@@ -173,7 +173,7 @@ entity_element
     ;
 
 paramsStat
-    :   paramStat*
+    :   (paramStat WS*)*
     ;
 
 //connectionParamStat
@@ -203,7 +203,7 @@ constraintParams
     |   horizontalSpacingParam
     ;
 
-spacingParam: 'spacing' '=' value;
+spacingParam: 'spacing'WS*'=' WS* value;
 
 directionParam: 'direction''=' direction=('UP'|'DOWN'|'LEFT'|'RIGHT');
 
@@ -212,7 +212,7 @@ param_element
     ;
 
 intParam
-    :   param_element '=' value
+    :   param_element '=' WS* value
     ;
 
 boolParam
@@ -220,24 +220,24 @@ boolParam
     ;
 
 widthParam
-    :   key='width' '=' value
-    |   key='w' '=' value
+    :   key='width'WS*'=' WS* value
+    |   key='w'WS*'=' WS* value
     ;
 
 verticalSpacingParam
-    :   'horizontalSpacing''=' value
+    :   'horizontalSpacing'WS*'=' WS* value
     ;
 
 horizontalSpacingParam
-    :   'horizontalSpacing''=' value
+    :   'horizontalSpacing'WS*'=' WS* value
     ;
 
 rotationParam
-    :   'rotation' '=' rotation=value
+    :   'rotation'WS*'=' WS* rotation=value
     ;
 
 lengthParam
-    :   'length' '=' length=value
+    :   'length'WS*'=' WS* length=value
     ;
 
 ufmodulename
@@ -249,11 +249,11 @@ ufterminal
     ;
 
 uftargets
-    :    uftarget (',' uftarget)+
+    :    uftarget WS* (',' WS* uftarget)+
     ;
 
 uftarget
-    :   target_name=ID (target_terminal=INT)?
+    :   target_name=ID (WS+ target_terminal=INT)?
     ;
 
 ufname
@@ -261,7 +261,7 @@ ufname
     ;
 
 ufnames
-    :   ufname (',' ufname)*
+    :   ufname WS* (',' WS* ufname)*
     ;
 
 value
@@ -276,7 +276,7 @@ boolvalue
 
 //Constraints
 positionConstraintStat
-    :   ufname 'SET' setCoordinate+ ';'
+    :   ufname WS+ 'SET' WS+ setCoordinate+ ';'
     ;
 
 setCoordinate
@@ -293,7 +293,9 @@ ID_BIG  :  ('A'..'Z'|'_') ('A'..'Z'|'_'|'0'..'9')*  ;
 
 INT :   [0-9]+ ; // Define token INT as one or more digits
 
-WS  :   [ \t\r\n]+ -> skip ; // Define whitespace rule, toss it out
+WS  :   [ \t]+ ;
+
+NL : [\r\n]+ -> skip ; // Define whitespace rule, toss it out
 
 COMMENT :    '#' ~[\r\n]* -> skip ;
 
