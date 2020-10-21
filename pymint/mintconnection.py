@@ -11,10 +11,12 @@ class MINTConnection(Connection):
         self.ID = name
         self.entity = technology
         self.params = MINTParams(params)
-        self.source = source
-        self.sinks = sinks
+        self.source: MINTTarget = source
+        self.sinks: List[MINTTarget] = sinks
         self.layer = layer
 
+    def overwrite_id(self, id: str) -> None:
+        self.ID = id
 
     def toMINT(self) -> str:
         ret = "{} {} from {} to {} {} ;".format(self.entity, self.name, self.source.toMINT(), " ".join([item.toMINT() for item in self.sinks]), self.params.toMINT())

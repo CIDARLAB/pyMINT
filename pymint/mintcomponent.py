@@ -11,6 +11,9 @@ class MINTComponent(Component):
         self.params = MINTParams(params)
         self.layers.append(layer)
 
+    def overwrite_id(self, id: str) -> None:
+        self.ID = id
+
     def toMINT(self) -> str:
         ret = "{} {} {};".format(self.entity, self.name, self.params.toMINT())
         return ret
