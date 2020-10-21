@@ -5,3 +5,4 @@ from .mintterminal import MINTTerminal
 from .mintconnection import MINTConnection
 from .mintcomponent import MINTComponent
 from .mintcompiler import MINTCompiler
+from .mintdevice import MINTDevice
