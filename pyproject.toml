@@ -10,7 +10,7 @@ python = "^3.8"
 pip = "^20.2.2"
 install = "^1.3.3"
 antlr4-python3-runtime = "^4.8"
-parchmint = "^0.1.2"
+parchmint = {path = "../pyparchmint"}
 
 [tool.poetry.dev-dependencies]
 
