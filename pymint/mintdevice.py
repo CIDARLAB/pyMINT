@@ -19,17 +19,17 @@ class MINTDevice(Device):
         self._terminals = []
         self._vias = []
 
-    def addComponent(self, name: str, technology: str, params: dict, layer:str) -> MINTComponent:
+    def add_component(self, name: str, technology: str, params: dict, layer:str) -> MINTComponent:
         component = MINTComponent(name, technology, params, layer)
         super().add_component(component)
         return component
     
-    def addConnection(self, name:str, technology:str, params: dict , source:MINTTarget, sinks:List[MINTTarget], layer:str) -> MINTConnection:
+    def add_connection(self, name:str, technology:str, params: dict , source:MINTTarget, sinks:List[MINTTarget], layer:str) -> MINTConnection:
         connection = MINTConnection(name, technology, params, source, sinks, layer)
         super().add_connection(connection)
         return connection
 
-    def addLayer(self, name, group, layer_type:MINTLayerType) -> MINTLayer:
+    def add_layer(self, name, group, layer_type:MINTLayerType) -> MINTLayer:
         layer = MINTLayer(name, group, layer_type)
         super().add_layer(layer)
         return layer
