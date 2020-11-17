@@ -229,20 +229,3 @@ class MINTCompiler(mintListener):
         
     def exitNetlist(self, ctx: mintParser.NetlistContext):
         self.current_device.generate_network()
-
-
-
-        
-
-    
-
-
-    
-
-        
-
-
-    
-
-
-

@@ -13,6 +13,9 @@ antlr4-python3-runtime = "^4.8"
 parchmint = {path = "../pyparchmint"}
 
 [tool.poetry.dev-dependencies]
+mypy = "^0.790"
+flake8 = "^3.8.4"
+black = "^20.8b1"
 
 [tool.dephell.main]
 from = {format = "poetry", path = "pyproject.toml"}
