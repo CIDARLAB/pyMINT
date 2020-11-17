@@ -212,20 +212,20 @@ class MINTCompiler(mintListener):
         valve_name = ctx.ufname()[0].getText()
         valve_component = self.current_device.addComponent(valve_name, entity, self.current_params, str(self.current_layer_id))
         connection_name = ctx.ufname()[1].getText()
-        valve_connection = self.current_device.getConnection(connection_name)
+        valve_connection = self.current_device.get_connection(connection_name)
         if valve_connection is None:
             raise Exception("Error: Could not find connection '{}' in device '{}'".format(connection_name, self.current_device.name))
         
-        self.current_device.mapValve(valve_component, valve_connection)
+        self.current_device.map_valve(valve_component, valve_connection)
 
     def enterViaStat(self, ctx:mintParser.ViaStatContext):
         for ufname in ctx.ufnames().ufname():
-            self.current_device.addVia(ufname.getText(),)
+            self.current_device.add_via(ufname.getText(),)
 
     def enterTerminalStat(self, ctx:mintParser.TerminalStatContext):
         terminal_name = ctx.ufname().getText()
         pin_number = int(ctx.INT.getText())
-        self.current_device.addTerminal(terminal_name, pin_number, str(self.current_layer_id))
+        self.current_device.add_terminal(terminal_name, pin_number, str(self.current_layer_id))
         
     def exitNetlist(self, ctx: mintParser.NetlistContext):
         self.current_device.generate_network()

@@ -26,7 +26,7 @@ class MINTLayer(Layer):
         self.name = "{}_{}".format(str(layer_type), id)
         self.type = str(layer_type)
 
-    def toMINT(self, content:str) -> str:
+    def to_MINT(self, content:str) -> str:
         
         ret = "LAYER {} \n\n{} \n\nEND LAYER".format(self.type, content)
         return ret

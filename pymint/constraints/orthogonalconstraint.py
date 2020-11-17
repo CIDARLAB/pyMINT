@@ -24,7 +24,7 @@ class OrthogonalConstraint(LayoutConstraint):
             neighbors = list(nx.neighbors(G, root_node))
             pass
             for neighbor in neighbors:
-                component = current_device.getComponent(neighbor)
+                component = current_device.get_component(neighbor)
                 if component in nodes:
                     continue
                 if component.entity == 'NODE':

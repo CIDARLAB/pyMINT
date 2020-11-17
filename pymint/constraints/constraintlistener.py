@@ -50,7 +50,7 @@ class ConstraintListener(mintListener):
 
     def exitPositionConstraintStat(self, ctx: mintParser.PositionConstraintStatContext):
         constraint = PositionConstraint(self._constrained_components[0], self._xpos, self._ypos, self._zpos )
-        self.current_device.addConstraint(constraint)
+        self.current_device.add_constraint(constraint)
 
     def enterHorizontalSpacingParam(self, ctx: mintParser.HorizontalSpacingParamContext):
         self._horizontal_spacing = float(ctx.value().getText())
@@ -76,7 +76,7 @@ class ConstraintListener(mintListener):
         #We need to add all the parameters here
         constraint = ArrayConstraint(self._constrained_components, xdim, ydim, self._horizontal_spacing, self._vertical_spacing)
 
-        self.current_device.addConstraint(constraint)
+        self.current_device.add_constraint(constraint)
 
     def exitBankStat(self, ctx: mintParser.BankStatContext):
         dim = 1
@@ -87,7 +87,7 @@ class ConstraintListener(mintListener):
         #We need to add all the parameters here
         constraint = ArrayConstraint(self._constrained_components, dim, horizontal_spacing=self._spacing)
 
-        self.current_device.addConstraint(constraint)
+        self.current_device.add_constraint(constraint)
 
     def enterOrientation(self, ctx: mintParser.OrientationContext):
         if ctx.getText() == 'H':
@@ -101,7 +101,7 @@ class ConstraintListener(mintListener):
 
     def enterUfname(self, ctx: mintParser.UfnameContext):
         component_name = ctx.getText()
-        component = self.current_device.getComponent(component_name)
+        component = self.current_device.get_component(component_name)
         if component is not None:
             # raise Exception("Could not find component in device : {}".format(component_name))
             self._constrained_components.append(component)
@@ -125,7 +125,7 @@ class ConstraintListener(mintListener):
         for component in self._constrained_components:
             constraint.add_component(component, self._orientation)
 
-        self.current_device.addConstraint(constraint)
+        self.current_device.add_constraint(constraint)
 
 
     def exitNodeStat(self, ctx: mintParser.NodeStatContext):
@@ -140,7 +140,7 @@ class ConstraintListener(mintListener):
             #TODO check if component exists in any of the of existing constraints
             components = OrthogonalConstraint.traverse_node_component_neighbours(component, self.current_device)
             constraint = OrthogonalConstraint(components)
-            self.current_device.addConstraint(constraint)
+            self.current_device.add_constraint(constraint)
 
         
         #TODO: Add all the components onto the list and create the constraint
@@ -149,7 +149,7 @@ class ConstraintListener(mintListener):
     ##############Helpers############
     def _checkIfComponentConstranied(self, component:MINTComponent)->bool:
         found_flag = False
-        for constraint in self.current_device.getConstraints():
+        for constraint in self.current_device.get_constraints():
             if isinstance(constraint, OrthogonalConstraint):
                 found_flag = constraint.contains_component(component)
         

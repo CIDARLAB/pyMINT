@@ -18,6 +18,6 @@ class MINTConnection(Connection):
     def overwrite_id(self, id: str) -> None:
         self.ID = id
 
-    def toMINT(self) -> str:
-        ret = "{} {} from {} to {} {} ;".format(self.entity, self.name, self.source.toMINT(), " ".join([item.toMINT() for item in self.sinks]), self.params.toMINT())
+    def to_MINT(self) -> str:
+        ret = "{} {} from {} to {} {} ;".format(self.entity, self.name, self.source.to_MINT(), " ".join([item.to_MINT() for item in self.sinks]), self.params.to_MINT())
         return ret

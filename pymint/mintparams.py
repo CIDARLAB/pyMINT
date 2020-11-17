@@ -8,7 +8,7 @@ class MINTParams(Params):
         for key in pairs.keys():
             self.data[key] = pairs[key]
 
-    def toMINT(self):
+    def to_MINT(self):
         ret = ''
         for key in self.data.keys():
             ret += "{}={} ".format(key, self.data[key])
