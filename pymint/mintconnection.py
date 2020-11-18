@@ -1,3 +1,4 @@
+from __future__ import annotations
 from pymint.mintparams import MINTParams
 from parchmint.connection import Connection
 from pymint.minttarget import MINTTarget

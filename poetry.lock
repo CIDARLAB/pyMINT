@@ -175,7 +175,7 @@ description = ""
 category = "main"
 optional = false
 python-versions = "^3.8"
-develop = true
+develop = false
 
 [package.dependencies]
 argparse = ">=1.4.0,<2.0.0"
@@ -261,7 +261,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "27b6cf3d4927829eb798eaef56962b71a68cdcc5188175ecccf72cbf6506cc3c"
+content-hash = "78dc355eccae3e326d525012f9b8b2360d2ad8a236cb5edac6e2733f1c8a3c32"
 
 [metadata.files]
 antlr4-python3-runtime = [
