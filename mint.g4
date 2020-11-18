@@ -107,59 +107,59 @@ integrationStat
 //Flow and Control Statements
 
 primitiveStat
-    :   (orientation WS+)?  entity WS+ ufnames WS+ paramsStat ';'
+    :   (orientation WS+)?  entity WS+ ufnames WS+ paramsStat statTerminaion
     ;
 
 bankDeclStat
-    :   (orientation WS+)? 'BANK' WS+ ufnames WS+ 'of' WS+ entity WS+ paramsStat ';'
+    :   (orientation WS+)? 'BANK' WS+ ufnames WS+ 'of' WS+ entity WS+ paramsStat statTerminaion
     ;
 
 bankGenStat
-    :   (orientation WS+)? 'BANK' WS+ ufname 'of' dim=INT WS+ entity WS+ paramsStat ';'
+    :   (orientation WS+)? 'BANK' WS+ ufname  WS+ 'of'  WS+ dim=INT WS+ entity WS+ paramsStat statTerminaion
     ;
 
 bankStat
-    :   (orientation WS+)? 'BANK' WS+ ufnames WS+ 'of' WS+ dim=INT WS+ paramsStat ';'
+    :   (orientation WS+)? 'BANK' WS+ ufnames WS+ 'of' WS+ dim=INT WS+ paramsStat statTerminaion
     ;
 
 gridGenStat
-    :   (orientation WS+)? 'GRID' WS+ ufname WS+ 'of' WS+ xdim=INT WS* ',' WS* ydim=INT WS+ entity WS+ paramsStat ';'
+    :   (orientation WS+)? 'GRID' WS+ ufname WS+ 'of' WS+ xdim=INT WS* ',' WS* ydim=INT WS+ entity WS+ paramsStat statTerminaion
     ;
 
 gridDeclStat
-    :   (orientation WS+)? 'GRID' WS+ ufnames WS+ 'of' WS+ xdim=INT WS* ',' WS* ydim=INT WS+ entity WS+ paramsStat ';'
+    :   (orientation WS+)? 'GRID' WS+ ufnames WS+ 'of' WS+ xdim=INT WS* ',' WS* ydim=INT WS+ entity WS+ paramsStat statTerminaion
     ;
 
 gridStat
-    :   orientation? 'GRID' WS+ ufnames WS+  'of' WS+ xdim=INT ',' ydim=INT WS+ paramsStat ';'
+    :   (orientation WS+)? 'GRID' WS+ ufnames WS+  'of' WS+ xdim=INT WS* ',' WS* ydim=INT WS+ paramsStat statTerminaion
     ;
 
 spanStat
-    :   orientation? entity WS+ ufnames WS+ indim=INT WS+ 'to' WS+ outdim=INT WS+ paramsStat ';'
+    :   (orientation WS+)? entity WS+ ufnames WS+ indim=INT WS+ 'to' WS+ outdim=INT WS+ paramsStat statTerminaion
     ;
 
 valveStat
-    :   entity ufname 'on' ufname paramsStat ';'
+    :   entity WS+ ufname WS+ 'on' WS+ ufname WS+ paramsStat statTerminaion
     ;
 
 nodeStat
-    :   'NODE' WS+ ufnames ';'
+    :   'NODE' WS+ ufnames statTerminaion
     ;
 
 viaStat
-    :   'VIA' WS+ ufnames ';'
+    :   'VIA' WS+ ufnames statTerminaion
     ;
 
 terminalStat
-    :   'TERMINAL' WS+ ufname WS+ pin=INT ';'
+    :   'TERMINAL' WS+ ufname WS+ pin=INT statTerminaion
     ;
 
 channelStat
-    :   (entity|'CHANNEL') WS+ ufname WS+ 'from' WS+ source=uftarget WS+ 'to' WS+ sink=uftarget WS* paramsStat ';'
+    :   (entity|'CHANNEL') WS+ ufname WS+ 'from' WS+ source=uftarget WS+ 'to' WS+ sink=uftarget WS* paramsStat statTerminaion
     ;
 
 netStat
-    :   (entity|'NET') ufname 'from' source=uftarget 'to' sinks=uftargets paramsStat ';'
+    :   (entity|'NET') WS+ ufname WS+ 'from' WS+ source=uftarget WS+ 'to' WS+ sinks=uftargets WS+ paramsStat statTerminaion
     ;
 
 //Common Parser Rules
@@ -176,6 +176,7 @@ paramsStat
     :   (paramStat WS*)*
     ;
 
+statTerminaion : WS* ';' WS* ;
 //connectionParamStat
 //    :   lengthParam
 //    |   paramsStat
@@ -261,7 +262,7 @@ ufname
     ;
 
 ufnames
-    :   ufname WS* (',' WS* ufname)*
+    :   ufname WS* (',' WS* ufname)* WS*
     ;
 
 value
