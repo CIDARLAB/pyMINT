@@ -3,8 +3,8 @@ from pymint.minttarget import MINTTarget
 from pymint.mintcomponent import MINTComponent
 from parchmint.component import Component
 from pymint.mintdevice import MINTDevice
-from pymint.antlr.mintListener import mintListener
-from pymint.antlr.mintParser import mintParser
+from pymint.antlrgen.mintListener import mintListener
+from pymint.antlrgen.mintParser import mintParser
 from pymint.mintlayer import MINTLayer, MINTLayerType
 from typing import Optional
 

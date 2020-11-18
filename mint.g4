@@ -131,11 +131,11 @@ gridDeclStat
     ;
 
 gridStat
-    :   orientation? 'GRID' WS+ ufnames WS+  'of' WS+ xdim=INT ',' ydim=INT paramsStat ';'
+    :   orientation? 'GRID' WS+ ufnames WS+  'of' WS+ xdim=INT ',' ydim=INT WS+ paramsStat ';'
     ;
 
 spanStat
-    :   orientation? entity ufnames  indim=INT 'to' outdim=INT paramsStat ';'
+    :   orientation? entity WS+ ufnames WS+ indim=INT WS+ 'to' WS+ outdim=INT WS+ paramsStat ';'
     ;
 
 valveStat

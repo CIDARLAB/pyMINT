@@ -81,8 +81,8 @@ class MINTDevice(Device):
         from antlr4 import CommonTokenStream, ParseTreeWalker, FileStream
         from pymint.constraints.constraintlistener import ConstraintListener
         from pymint.mintErrorListener import MINTErrorListener
-        from pymint.antlr.mintLexer import mintLexer
-        from pymint.antlr.mintParser import mintParser
+        from pymint.antlrgen.mintLexer import mintLexer
+        from pymint.antlrgen.mintParser import mintParser
         from pymint.mintcompiler import MINTCompiler
         import io
 
