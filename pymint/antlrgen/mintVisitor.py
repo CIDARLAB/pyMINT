@@ -169,6 +169,11 @@ class mintVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by mintParser#statTerminaion.
+    def visitStatTerminaion(self, ctx:mintParser.StatTerminaionContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by mintParser#connectionParamStat.
     def visitConnectionParamStat(self, ctx:mintParser.ConnectionParamStatContext):
         return self.visitChildren(ctx)

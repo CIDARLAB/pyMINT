@@ -296,6 +296,15 @@ class mintListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by mintParser#statTerminaion.
+    def enterStatTerminaion(self, ctx:mintParser.StatTerminaionContext):
+        pass
+
+    # Exit a parse tree produced by mintParser#statTerminaion.
+    def exitStatTerminaion(self, ctx:mintParser.StatTerminaionContext):
+        pass
+
+
     # Enter a parse tree produced by mintParser#connectionParamStat.
     def enterConnectionParamStat(self, ctx:mintParser.ConnectionParamStatContext):
         pass
