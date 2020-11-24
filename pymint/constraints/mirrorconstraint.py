@@ -112,5 +112,56 @@ class MirrorConstraint(LayoutConstraint):
 
         return True
 
-    def step_reverse(self, source: str, mirror_groups: List[List[MINTComponent]]) -> None:
-        pass
+    def step_reverse(self, sources: List[str], mirror_groups: List[List[MINTComponent]], device: MINTDevice) -> bool:
+        G = device.G
+        incoming_edges = []
+        for source in sources:
+            incoming_edges.extend(list(G.in_edges(source)))
+
+        sink_ids = []
+        for edge in list(incoming_edges):
+            sink_ids.append(edge[0])
+
+        # If there is a only 1 common sink, or less than the mirror count, then we gotto kill the mirror groupings
+        if len(sink_ids) < self.__mirror_count:
+            return False
+
+        # Check if all the types of the components are the same
+        entities = []
+        components = []
+        for id in sink_ids:
+            component = device.get_component(id)
+            entities.append(component.entity)
+            components.append(component)
+
+        # If all the entities are the same, include them into the mirror groups
+        entity_0 = entities[0]
+        fail_flag = False
+        for i in range(1, len(sink_ids)):
+            entity_i = entities[i]
+            if entity_i != entity_0:
+                fail_flag = True
+
+        if fail_flag is True:
+            return False
+
+        # Since it works, we add everything to the mirror groups, for each of the components see which group the
+        # predecessor is in and place it in the corresponding group, if its not in any of the groups something
+        # went wrong in the alg
+        for component in components:
+            assing_group_found_flag = False
+            for edge in list(G.in_edges(component.ID)):
+                predecessor_component = device.get_component(edge[0])
+                for group in mirror_groups:
+                    if predecessor_component in group:
+                        group.append(component)
+                        assing_group_found_flag = True
+                        break
+
+            if assing_group_found_flag is False:
+                raise Exception("Could not find the mirror group for component: {}".format(component.ID))
+
+        next_sources = [c.ID for c in components]
+        self.step_forward(next_sources, mirror_groups, device)
+
+        return True
