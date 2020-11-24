@@ -16,6 +16,7 @@ class ArrayConstraint(LayoutConstraint):
         
         if ydim is None:
             self.__is1D = True
+            self.__ydim = 1
         else:
             self.__ydim = ydim
 
@@ -34,5 +35,3 @@ class ArrayConstraint(LayoutConstraint):
     @property
     def dim(self) -> int:
         return self.__xdim
-
-    

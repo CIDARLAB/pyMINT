@@ -1,5 +1,6 @@
 from parchmint.layer import Layer
 
+
 from enum import Enum
 
 class MINTLayerType(Enum):
