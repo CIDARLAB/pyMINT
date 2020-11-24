@@ -3,6 +3,7 @@ from pymint.mintconnection import MINTConnection
 from pymint.mintcomponent import MINTComponent
 from typing import List
 
+
 class OperationType(Enum):
     EXPLICIT_OPERATION = 0
     OPTIONAL_OPERATION = 1
@@ -13,7 +14,6 @@ class OperationType(Enum):
 
 
 class LayoutConstraint(object):
-
     def __init__(self) -> None:
         self._components = []
         self._connections = []
@@ -21,12 +21,12 @@ class LayoutConstraint(object):
 
     def add_component(self, component: MINTComponent):
         self._components.append(component)
-    
+
     def add_connection(self, connection: MINTConnection):
         self._connections.append(connection)
 
-    def get_components(self)->List[MINTComponent]:
+    def get_components(self) -> List[MINTComponent]:
         return self._components
 
-    def contains_component(self, component:MINTComponent) -> bool:
+    def contains_component(self, component: MINTComponent) -> bool:
         return component in self._components

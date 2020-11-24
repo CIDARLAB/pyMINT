@@ -2,9 +2,11 @@ from __future__ import annotations
 from pymint.mintparams import MINTParams
 from parchmint.component import Component
 
-class MINTComponent(Component):
 
-    def __init__(self, name:str , technology:str, params:dict, layer:str = '0') -> None:
+class MINTComponent(Component):
+    def __init__(
+        self, name: str, technology: str, params: dict, layer: str = "0"
+    ) -> None:
         super().__init__()
         self.name = name
         self.ID = name

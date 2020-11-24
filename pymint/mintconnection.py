@@ -4,10 +4,18 @@ from parchmint.connection import Connection
 from pymint.minttarget import MINTTarget
 from typing import List
 
-class MINTConnection(Connection):
 
-    def __init__(self, name: str, technology: str, params:dict, source: MINTTarget, sinks: List[MINTTarget], layer:str = '0') -> None:
-        
+class MINTConnection(Connection):
+    def __init__(
+        self,
+        name: str,
+        technology: str,
+        params: dict,
+        source: MINTTarget,
+        sinks: List[MINTTarget],
+        layer: str = "0",
+    ) -> None:
+
         self.name = name
         self.ID = name
         self.entity = technology
@@ -20,5 +28,11 @@ class MINTConnection(Connection):
         self.ID = id
 
     def to_MINT(self) -> str:
-        ret = "{} {} from {} to {} {} ;".format(self.entity, self.name, self.source.to_MINT(), " ".join([item.to_MINT() for item in self.sinks]), self.params.to_MINT())
+        ret = "{} {} from {} to {} {} ;".format(
+            self.entity,
+            self.name,
+            self.source.to_MINT(),
+            " ".join([item.to_MINT() for item in self.sinks]),
+            self.params.to_MINT(),
+        )
         return ret

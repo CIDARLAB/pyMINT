@@ -4,8 +4,13 @@ from typing import Optional
 
 
 class PositionConstraint(LayoutConstraint):
-
-    def __init__(self, component: MINTComponent, xpos: Optional[float], ypos: Optional[float], zpos: Optional[float]) -> None:
+    def __init__(
+        self,
+        component: MINTComponent,
+        xpos: Optional[float],
+        ypos: Optional[float],
+        zpos: Optional[float],
+    ) -> None:
         super().__init__()
         self.add_component(component)
         self.__xpos = xpos

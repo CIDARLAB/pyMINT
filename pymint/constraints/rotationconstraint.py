@@ -7,7 +7,7 @@ class RotationConstraint(LayoutConstraint):
         super().__init__()
         self._components.append(component)
         self.__rotation = rotation
-    
+
     @property
     def component(self) -> MINTComponent:
         return self._components[0]

@@ -2,10 +2,8 @@ from pymint.mintcomponent import MINTComponent
 
 
 class MINTNode(MINTComponent):
-
-    def __init__(self, name: str, layer: str = '0') -> None:
+    def __init__(self, name: str, layer: str = "0") -> None:
         super().__init__(name, "NODE", dict(), layer)
-
 
     def to_MINT(self) -> str:
         ret = "NODE {};".format(self.name)
