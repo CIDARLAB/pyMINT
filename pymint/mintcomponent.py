@@ -1,3 +1,4 @@
+from __future__ import annotations
 from pymint.mintparams import MINTParams
 from parchmint.component import Component
 
@@ -14,8 +15,8 @@ class MINTComponent(Component):
     def overwrite_id(self, id: str) -> None:
         self.ID = id
 
-    def toMINT(self) -> str:
-        ret = "{} {} {};".format(self.entity, self.name, self.params.toMINT())
+    def to_MINT(self) -> str:
+        ret = "{} {} {};".format(self.entity, self.name, self.params.to_MINT())
         return ret
 
     def __hash__(self) -> int:

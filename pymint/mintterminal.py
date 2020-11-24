@@ -11,3 +11,6 @@ class MINTTerminal(MINTComponent):
     def port_number(self) -> int:
         return self.__port_number
     
+    def to_MINT(self) -> str:
+        return "TERMINAL {} {}".format(self.name, self.__port_number)
+    

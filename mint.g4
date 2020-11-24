@@ -17,11 +17,11 @@ importBlock
     ;
 
 importStat
-    :   'IMPORT' ufmodulename
+    :   WS* 'IMPORT' WS+ ufmodulename
     ;
 
 header
-    :   'DEVICE' device_name=ID
+    :   WS* 'DEVICE' WS+ device_name=ID
     ;
 
 ufmoduleBlock
@@ -49,15 +49,15 @@ layerBlock
 
 
 flowBlock
-    :   'LAYER FLOW'
-        (flowStat)*
-        'END LAYER'
+    :   WS*'LAYER FLOW'
+        (WS* flowStat)*
+        WS*'END LAYER'
     ;
 
 controlBlock
-    :   'LAYER CONTROL'
-        (controlStat)*
-        'END LAYER'
+    :   WS*'LAYER CONTROL'
+        (WS* controlStat)*
+        WS*'END LAYER'
     ;
 
 integrationBlock
@@ -90,6 +90,7 @@ controlStat
     |   netStat
     |   bankDeclStat
     |   bankStat
+    |   bankGenStat
     |   gridStat
     |   gridGenStat
     |   primitiveStat
@@ -107,65 +108,65 @@ integrationStat
 //Flow and Control Statements
 
 primitiveStat
-    :   orientation? entity ufnames paramsStat ';'
+    :   (orientation WS+)?  entity WS+ ufnames (WS+ paramsStat)? statTerminaion
     ;
 
 bankDeclStat
-    :   orientation? 'BANK' ufnames 'of' entity paramsStat ';'
+    :   (orientation WS+)? 'BANK' WS+ ufnames WS+ 'of' WS+ entity (WS+ paramsStat)? statTerminaion
     ;
 
 bankGenStat
-    :   orientation? 'BANK' ufname 'of' dim=INT entity paramsStat ';'
+    :   (orientation WS+)? 'BANK' WS+ ufname  WS+ 'of'  WS+ dim=INT WS+ entity (WS+ paramsStat)? statTerminaion
     ;
 
 bankStat
-    :   orientation? 'BANK' ufnames 'of' dim=INT paramsStat ';'
+    :   (orientation WS+)? 'BANK' WS+ ufnames (WS+ paramsStat)? statTerminaion
     ;
 
 gridGenStat
-    :   orientation? 'GRID' ufname 'of' xdim=INT ',' ydim=INT entity paramsStat ';'
+    :   (orientation WS+)? 'GRID' WS+ ufname WS+ 'of' WS+ xdim=INT WS* ',' WS* ydim=INT WS+ entity (WS+ paramsStat)? statTerminaion
     ;
 
 gridDeclStat
-    :   orientation? 'GRID' ufnames 'of' xdim=INT ',' ydim=INT entity paramsStat ';'
+    :   (orientation WS+)? 'GRID' WS+ ufnames WS+ 'of' WS+ xdim=INT WS* ',' WS* ydim=INT WS+ entity (WS+ paramsStat)? statTerminaion
     ;
 
 gridStat
-    :   orientation? 'GRID' ufnames 'of' xdim=INT ',' ydim=INT paramsStat ';'
+    :   (orientation WS+)? 'GRID' WS+ ufnames WS+  'of' WS+ xdim=INT WS* ',' WS* ydim=INT (WS+ paramsStat)? statTerminaion
     ;
 
 spanStat
-    :   orientation? entity ufnames  indim=INT 'to' outdim=INT paramsStat ';'
+    :   (orientation WS+)? entity WS+ ufnames WS+ indim=INT WS+ 'to' WS+ outdim=INT (WS+ paramsStat)? statTerminaion
     ;
 
 valveStat
-    :   entity ufname 'on' ufname paramsStat ';'
+    :   entity WS+ ufname WS+ 'on' WS+ ufname (WS+ paramsStat)? statTerminaion
     ;
 
 nodeStat
-    :   'NODE' ufnames ';'
+    :   'NODE' WS+ ufnames statTerminaion
     ;
 
 viaStat
-    :   'VIA' ufnames ';'
+    :   'VIA' WS+ ufnames statTerminaion
     ;
 
 terminalStat
-    :   'TERMINAL' ufname pin=INT ';'
+    :   'TERMINAL' WS+ ufname WS+ pin=INT statTerminaion
     ;
 
 channelStat
-    :   (entity|'CHANNEL') ufname 'from' source=uftarget 'to' sink=uftarget paramsStat ';'
+    :   (entity|'CHANNEL') WS+ ufname WS+ 'from' WS+ source=uftarget WS+ 'to' WS+ sink=uftarget WS* (WS+ paramsStat)? statTerminaion
     ;
 
 netStat
-    :   (entity|'NET') ufname 'from' source=uftarget 'to' sinks=uftargets paramsStat ';'
+    :   (entity|'NET') WS+ ufname WS+ 'from' WS+ source=uftarget WS+ 'to' WS+ sinks=uftargets (WS+ paramsStat)? statTerminaion
     ;
 
 //Common Parser Rules
 
 entity
-    :   entity_element+
+    :   entity_element (WS entity_element)*
     ;
 
 entity_element
@@ -173,9 +174,10 @@ entity_element
     ;
 
 paramsStat
-    :   paramStat*
+    :   (paramStat WS*)*
     ;
 
+statTerminaion : WS* ';' WS* ;
 //connectionParamStat
 //    :   lengthParam
 //    |   paramsStat
@@ -203,7 +205,7 @@ constraintParams
     |   horizontalSpacingParam
     ;
 
-spacingParam: 'spacing' '=' value;
+spacingParam: 'spacing'WS*'=' WS* value;
 
 directionParam: 'direction''=' direction=('UP'|'DOWN'|'LEFT'|'RIGHT');
 
@@ -212,7 +214,7 @@ param_element
     ;
 
 intParam
-    :   param_element '=' value
+    :   param_element '=' WS* value
     ;
 
 boolParam
@@ -220,24 +222,24 @@ boolParam
     ;
 
 widthParam
-    :   key='width' '=' value
-    |   key='w' '=' value
+    :   key='width'WS*'=' WS* value
+    |   key='w'WS*'=' WS* value
     ;
 
 verticalSpacingParam
-    :   'horizontalSpacing''=' value
+    :   'horizontalSpacing'WS*'=' WS* value
     ;
 
 horizontalSpacingParam
-    :   'horizontalSpacing''=' value
+    :   'horizontalSpacing'WS*'=' WS* value
     ;
 
 rotationParam
-    :   'rotation' '=' rotation=value
+    :   'rotation'WS*'=' WS* rotation=value
     ;
 
 lengthParam
-    :   'length' '=' length=value
+    :   'length'WS*'=' WS* length=value
     ;
 
 ufmodulename
@@ -249,11 +251,11 @@ ufterminal
     ;
 
 uftargets
-    :    uftarget (',' uftarget)+
+    :    uftarget WS* (',' WS* uftarget)+
     ;
 
 uftarget
-    :   target_name=ID (target_terminal=INT)?
+    :   target_name=ID (WS+ target_terminal=INT)?
     ;
 
 ufname
@@ -261,7 +263,7 @@ ufname
     ;
 
 ufnames
-    :   ufname (',' ufname)*
+    :   ufname WS* (',' WS* ufname)* WS*
     ;
 
 value
@@ -276,11 +278,11 @@ boolvalue
 
 //Constraints
 positionConstraintStat
-    :   ufname 'SET' setCoordinate+ ';'
+    :   ufname WS+ 'SET' setCoordinate+ ';'
     ;
 
 setCoordinate
-    :   coordinate=('X'|'Y'|'Z') INT
+    :   WS+ coordinate=('X'|'Y'|'Z') WS+ INT
     ;
 
 orientation : ('V'|'H') ;
@@ -293,7 +295,9 @@ ID_BIG  :  ('A'..'Z'|'_') ('A'..'Z'|'_'|'0'..'9')*  ;
 
 INT :   [0-9]+ ; // Define token INT as one or more digits
 
-WS  :   [ \t\r\n]+ -> skip ; // Define whitespace rule, toss it out
+WS  :   [ \t]+ ;
+
+NL : [\r\n]+ -> skip ; // Define whitespace rule, toss it out
 
 COMMENT :    '#' ~[\r\n]* -> skip ;
 

@@ -13,7 +13,7 @@ class PositionConstraint(LayoutConstraint):
         self.__zpos = zpos
 
     def get_component(self) -> MINTComponent:
-        ret = self.__components[0]
+        ret = self._components[0]
         if ret is None:
             raise Exception("No component set for PositionConstraint")
 

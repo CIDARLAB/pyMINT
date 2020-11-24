@@ -7,6 +7,6 @@ class MINTNode(MINTComponent):
         super().__init__(name, "NODE", dict(), layer)
 
 
-    def toMINT(self) -> str:
+    def to_MINT(self) -> str:
         ret = "NODE {};".format(self.name)
         return ret

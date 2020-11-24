@@ -7,6 +7,6 @@ class MINTTarget(Target):
         self.component = componentstring
         self.port = portstring
 
-    def toMINT(self):
+    def to_MINT(self):
         ret = "{} {}".format(self.component, '' if self.port is None else self.port )
         return ret

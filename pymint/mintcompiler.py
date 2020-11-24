@@ -3,8 +3,8 @@ from pymint.minttarget import MINTTarget
 from pymint.mintcomponent import MINTComponent
 from parchmint.component import Component
 from pymint.mintdevice import MINTDevice
-from pymint.antlr.mintListener import mintListener
-from pymint.antlr.mintParser import mintParser
+from pymint.antlrgen.mintListener import mintListener
+from pymint.antlrgen.mintParser import mintParser
 from pymint.mintlayer import MINTLayer, MINTLayerType
 from typing import Optional
 
@@ -32,16 +32,16 @@ class MINTCompiler(mintListener):
         self.current_block_id += 1
 
     def enterFlowBlock(self, ctx: mintParser.FlowBlockContext):
-        self.current_device.addLayer(str(self.current_layer_id), str(self.current_block_id), MINTLayerType.FLOW)
+        self.current_device.add_layer(str(self.current_layer_id), str(self.current_block_id), MINTLayerType.FLOW)
 
     def exitLayerBlock(self, ctx: mintParser.FlowBlockContext):
         self.current_layer_id += 1
     
     def enterControlBlock(self, ctx: mintParser.ControlBlockContext):
-        self.current_device.addLayer(str(self.current_layer_id), str(self.current_block_id), MINTLayerType.FLOW)
+        self.current_device.add_layer(str(self.current_layer_id), str(self.current_block_id), MINTLayerType.FLOW)
 
     def enterIntegrationBlock(self, ctx: mintParser.IntegrationBlockContext):
-        self.current_device.addLayer(str(self.current_layer_id), str(self.current_block_id), MINTLayerType.INTEGRATION)
+        self.current_device.add_layer(str(self.current_layer_id), str(self.current_block_id), MINTLayerType.INTEGRATION)
 
     def enterEntity(self, ctx: mintParser.EntityContext):
         self.current_entity = ctx.getText()
@@ -91,7 +91,7 @@ class MINTCompiler(mintListener):
         
         #Loop for each of the components that need to be created with this param
         for ufname in ctx.ufnames().ufname():
-            self.current_device.addComponent(ufname.getText(), entity, self.current_params, str(self.current_layer_id))
+            self.current_device.add_component(ufname.getText(), entity, self.current_params, str(self.current_layer_id))
     
 
     def exitBankDeclStat(self, ctx: mintParser.BankDeclStatContext):
@@ -101,7 +101,7 @@ class MINTCompiler(mintListener):
 
         for ufname in ctx.ufnames().ufname():
             component_name = ufname.getText()
-            self.current_device.addComponent(component_name, entity, self.current_params, str(self.current_layer_id))
+            self.current_device.add_component(component_name, entity, self.current_params, str(self.current_layer_id))
 
     def exitBankGenStat(self, ctx:mintParser.BankGenStatContext):
         entity = self.current_entity
@@ -114,7 +114,7 @@ class MINTCompiler(mintListener):
 
         for i in range(1, dim+1):
             component_name = name + "_" + str(i)
-            self.current_device.addComponent(component_name, entity, self.current_params, str(self.current_layer_id))
+            self.current_device.add_component(component_name, entity, self.current_params, str(self.current_layer_id))
 
     def exitGridDeclStat(self, ctx: mintParser.GridDeclStatContext):
         entity = self.current_entity
@@ -123,7 +123,7 @@ class MINTCompiler(mintListener):
 
         for ufname in ctx.ufnames().ufname():
             component_name = ufname.getText()
-            self.current_device.addComponent(component_name, entity, self.current_params, str(self.current_layer_id))
+            self.current_device.add_component(component_name, entity, self.current_params, str(self.current_layer_id))
 
     def exitChannelStat(self, ctx: mintParser.ChannelStatContext):
         entity = self.current_entity
@@ -154,7 +154,7 @@ class MINTCompiler(mintListener):
         sink_uftarget = MINTTarget(sink_id, sink_port)
         
         #Create a connection between the different components in the device
-        self.current_device.addConnection(connection_name, entity, self.current_params, source_uftarget, [sink_uftarget], str(self.current_layer_id))
+        self.current_device.add_connection(connection_name, entity, self.current_params, source_uftarget, [sink_uftarget], str(self.current_layer_id))
 
     def exitNetStat(self, ctx: mintParser.NetStatContext):
         entity = self.current_entity
@@ -183,7 +183,7 @@ class MINTCompiler(mintListener):
 
             sink_uftargets.append(MINTTarget(sink_id, sink_port))
 
-        self.current_device.addConnection(connection_name, entity, self.current_params, source_uftarget, sink_uftargets, str(self.current_layer_id))
+        self.current_device.add_connection(connection_name, entity, self.current_params, source_uftarget, sink_uftargets, str(self.current_layer_id))
 
     def exitSpanStat(self, ctx: mintParser.SpanStatContext):
         entity = self.current_entity
@@ -192,7 +192,7 @@ class MINTCompiler(mintListener):
         
         #Loop for each of the components that need to be created with this param
         for ufname in ctx.ufnames().ufname():
-            self.current_device.addComponent(ufname.getText(), entity, self.current_params, str(self.current_layer_id))
+            self.current_device.add_component(ufname.getText(), entity, self.current_params, str(self.current_layer_id))
 
         #TODO: Figure out how to pipe in the in / out format
 
@@ -202,7 +202,7 @@ class MINTCompiler(mintListener):
         
         #Loop for each of the components that need to be created with this param
         for ufname in ctx.ufnames().ufname():
-            self.current_device.addComponent(ufname.getText(), entity, self.current_params, str(self.current_layer_id))
+            self.current_device.add_component(ufname.getText(), entity, self.current_params, str(self.current_layer_id))
 
     def exitValveStat(self, ctx: mintParser.ValveStatContext):
         entity =  self.current_entity
@@ -210,39 +210,22 @@ class MINTCompiler(mintListener):
             logging.error("Could not find entitry information for valve")
             raise Exception("Could not find entitry information for valve")
         valve_name = ctx.ufname()[0].getText()
-        valve_component = self.current_device.addComponent(valve_name, entity, self.current_params, str(self.current_layer_id))
+        valve_component = self.current_device.add_component(valve_name, entity, self.current_params, str(self.current_layer_id))
         connection_name = ctx.ufname()[1].getText()
-        valve_connection = self.current_device.getConnection(connection_name)
+        valve_connection = self.current_device.get_connection(connection_name)
         if valve_connection is None:
             raise Exception("Error: Could not find connection '{}' in device '{}'".format(connection_name, self.current_device.name))
         
-        self.current_device.mapValve(valve_component, valve_connection)
+        self.current_device.map_valve(valve_component, valve_connection)
 
     def enterViaStat(self, ctx:mintParser.ViaStatContext):
         for ufname in ctx.ufnames().ufname():
-            self.current_device.addVia(ufname.getText(),)
+            self.current_device.add_via(ufname.getText(),)
 
     def enterTerminalStat(self, ctx:mintParser.TerminalStatContext):
         terminal_name = ctx.ufname().getText()
         pin_number = int(ctx.INT.getText())
-        self.current_device.addTerminal(terminal_name, pin_number, str(self.current_layer_id))
+        self.current_device.add_terminal(terminal_name, pin_number, str(self.current_layer_id))
         
     def exitNetlist(self, ctx: mintParser.NetlistContext):
         self.current_device.generate_network()
-
-
-
-        
-
-    
-
-
-    
-
-        
-
-
-    
-
-
-

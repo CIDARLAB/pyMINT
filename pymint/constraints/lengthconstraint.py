@@ -8,3 +8,10 @@ class LengthConstraint(LayoutConstraint):
         self._components.append(component)
         self.__length = length
 
+    @property
+    def component(self) -> MINTComponent:
+        return self._components[0]
+    
+    @property
+    def length(self) -> float:
+        return self.__length
