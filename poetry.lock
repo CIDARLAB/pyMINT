@@ -1,7 +1,7 @@
 [[package]]
 name = "antlr4-python3-runtime"
-version = "4.8"
-description = "ANTLR 4.8 runtime for Python 3.7"
+version = "4.9"
+description = "ANTLR 4.9 runtime for Python 3.7"
 category = "main"
 optional = false
 python-versions = "*"
@@ -260,7 +260,7 @@ content-hash = "9aab9e759bb52f2b6c6c448e0c7723e75db7f137d8499a20993a5ab2a7e91e33
 
 [metadata.files]
 antlr4-python3-runtime = [
-    {file = "antlr4-python3-runtime-4.8.tar.gz", hash = "sha256:15793f5d0512a372b4e7d2284058ad32ce7dd27126b105fb0b2245130445db33"},
+    {file = "antlr4-python3-runtime-4.9.tar.gz", hash = "sha256:02d9afb720c13c52b336234286966cdf5aff704f230a513e635adb0d94de97ae"},
 ]
 appdirs = [
     {file = "appdirs-1.4.4-py2.py3-none-any.whl", hash = "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"},
