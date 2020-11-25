@@ -21,8 +21,10 @@ class MINTDevice(Device):
         self._vias = []
 
     def add_component(
-        self, name: str, technology: str, params: dict, layer: str
+        self, name: str, technology: str, params: dict, layer_id: str
     ) -> MINTComponent:
+        # Retrieve the correct layer:
+        layer = super().get_layer(layer_id)
         component = MINTComponent(name, technology, params, layer)
         super().add_component(component)
         return component
