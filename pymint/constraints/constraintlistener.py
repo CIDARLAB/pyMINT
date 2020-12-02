@@ -1,11 +1,9 @@
 from pymint.constraints.mirrorconstraint import MirrorConstraint
-from typing import List
 import logging
 from pymint.mintcomponent import MINTComponent
 from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
 from pymint.constraints.arrayconstraint import ArrayConstraint
 from pymint.constraints.positionconstraint import PositionConstraint
-from pymint.constraints.constraint import LayoutConstraint
 from pymint.antlrgen.mintListener import mintListener
 from pymint.mintdevice import MINTDevice
 from pymint.antlrgen.mintParser import mintParser
@@ -196,8 +194,11 @@ class ConstraintListener(mintListener):
     def exitLayerBlock(self, ctx: mintParser.LayerBlockContext):
         for constraint in self._mirror_constraints:
             assert isinstance(constraint, MirrorConstraint)
-            constraint.find_mirror_candidates(self.current_device)
-            self.current_device.add_constraint(constraint)
+            try:
+                constraint.find_mirror_candidates(self.current_device)
+                self.current_device.add_constraint(constraint)
+            except Exception as e:
+                print(e)
 
     # ------------ Helpers ----------
 

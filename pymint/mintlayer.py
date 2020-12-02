@@ -1,6 +1,5 @@
 from parchmint.layer import Layer
 
-
 from enum import Enum
 
 
@@ -37,3 +36,8 @@ class MINTLayer(Layer):
 
         ret = "LAYER {} \n\n{} \n\nEND LAYER".format(self.type, content)
         return ret
+
+
+# class MINTLayerEncoder(JSONEncoder):
+#     def default(self, o):
+#         return o.__dict__

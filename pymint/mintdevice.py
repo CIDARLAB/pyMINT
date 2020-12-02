@@ -97,6 +97,17 @@ class MINTDevice(Device):
         self.components.append(ret)
         return ret
 
+    def to_parchmint_v1(self):
+        ret = dict()
+        ret["name"] = self.name
+        ret["components"] = [c.to_parchmint_v1() for c in self.components]
+        ret["connections"] = [c.to_parchmint_v1() for c in self.connections]
+        ret["params"] = self.params.to_parchmint_v1()
+        ret["layers"] = [layer.to_parchmint_v1() for layer in self.layers]
+        ret["version"] = 1
+
+        return ret
+
     @staticmethod
     def from_mint_file(filepath: str):
         from antlr4 import CommonTokenStream, ParseTreeWalker, FileStream

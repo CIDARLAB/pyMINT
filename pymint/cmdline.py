@@ -27,8 +27,9 @@ def main():
 
     current_device = MINTDevice.from_mint_file(file_path)
 
-    tt = os.path.join(OUTPUT_DIR, "{}_no_par.json".format(current_device.name))
+    tt = os.path.join(OUTPUT_DIR, "{}.json".format(current_device.name))
     with open(tt, "w") as f:
+        string = json.dumps(current_device.to_parchmint_v1())
         json.dump(current_device.to_parchmint_v1(), f)
 
 

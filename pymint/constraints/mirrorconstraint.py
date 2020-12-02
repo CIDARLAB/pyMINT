@@ -41,16 +41,27 @@ class MirrorConstraint(LayoutConstraint):
             forward_traverse = False
             edges_to_use = incoming_edges
         else:
-            raise Exception(
-                "Unable to compute mirror group for source: {}".format(
-                    self.__mirror_source
+            # Reverse Case Considtion
+            if len(incoming_edges) == self.__mirror_count:
+                forward_traverse = True
+                edges_to_use = outgoing_edges
+            elif len(outgoing_edges) == self.__mirror_count:
+                forward_traverse = False
+                edges_to_use = incoming_edges
+            else:
+                raise Exception(
+                    "Unable to compute mirror group for source: {}, please check if outgoing and incoming channels are declared correctly".format(
+                        self.__mirror_source
+                    )
                 )
-            )
 
         sources = []
 
         for i in range(self.__mirror_count):
-            component = device.get_component(edges_to_use[i][1])
+            if forward_traverse is True:
+                component = device.get_component(edges_to_use[i][1])
+            else:
+                component = device.get_component(edges_to_use[i][0])
             mirror_groups.append([component])
             sources.append(component.ID)
 
