@@ -57,7 +57,7 @@ class MirrorConstraint(LayoutConstraint):
         if forward_traverse is True:
             self.step_forward(sources, mirror_groups, device)
         else:
-            self.step_reverse(self.__mirror_source.ID, mirror_groups)
+            self.step_reverse(sources, mirror_groups, device)
 
         # Step 2 - Save teh mirror groups into our constraint object
         self.__mirror_groups = mirror_groups
