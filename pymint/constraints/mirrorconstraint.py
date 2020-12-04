@@ -1,9 +1,7 @@
-from networkx.algorithms.shortest_paths.unweighted import predecessor
 from pymint.mintdevice import MINTDevice
 from pymint.constraints.constraint import LayoutConstraint
 from typing import List
 from pymint.mintcomponent import MINTComponent
-import networkx as nx
 
 
 class MirrorConstraint(LayoutConstraint):

@@ -107,7 +107,7 @@ class ConstraintListener(mintListener):
 
     def exitBankStat(self, ctx: mintParser.BankStatContext):
         dim = 1
-        if ctx.xdim is not None:
+        if ctx.dim is not None:
             dim = int(ctx.dim.text)
         else:
             logging.warning("No dimension found for BANK stat, setting dimension to 1")

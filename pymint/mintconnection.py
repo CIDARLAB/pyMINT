@@ -2,7 +2,7 @@ from __future__ import annotations
 from pymint.mintparams import MINTParams
 from parchmint.connection import Connection
 from pymint.minttarget import MINTTarget
-from typing import List
+from typing import List, Tuple
 
 
 class MINTConnection(Connection):
@@ -19,13 +19,25 @@ class MINTConnection(Connection):
         self.name = name
         self.ID = name
         self.entity = technology
-        self.params = MINTParams(params)
+        self.params: MINTParams = MINTParams(params)
         self.source: MINTTarget = source
         self.sinks: List[MINTTarget] = sinks
         self.layer = layer
 
     def overwrite_id(self, id: str) -> None:
         self.ID = id
+
+    def add_waypoints_path(self, waypoints: List[Tuple[int, int]]) -> None:
+        paths = self.params.get_param("paths")
+        paths.append(waypoints)
+
+    @property
+    def connection_spacing(self) -> int:
+        return self.params.get_param("channel_spacing")
+
+    @connection_spacing.setter
+    def connection_spacing(self, value: int) -> None:
+        self.params.set_param("channel_spacing", value)
 
     def to_MINT(self) -> str:
         ret = "{} {} from {} to {} {} ;".format(

@@ -20,16 +20,18 @@ class MINTDevice(Device):
         self._terminals = []
         self._vias = []
 
-    def add_component(
-        self, name: str, technology: str, params: dict, layer_id: str
+    def create_mint_component(
+        self, name: str, technology: str, params: dict, layer_ids: List[str]
     ) -> MINTComponent:
         # Retrieve the correct layer:
-        layer = super().get_layer(layer_id)
-        component = MINTComponent(name, technology, params, layer)
+        layers = []
+        for layer_id in layer_ids:
+            layers.append(self.get_layer(layer_id))
+        component = MINTComponent(name, technology, params, layers)
         super().add_component(component)
         return component
 
-    def add_connection(
+    def create_mint_connection(
         self,
         name: str,
         technology: str,
@@ -42,7 +44,7 @@ class MINTDevice(Device):
         super().add_connection(connection)
         return connection
 
-    def add_layer(self, name, group, layer_type: MINTLayerType) -> MINTLayer:
+    def create_mint_layer(self, name, group, layer_type: MINTLayerType) -> MINTLayer:
         layer = MINTLayer(name, group, layer_type)
         super().add_layer(layer)
         return layer
@@ -91,8 +93,8 @@ class MINTDevice(Device):
         self._terminals.append(ret)
         return ret
 
-    def add_via(self, name: str) -> MINTVia:
-        ret = MINTVia(name)
+    def add_via(self, name: str, width: int, layers: List[MINTLayer]) -> MINTVia:
+        ret = MINTVia(name, width, layers)
         self._vias.append(ret)
         self.components.append(ret)
         return ret
@@ -109,7 +111,7 @@ class MINTDevice(Device):
         return ret
 
     @staticmethod
-    def from_mint_file(filepath: str):
+    def from_mint_file(filepath: str, skip_constraints: bool = False):
         from antlr4 import CommonTokenStream, ParseTreeWalker, FileStream
         from pymint.constraints.constraintlistener import ConstraintListener
         from pymint.mintErrorListener import MINTErrorListener
@@ -145,10 +147,12 @@ class MINTDevice(Device):
 
         walker.walk(listener, tree)
 
-        constraint_listener = ConstraintListener(listener.current_device)
+        if skip_constraints is not True:
+            print("Computing Constraints")
+            constraint_listener = ConstraintListener(listener.current_device)
 
-        walker.walk(constraint_listener, tree)
+            walker.walk(constraint_listener, tree)
 
-        current_device = listener.current_device
+            current_device = listener.current_device
 
         return current_device

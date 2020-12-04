@@ -1,11 +1,9 @@
 import logging
 from pymint.minttarget import MINTTarget
-from pymint.mintcomponent import MINTComponent
-from parchmint.component import Component
 from pymint.mintdevice import MINTDevice
 from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
-from pymint.mintlayer import MINTLayer, MINTLayerType
+from pymint.mintlayer import MINTLayerType
 from typing import Optional
 
 
@@ -31,20 +29,17 @@ class MINTCompiler(mintListener):
         self.current_block_id += 1
 
     def enterFlowBlock(self, ctx: mintParser.FlowBlockContext):
-        self.current_device.add_layer(
+        self.current_device.create_mint_layer(
             str(self.current_layer_id), str(self.current_block_id), MINTLayerType.FLOW
         )
 
-    def exitLayerBlock(self, ctx: mintParser.FlowBlockContext):
-        self.current_layer_id += 1
-
     def enterControlBlock(self, ctx: mintParser.ControlBlockContext):
-        self.current_device.add_layer(
+        self.current_device.create_mint_layer(
             str(self.current_layer_id), str(self.current_block_id), MINTLayerType.FLOW
         )
 
     def enterIntegrationBlock(self, ctx: mintParser.IntegrationBlockContext):
-        self.current_device.add_layer(
+        self.current_device.create_mint_layer(
             str(self.current_layer_id),
             str(self.current_block_id),
             MINTLayerType.INTEGRATION,
@@ -98,11 +93,13 @@ class MINTCompiler(mintListener):
 
         # Loop for each of the components that need to be created with this param
         for ufname in ctx.ufnames().ufname():
-            self.current_device.add_component(
+            self.current_device.create_mint_component(
                 ufname.getText(),
                 entity,
                 self.current_params,
-                str(self.current_layer_id),
+                [
+                    str(self.current_layer_id),
+                ],
             )
 
     def exitBankDeclStat(self, ctx: mintParser.BankDeclStatContext):
@@ -112,8 +109,11 @@ class MINTCompiler(mintListener):
 
         for ufname in ctx.ufnames().ufname():
             component_name = ufname.getText()
-            self.current_device.add_component(
-                component_name, entity, self.current_params, str(self.current_layer_id)
+            self.current_device.create_mint_component(
+                component_name,
+                entity,
+                self.current_params,
+                [str(self.current_layer_id)],
             )
 
     def exitBankGenStat(self, ctx: mintParser.BankGenStatContext):
@@ -127,8 +127,11 @@ class MINTCompiler(mintListener):
 
         for i in range(1, dim + 1):
             component_name = name + "_" + str(i)
-            self.current_device.add_component(
-                component_name, entity, self.current_params, str(self.current_layer_id)
+            self.current_device.create_mint_component(
+                component_name,
+                entity,
+                self.current_params,
+                [str(self.current_layer_id)],
             )
 
     def exitGridDeclStat(self, ctx: mintParser.GridDeclStatContext):
@@ -138,8 +141,11 @@ class MINTCompiler(mintListener):
 
         for ufname in ctx.ufnames().ufname():
             component_name = ufname.getText()
-            self.current_device.add_component(
-                component_name, entity, self.current_params, str(self.current_layer_id)
+            self.current_device.create_mint_component(
+                component_name,
+                entity,
+                self.current_params,
+                [str(self.current_layer_id)],
             )
 
     def exitChannelStat(self, ctx: mintParser.ChannelStatContext):
@@ -179,7 +185,7 @@ class MINTCompiler(mintListener):
         sink_uftarget = MINTTarget(sink_id, sink_port)
 
         # Create a connection between the different components in the device
-        self.current_device.add_connection(
+        self.current_device.create_mint_connection(
             connection_name,
             entity,
             self.current_params,
@@ -215,7 +221,7 @@ class MINTCompiler(mintListener):
 
             sink_uftargets.append(MINTTarget(sink_id, sink_port))
 
-        self.current_device.add_connection(
+        self.current_device.create_mint_connection(
             connection_name,
             entity,
             self.current_params,
@@ -231,11 +237,11 @@ class MINTCompiler(mintListener):
 
         # Loop for each of the components that need to be created with this param
         for ufname in ctx.ufnames().ufname():
-            self.current_device.add_component(
+            self.current_device.create_mint_component(
                 ufname.getText(),
                 entity,
                 self.current_params,
-                str(self.current_layer_id),
+                [str(self.current_layer_id)],
             )
 
         # TODO: Figure out how to pipe in the in / out format
@@ -245,11 +251,11 @@ class MINTCompiler(mintListener):
 
         # Loop for each of the components that need to be created with this param
         for ufname in ctx.ufnames().ufname():
-            self.current_device.add_component(
+            self.current_device.create_mint_component(
                 ufname.getText(),
                 entity,
                 self.current_params,
-                str(self.current_layer_id),
+                [str(self.current_layer_id)],
             )
 
     def exitValveStat(self, ctx: mintParser.ValveStatContext):
@@ -258,8 +264,8 @@ class MINTCompiler(mintListener):
             logging.error("Could not find entitry information for valve")
             raise Exception("Could not find entitry information for valve")
         valve_name = ctx.ufname()[0].getText()
-        valve_component = self.current_device.add_component(
-            valve_name, entity, self.current_params, str(self.current_layer_id)
+        valve_component = self.current_device.create_mint_component(
+            valve_name, entity, self.current_params, [str(self.current_layer_id)]
         )
         connection_name = ctx.ufname()[1].getText()
         valve_connection = self.current_device.get_connection(connection_name)
