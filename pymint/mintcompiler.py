@@ -15,6 +15,7 @@ class MINTCompiler(mintListener):
         self.current_layer_id = 0
         self.current_entity: Optional[str]
         self.current_params = dict()
+        self._current_layer = None
 
     def enterNetlist(self, ctx: mintParser.NetlistContext):
         self.current_device = MINTDevice("DEFAULT_NAME")
@@ -29,21 +30,24 @@ class MINTCompiler(mintListener):
         self.current_block_id += 1
 
     def enterFlowBlock(self, ctx: mintParser.FlowBlockContext):
-        self.current_device.create_mint_layer(
+        layer = self.current_device.create_mint_layer(
             str(self.current_layer_id), str(self.current_block_id), MINTLayerType.FLOW
         )
+        self._current_layer = layer
 
     def enterControlBlock(self, ctx: mintParser.ControlBlockContext):
-        self.current_device.create_mint_layer(
+        layer = self.current_device.create_mint_layer(
             str(self.current_layer_id), str(self.current_block_id), MINTLayerType.FLOW
         )
+        self._current_layer = layer
 
     def enterIntegrationBlock(self, ctx: mintParser.IntegrationBlockContext):
-        self.current_device.create_mint_layer(
+        layer = self.current_device.create_mint_layer(
             str(self.current_layer_id),
             str(self.current_block_id),
             MINTLayerType.INTEGRATION,
         )
+        self._current_layer = layer
 
     def enterEntity(self, ctx: mintParser.EntityContext):
         self.current_entity = ctx.getText()
@@ -98,7 +102,7 @@ class MINTCompiler(mintListener):
                 entity,
                 self.current_params,
                 [
-                    str(self.current_layer_id),
+                    self._current_layer.ID,
                 ],
             )
 
@@ -113,7 +117,7 @@ class MINTCompiler(mintListener):
                 component_name,
                 entity,
                 self.current_params,
-                [str(self.current_layer_id)],
+                [self._current_layer.ID],
             )
 
     def exitBankGenStat(self, ctx: mintParser.BankGenStatContext):
@@ -131,7 +135,7 @@ class MINTCompiler(mintListener):
                 component_name,
                 entity,
                 self.current_params,
-                [str(self.current_layer_id)],
+                [self._current_layer.ID],
             )
 
     def exitGridDeclStat(self, ctx: mintParser.GridDeclStatContext):
@@ -145,7 +149,7 @@ class MINTCompiler(mintListener):
                 component_name,
                 entity,
                 self.current_params,
-                [str(self.current_layer_id)],
+                [self._current_layer.ID],
             )
 
     def exitChannelStat(self, ctx: mintParser.ChannelStatContext):
@@ -191,7 +195,7 @@ class MINTCompiler(mintListener):
             self.current_params,
             source_uftarget,
             [sink_uftarget],
-            str(self.current_layer_id),
+            self._current_layer.ID,
         )
 
     def exitNetStat(self, ctx: mintParser.NetStatContext):
@@ -227,7 +231,7 @@ class MINTCompiler(mintListener):
             self.current_params,
             source_uftarget,
             sink_uftargets,
-            str(self.current_layer_id),
+            self._current_layer.ID,
         )
 
     def exitSpanStat(self, ctx: mintParser.SpanStatContext):
@@ -241,7 +245,7 @@ class MINTCompiler(mintListener):
                 ufname.getText(),
                 entity,
                 self.current_params,
-                [str(self.current_layer_id)],
+                [self._current_layer.ID],
             )
 
         # TODO: Figure out how to pipe in the in / out format
@@ -255,7 +259,7 @@ class MINTCompiler(mintListener):
                 ufname.getText(),
                 entity,
                 self.current_params,
-                [str(self.current_layer_id)],
+                [self._current_layer.ID],
             )
 
     def exitValveStat(self, ctx: mintParser.ValveStatContext):
@@ -265,7 +269,10 @@ class MINTCompiler(mintListener):
             raise Exception("Could not find entitry information for valve")
         valve_name = ctx.ufname()[0].getText()
         valve_component = self.current_device.create_mint_component(
-            valve_name, entity, self.current_params, [str(self.current_layer_id)]
+            valve_name,
+            entity,
+            self.current_params,
+            [self._current_layer.ID],
         )
         connection_name = ctx.ufname()[1].getText()
         valve_connection = self.current_device.get_connection(connection_name)
@@ -288,7 +295,9 @@ class MINTCompiler(mintListener):
         terminal_name = ctx.ufname().getText()
         pin_number = int(ctx.INT.getText())
         self.current_device.add_terminal(
-            terminal_name, pin_number, str(self.current_layer_id)
+            terminal_name,
+            pin_number,
+            self._current_layer,
         )
 
     def exitNetlist(self, ctx: mintParser.NetlistContext):

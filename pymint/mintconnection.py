@@ -3,6 +3,7 @@ from pymint.mintparams import MINTParams
 from parchmint.connection import Connection
 from pymint.minttarget import MINTTarget
 from typing import List, Tuple
+from pymint import MINTLayer
 
 
 class MINTConnection(Connection):
@@ -13,7 +14,7 @@ class MINTConnection(Connection):
         params: dict,
         source: MINTTarget,
         sinks: List[MINTTarget],
-        layer: str = "0",
+        layer: MINTLayer = None,
     ) -> None:
 
         self.name = name

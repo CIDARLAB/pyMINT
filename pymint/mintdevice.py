@@ -38,8 +38,9 @@ class MINTDevice(Device):
         params: dict,
         source: MINTTarget,
         sinks: List[MINTTarget],
-        layer: str,
+        layer_id: str,
     ) -> MINTConnection:
+        layer = self.get_layer(layer_id)
         connection = MINTConnection(name, technology, params, source, sinks, layer)
         super().add_connection(connection)
         return connection
