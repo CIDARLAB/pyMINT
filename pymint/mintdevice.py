@@ -69,14 +69,10 @@ class MINTDevice(Device):
         # Loop Over all the layers
         for layer in self.layers:
             componenttext = "\n".join(
-                [
-                    item.to_MINT()
-                    for item in self.components
-                    if item.layers[0] == layer.ID
-                ]
+                [item.to_MINT() for item in self.components if item.layers[0] == layer]
             )
             connectiontext = "\n".join(
-                [item.to_MINT() for item in self.connections if item.layer == layer.ID]
+                [item.to_MINT() for item in self.connections if item.layer == layer]
             )
 
             full_layer_text += (
