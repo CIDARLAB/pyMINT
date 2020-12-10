@@ -26,7 +26,7 @@ class MINTDevice(Device):
         # Retrieve the correct layer:
         layers = []
         for layer_id in layer_ids:
-            layers.append(self.get_layer(layer_id))
+            layers.append(super().get_layer(layer_id))
         component = MINTComponent(name, technology, params, layers)
         super().add_component(component)
         return component
@@ -40,7 +40,7 @@ class MINTDevice(Device):
         sinks: List[MINTTarget],
         layer_id: str,
     ) -> MINTConnection:
-        layer = self.get_layer(layer_id)
+        layer = super().get_layer(layer_id)
         connection = MINTConnection(name, technology, params, source, sinks, layer)
         super().add_connection(connection)
         return connection
@@ -108,7 +108,7 @@ class MINTDevice(Device):
         return ret
 
     @staticmethod
-    def from_mint_file(filepath: str, skip_constraints: bool = False):
+    def from_mint_file(filepath: str, skip_constraints: bool = False) -> MINTDevice:
         from antlr4 import CommonTokenStream, ParseTreeWalker, FileStream
         from pymint.constraints.constraintlistener import ConstraintListener
         from pymint.mintErrorListener import MINTErrorListener

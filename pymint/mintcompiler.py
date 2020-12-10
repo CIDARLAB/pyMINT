@@ -131,6 +131,8 @@ class MINTCompiler(mintListener):
 
         for i in range(1, dim + 1):
             component_name = name + "_" + str(i)
+            if self._current_layer is None:
+                raise Exception("Current Layer not Set")
             self.current_device.create_mint_component(
                 component_name,
                 entity,

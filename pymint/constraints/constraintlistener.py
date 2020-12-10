@@ -128,11 +128,24 @@ class ConstraintListener(mintListener):
             raise Exception("Orientation that is not H or V found. Illegal Syntax")
 
     def enterUfname(self, ctx: mintParser.UfnameContext):
-        component_name = ctx.getText()
-        component = self.current_device.get_component(component_name)
+        element_name = ctx.getText()
+        component = None
+        connection = None
+        if self.current_device.component_exists(element_name):
+            component = self.current_device.get_component(element_name)
+        elif self.current_device.connection_exists(element_name):
+            connection = self.current_device.get_connection(element_name)
         if component is not None:
             # raise Exception("Could not find component in device : {}".format(component_name))
             self._constrained_components.append(component)
+        elif connection is not None:
+            self._constrained_components.append(connection)
+        else:
+            print(
+                'Could not find component or connection with the ID "{}" in device'.format(
+                    element_name
+                )
+            )
 
     def enterLayerBlock(self, ctx: mintParser.LayerBlockContext):
         # Create a new relative orientation constraint for the whole layer
