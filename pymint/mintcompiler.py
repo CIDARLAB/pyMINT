@@ -37,7 +37,9 @@ class MINTCompiler(mintListener):
 
     def enterControlBlock(self, ctx: mintParser.ControlBlockContext):
         layer = self.current_device.create_mint_layer(
-            str(self.current_layer_id), str(self.current_block_id), MINTLayerType.FLOW
+            str(self.current_layer_id),
+            str(self.current_block_id),
+            MINTLayerType.CONTROL,
         )
         self._current_layer = layer
 

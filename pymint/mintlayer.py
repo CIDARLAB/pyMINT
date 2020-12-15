@@ -18,6 +18,21 @@ class MINTLayerType(Enum):
         else:
             raise Exception("Could not generate MINT Layer string")
 
+    def __eq__(self, o: object) -> bool:
+        if o.__class__ is MINTLayerType:
+            return super().__eq__(o)
+        elif o.__class__ is str:
+            if self is MINTLayerType.FLOW and o == "FLOW":
+                return True
+            elif self is MINTLayerType.CONTROL and o == "CONTROL":
+                return True
+            elif self is MINTLayerType.INTEGRATION and o == "INTEGRATION":
+                return True
+            else:
+                return False
+        else:
+            return False
+
 
 class MINTLayer(Layer):
     def __init__(
