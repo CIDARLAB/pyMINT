@@ -41,13 +41,16 @@ class MINTDevice(Device):
         layer_id: str,
     ) -> MINTConnection:
         layer = super().get_layer(layer_id)
+        if layer is None:
+            raise Exception("Cannot create new MINT connection with invalid layer")
         connection = MINTConnection(name, technology, params, source, sinks, layer)
         super().add_connection(connection)
         return connection
 
     def create_mint_layer(
-        self, id: str, name: str, group, layer_type: MINTLayerType
+        self, id: str, name_postfix: str, group, layer_type: MINTLayerType
     ) -> MINTLayer:
+        name = "{}_{}".format(str(MINTLayerType.FLOW), name_postfix)
         layer = MINTLayer(id, name, group, layer_type)
         super().add_layer(layer)
         return layer

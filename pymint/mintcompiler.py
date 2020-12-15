@@ -33,10 +33,9 @@ class MINTCompiler(mintListener):
         self.current_block_id += 1
 
     def enterFlowBlock(self, ctx: mintParser.FlowBlockContext):
-        name = "{}_{}".format(str(MINTLayerType.FLOW), str(self.flow_layer_count))
         layer = self.current_device.create_mint_layer(
             str(self.current_layer_id),
-            name,
+            str(self.flow_layer_count),
             str(self.current_block_id),
             MINTLayerType.FLOW,
         )
@@ -45,10 +44,9 @@ class MINTCompiler(mintListener):
         self.current_layer_id += 1
 
     def enterControlBlock(self, ctx: mintParser.ControlBlockContext):
-        name = "{}_{}".format(str(MINTLayerType.CONTROL), str(self.control_layer_count))
         layer = self.current_device.create_mint_layer(
             str(self.current_layer_id),
-            name,
+            str(self.control_layer_count),
             str(self.current_block_id),
             MINTLayerType.CONTROL,
         )
@@ -57,12 +55,9 @@ class MINTCompiler(mintListener):
         self.current_layer_id += 1
 
     def enterIntegrationBlock(self, ctx: mintParser.IntegrationBlockContext):
-        name = "{}_{}".format(
-            str(MINTLayerType.INTEGRATION), str(self.integration_layer_count)
-        )
         layer = self.current_device.create_mint_layer(
             str(self.current_layer_id),
-            name,
+            str(self.integration_layer_count),
             str(self.current_block_id),
             MINTLayerType.INTEGRATION,
         )
