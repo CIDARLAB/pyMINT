@@ -45,8 +45,10 @@ class MINTDevice(Device):
         super().add_connection(connection)
         return connection
 
-    def create_mint_layer(self, name, group, layer_type: MINTLayerType) -> MINTLayer:
-        layer = MINTLayer(name, group, layer_type)
+    def create_mint_layer(
+        self, id: str, name: str, group, layer_type: MINTLayerType
+    ) -> MINTLayer:
+        layer = MINTLayer(id, name, group, layer_type)
         super().add_layer(layer)
         return layer
 

@@ -37,14 +37,15 @@ class MINTLayerType(Enum):
 class MINTLayer(Layer):
     def __init__(
         self,
-        id,
+        id: str,
+        name: str,
         group,
         layer_type: MINTLayerType,
     ) -> None:
         super().__init__()
         self.ID = id
         self.group = group
-        self.name = "{}_{}".format(str(layer_type), id)
+        self.name = name
         self.type = str(layer_type)
 
     def to_MINT(self, content: str) -> str:

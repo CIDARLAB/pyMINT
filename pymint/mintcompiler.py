@@ -13,6 +13,9 @@ class MINTCompiler(mintListener):
         self.current_device: Optional[MINTDevice] = None
         self.current_block_id = 0
         self.current_layer_id = 0
+        self.flow_layer_count = 0
+        self.control_layer_count = 0
+        self.integration_layer_count = 0
         self.current_entity: Optional[str]
         self.current_params = dict()
         self._current_layer = None
@@ -30,26 +33,42 @@ class MINTCompiler(mintListener):
         self.current_block_id += 1
 
     def enterFlowBlock(self, ctx: mintParser.FlowBlockContext):
-        layer = self.current_device.create_mint_layer(
-            str(self.current_layer_id), str(self.current_block_id), MINTLayerType.FLOW
-        )
-        self._current_layer = layer
-
-    def enterControlBlock(self, ctx: mintParser.ControlBlockContext):
+        name = "{}_{}".format(str(MINTLayerType.FLOW), str(self.flow_layer_count))
         layer = self.current_device.create_mint_layer(
             str(self.current_layer_id),
+            name,
+            str(self.current_block_id),
+            MINTLayerType.FLOW,
+        )
+        self._current_layer = layer
+        self.flow_layer_count += 1
+        self.current_layer_id += 1
+
+    def enterControlBlock(self, ctx: mintParser.ControlBlockContext):
+        name = "{}_{}".format(str(MINTLayerType.CONTROL), str(self.control_layer_count))
+        layer = self.current_device.create_mint_layer(
+            str(self.current_layer_id),
+            name,
             str(self.current_block_id),
             MINTLayerType.CONTROL,
         )
         self._current_layer = layer
+        self.control_layer_count += 1
+        self.current_layer_id += 1
 
     def enterIntegrationBlock(self, ctx: mintParser.IntegrationBlockContext):
+        name = "{}_{}".format(
+            str(MINTLayerType.INTEGRATION), str(self.integration_layer_count)
+        )
         layer = self.current_device.create_mint_layer(
             str(self.current_layer_id),
+            name,
             str(self.current_block_id),
             MINTLayerType.INTEGRATION,
         )
         self._current_layer = layer
+        self.integration_layer_count += 1
+        self.current_layer_id += 1
 
     def enterEntity(self, ctx: mintParser.EntityContext):
         self.current_entity = ctx.getText()
