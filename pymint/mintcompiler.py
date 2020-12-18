@@ -257,6 +257,14 @@ class MINTCompiler(mintListener):
         if entity is None:
             raise Exception("Could not find the technology for the pimitive")
 
+        # pipe in the in / out values to params for sizing
+        if ctx.indim is not None:
+            in_value = int(ctx.indim.text)
+            self.current_params["in"] = in_value
+        if ctx.outdim is not None:
+            out_value = int(ctx.outdim.text)
+            self.current_params["out"] = out_value
+
         # Loop for each of the components that need to be created with this param
         for ufname in ctx.ufnames().ufname():
             self.current_device.create_mint_component(
@@ -265,8 +273,6 @@ class MINTCompiler(mintListener):
                 self.current_params,
                 [self._current_layer.ID],
             )
-
-        # TODO: Figure out how to pipe in the in / out format
 
     def exitNodeStat(self, ctx: mintParser.NodeStatContext):
         entity = "NODE"
