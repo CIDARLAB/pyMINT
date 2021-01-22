@@ -28,10 +28,6 @@ class MINTConnection(Connection):
     def overwrite_id(self, id: str) -> None:
         self.ID = id
 
-    def add_waypoints_path(self, waypoints: List[Tuple[int, int]]) -> None:
-        paths = self.params.get_param("paths")
-        paths.append(waypoints)
-
     @property
     def connection_spacing(self) -> int:
         return self.params.get_param("channel_spacing")
