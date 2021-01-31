@@ -16,7 +16,7 @@ class MINTConnection(Connection):
         sinks: List[MINTTarget],
         layer: MINTLayer = None,
     ) -> None:
-
+        super().__init__()
         self.name = name
         self.ID = name
         self.entity = technology
