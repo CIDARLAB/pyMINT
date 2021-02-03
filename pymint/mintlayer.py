@@ -39,7 +39,7 @@ class MINTLayer(Layer):
         self,
         id: str,
         name: str,
-        group,
+        group: str,
         layer_type: MINTLayerType,
     ) -> None:
         super().__init__()
