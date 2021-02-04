@@ -146,6 +146,8 @@ class MINTCompiler(mintListener):
         if entity is None:
             raise Exception("Could not find the technology for the primitive")
 
+        self._cleanup_BANK_params()
+
         dim = int(ctx.dim.text)
 
         name = ctx.ufname().getText()
