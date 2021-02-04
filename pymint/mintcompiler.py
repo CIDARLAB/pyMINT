@@ -3,7 +3,7 @@ from pymint.minttarget import MINTTarget
 from pymint.mintdevice import MINTDevice
 from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
-from pymint.mintlayer import MINTLayerType
+from pymint.mintlayer import MINTLayer, MINTLayerType
 from typing import Optional
 
 
@@ -18,7 +18,7 @@ class MINTCompiler(mintListener):
         self.integration_layer_count = 0
         self.current_entity: Optional[str]
         self.current_params = dict()
-        self._current_layer = None
+        self._current_layer: Optional[MINTLayer] = None
 
     def enterNetlist(self, ctx: mintParser.NetlistContext):
         self.current_device = MINTDevice("DEFAULT_NAME")
@@ -113,6 +113,8 @@ class MINTCompiler(mintListener):
 
         # Loop for each of the components that need to be created with this param
         for ufname in ctx.ufnames().ufname():
+            if self._current_layer is None:
+                raise Exception("Current layer is set to None")
             self.current_device.create_mint_component(
                 ufname.getText(),
                 entity,
