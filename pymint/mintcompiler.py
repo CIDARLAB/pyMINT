@@ -129,6 +129,9 @@ class MINTCompiler(mintListener):
         if entity is None:
             raise Exception("Could not find the technology for the primitive")
 
+        # Clean up the constraint specific params
+        self._cleanup_BANK_params()
+
         for ufname in ctx.ufnames().ufname():
             component_name = ufname.getText()
             self.current_device.create_mint_component(
@@ -162,6 +165,8 @@ class MINTCompiler(mintListener):
         entity = self.current_entity
         if entity is None:
             raise Exception("Could not find the technology for the primitive")
+
+        self._cleanup_GRID_params()
 
         for ufname in ctx.ufnames().ufname():
             component_name = ufname.getText()
@@ -207,6 +212,8 @@ class MINTCompiler(mintListener):
             sink_port = None
 
         sink_uftarget = MINTTarget(sink_id, sink_port)
+
+        self._cleanup_CHANNEL_params()
 
         # Create a connection between the different components in the device
         self.current_device.create_mint_connection(
@@ -328,3 +335,17 @@ class MINTCompiler(mintListener):
 
     def exitNetlist(self, ctx: mintParser.NetlistContext):
         self.current_device.generate_network()
+
+    def _cleanup_BANK_params(self):
+        if "spacing" in self.current_params.keys():
+            del self.current_params["spacing"]
+
+    def _cleanup_GRID_params(self):
+        if "horizontalSpacing" in self.current_params.keys():
+            del self.current_params["horizontalSpacing"]
+        if "verticalSpacing" in self.current_params.keys():
+            del self.current_params["verticalSpacing"]
+
+    def _cleanup_CHANNEL_params(self):
+        if "length" in self.current_params.keys():
+            del self.current_params["length"]
