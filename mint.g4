@@ -162,7 +162,7 @@ widthParam:
 	key = 'width' WS* '=' WS* value
 	| key = 'w' WS* '=' WS* value;
 
-verticalSpacingParam: 'horizontalSpacing' WS* '=' WS* value;
+verticalSpacingParam: 'verticalSpacing' WS* '=' WS* value;
 
 horizontalSpacingParam: 'horizontalSpacing' WS* '=' WS* value;
 
