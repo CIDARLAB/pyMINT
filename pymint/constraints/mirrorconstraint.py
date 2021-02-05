@@ -5,9 +5,13 @@ from pymint.mintcomponent import MINTComponent
 
 
 class MirrorConstraint(LayoutConstraint):
-    def __init__(self, source_component: MINTComponent, mirror_count=None):
+    def __init__(self, mirror_count=None):
+        """Create a new instance of the mirror constraint
+
+        Args:
+            mirror_count ([type], optional): Number of mirror groups. Defaults to None.
+        """
         super().__init__()
-        self.__mirror_source: MINTComponent = source_component
         self.__mirror_groups: List[List[MINTComponent]] = []
         self.__mirror_count: int = mirror_count
 
@@ -15,22 +19,20 @@ class MirrorConstraint(LayoutConstraint):
         self.__mirror_groups.append(components)
 
     @property
-    def mirror_source(self) -> MINTComponent:
-        return self.__mirror_source
-
-    @property
     def mirror_groups(self) -> List[List[MINTComponent]]:
         return self.__mirror_groups
 
-    def find_mirror_candidates(self, device: MINTDevice) -> None:
+    def find_mirror_candidates(
+        self, mirror_source: MINTComponent, device: MINTDevice
+    ) -> None:
         forward_traverse = True
         # TODO -
         # Step 1 - Go through all the outgoing components and create create mirror groups
         G = device.G
         mirror_groups = []
 
-        outgoing_edges = list(G.out_edges(self.__mirror_source.ID))
-        incoming_edges = list(G.in_edges(self.__mirror_source.ID))
+        outgoing_edges = list(G.out_edges(mirror_source.ID))
+        incoming_edges = list(G.in_edges(mirror_source.ID))
         edges_to_use = None
         if len(outgoing_edges) == self.__mirror_count:
             forward_traverse = True
@@ -49,7 +51,7 @@ class MirrorConstraint(LayoutConstraint):
             else:
                 raise Exception(
                     "Unable to compute mirror group for source: {}, please check if outgoing and incoming channels are declared correctly".format(
-                        self.__mirror_source
+                        mirror_source
                     )
                 )
 

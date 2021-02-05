@@ -42,6 +42,14 @@ class MINTLayer(Layer):
         group: str,
         layer_type: MINTLayerType,
     ) -> None:
+        """Creates a MINT layer object
+
+        Args:
+            id (str): unique id of the layer
+            name (str): name of the layer
+            group (str): group name
+            layer_type (MINTLayerType): layer type of the layer
+        """
         super().__init__()
         self.ID = id
         self.group = group
@@ -49,7 +57,14 @@ class MINTLayer(Layer):
         self.type = str(layer_type)
 
     def to_MINT(self, content: str) -> str:
+        """Generates the MINT string for the layer
 
+        Args:
+            content (str): MINT content that needs to be wrapped into the layer MINT
+
+        Returns:
+            str: Returns the MINT string
+        """
         ret = "LAYER {} \n\n{} \n\nEND LAYER".format(self.type, content)
         return ret
 
