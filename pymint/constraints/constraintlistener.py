@@ -50,7 +50,7 @@ class ConstraintListener(mintListener):
 
     def enterSetCoordinate(self, ctx: mintParser.SetCoordinateContext):
         coordinate_label = ctx.coordinate
-        coordinate_value = float(ctx.INT().getText())
+        coordinate_value = int(ctx.INT().getText())
 
         if coordinate_label == "X":
             self._xpos = coordinate_value
