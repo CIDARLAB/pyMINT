@@ -1,32 +1,54 @@
-from networkx.algorithms.shortest_paths.unweighted import predecessor
 from pymint.mintdevice import MINTDevice
 from pymint.constraints.constraint import LayoutConstraint
 from typing import List
 from pymint.mintcomponent import MINTComponent
-import networkx as nx
 
 
 class MirrorConstraint(LayoutConstraint):
-    def __init__(self, source_component: MINTComponent, mirror_count = None):
+    def __init__(self, source_component: MINTComponent, mirror_count=None):
+        """Create a new instance of the mirror constraint
+
+        Args:
+            source_component (MINTComponent): source for the mirror component to search for mirror groups
+            mirror_count ([type], optional): number of mirror groups. Defaults to None.
+        """
         super().__init__()
         self.__mirror_source: MINTComponent = source_component
         self.__mirror_groups: List[List[MINTComponent]] = []
         self.__mirror_count: int = mirror_count
 
-    def add_group(self, components:List[MINTComponent]) -> None:
+    def add_group(self, components: List[MINTComponent]) -> None:
         self.__mirror_groups.append(components)
 
     @property
     def mirror_source(self) -> MINTComponent:
+        """Returns the mirror source component
+
+        Returns:
+            MINTComponent: mirror source
+        """
         return self.__mirror_source
 
     @property
     def mirror_groups(self) -> List[List[MINTComponent]]:
+        """Returns the mirror groups
+
+        Returns:
+            List[List[MINTComponent]]: Mirror groups covered by the constraint
+        """
         return self.__mirror_groups
 
     def find_mirror_candidates(self, device: MINTDevice) -> None:
+        """Traverses the device on the mirror groups
+
+        Args:
+            device (MINTDevice): device to traverse
+
+        Raises:
+            Exception: if component is not part of any group
+        """
         forward_traverse = True
-        # TODO - 
+        # TODO -
         # Step 1 - Go through all the outgoing components and create create mirror groups
         G = device.G
         mirror_groups = []
@@ -41,24 +63,44 @@ class MirrorConstraint(LayoutConstraint):
             forward_traverse = False
             edges_to_use = incoming_edges
         else:
-            raise Exception("Unable to compute mirror group for source: {}".format(self.__mirror_source))
+            # Reverse Case Considtion
+            if len(incoming_edges) == self.__mirror_count:
+                forward_traverse = True
+                edges_to_use = outgoing_edges
+            elif len(outgoing_edges) == self.__mirror_count:
+                forward_traverse = False
+                edges_to_use = incoming_edges
+            else:
+                raise Exception(
+                    "Unable to compute mirror group for source: {}, please check if outgoing and incoming channels are declared correctly".format(
+                        self.__mirror_source
+                    )
+                )
 
         sources = []
 
         for i in range(self.__mirror_count):
-            component = device.get_component(edges_to_use[i][1])
+            if forward_traverse is True:
+                component = device.get_component(edges_to_use[i][1])
+            else:
+                component = device.get_component(edges_to_use[i][0])
             mirror_groups.append([component])
             sources.append(component.ID)
 
         if forward_traverse is True:
             self.step_forward(sources, mirror_groups, device)
         else:
-            self.step_reverse(self.__mirror_source.ID, mirror_groups)
+            self.step_reverse(sources, mirror_groups, device)
 
         # Step 2 - Save teh mirror groups into our constraint object
         self.__mirror_groups = mirror_groups
 
-    def step_forward(self, sources: List[str], mirror_groups: List[List[MINTComponent]], device: MINTDevice) -> bool:
+    def step_forward(
+        self,
+        sources: List[str],
+        mirror_groups: List[List[MINTComponent]],
+        device: MINTDevice,
+    ) -> bool:
         G = device.G
         outgoing_edges = []
         for source in sources:
@@ -105,14 +147,23 @@ class MirrorConstraint(LayoutConstraint):
                         break
 
             if assing_group_found_flag is False:
-                raise Exception("Could not find the mirror group for component: {}".format(component.ID))
+                raise Exception(
+                    "Could not find the mirror group for component: {}".format(
+                        component.ID
+                    )
+                )
 
         next_sources = [c.ID for c in components]
         self.step_forward(next_sources, mirror_groups, device)
 
         return True
 
-    def step_reverse(self, sources: List[str], mirror_groups: List[List[MINTComponent]], device: MINTDevice) -> bool:
+    def step_reverse(
+        self,
+        sources: List[str],
+        mirror_groups: List[List[MINTComponent]],
+        device: MINTDevice,
+    ) -> bool:
         G = device.G
         incoming_edges = []
         for source in sources:
@@ -159,7 +210,11 @@ class MirrorConstraint(LayoutConstraint):
                         break
 
             if assing_group_found_flag is False:
-                raise Exception("Could not find the mirror group for component: {}".format(component.ID))
+                raise Exception(
+                    "Could not find the mirror group for component: {}".format(
+                        component.ID
+                    )
+                )
 
         next_sources = [c.ID for c in components]
         self.step_forward(next_sources, mirror_groups, device)

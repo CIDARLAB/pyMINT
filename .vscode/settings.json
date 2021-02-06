@@ -3,7 +3,7 @@
     "python.linting.enabled": true,
     "python.linting.flake8Args": ["--max-line-length=300"],
     "python.formatting.provider": "black",
-    "editor.formatOnSave": false,
+    "editor.formatOnSave": true,
     "python.linting.pylintEnabled": false,  
     "python.pythonPath": "/home/krishna/.cache/pypoetry/virtualenvs/pymint-foaR6RZD-py3.8"
 }

@@ -1,21 +1,67 @@
 from __future__ import annotations
+from typing import List
 from pymint.mintparams import MINTParams
 from parchmint.component import Component
+from pymint import MINTLayer
+
 
 class MINTComponent(Component):
+    def __init__(
+        self, name: str, technology: str, params: dict, layers: List[MINTLayer] = None
+    ) -> None:
+        """Creates a MINT component
 
-    def __init__(self, name:str , technology:str, params:dict, layer:str = '0') -> None:
+        Args:
+            name (str): [description]
+            technology (str): [description]
+            params (dict): [description]
+            layers (List[MINTLayer], optional): [description]. Defaults to None.
+
+        Raises:
+            Exception: hrows the exception if no layer information is present
+        """
         super().__init__()
         self.name = name
         self.ID = name
         self.entity = technology
         self.params = MINTParams(params)
-        self.layers.append(layer)
+        if layers is None:
+            raise Exception("Cannot have no layer information")
+        for layer in layers:
+            self.layers.append(layer)
 
     def overwrite_id(self, id: str) -> None:
+        """Overwites the ID
+
+        Args:
+            id (str): New id of the component
+        """
         self.ID = id
 
+    @property
+    def component_spacing(self) -> int:
+        """Returns the component spacing of the component
+
+        Returns:
+            int: Component Spacing Value in microns
+        """
+        return self.params.get_param("component_spacing")
+
+    @component_spacing.setter
+    def connection_spacing(self, value: int) -> None:
+        """Sets the component spacing of the component
+
+        Args:
+            value (int): Value for the component spacing in microns
+        """
+        self.params.set_param("component_spacing", value)
+
     def to_MINT(self) -> str:
+        """Returns the MINT String for the component
+
+        Returns:
+            str: This is the MINT string for the serialization
+        """
         ret = "{} {} {};".format(self.entity, self.name, self.params.to_MINT())
         return ret
 
