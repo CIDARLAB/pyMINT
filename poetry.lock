@@ -170,7 +170,7 @@ scipy = ["scipy"]
 
 [[package]]
 name = "parchmint"
-version = "0.2.3"
+version = "0.2.6"
 description = ""
 category = "main"
 optional = false
@@ -256,7 +256,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "9aab9e759bb52f2b6c6c448e0c7723e75db7f137d8499a20993a5ab2a7e91e33"
+content-hash = "e576a547d76af62f83abf235da9b4ff0696bb25078be36276a7148be1252911d"
 
 [metadata.files]
 antlr4-python3-runtime = [
@@ -326,8 +326,8 @@ networkx = [
     {file = "networkx-2.5.tar.gz", hash = "sha256:7978955423fbc9639c10498878be59caf99b44dc304c2286162fd24b458c1602"},
 ]
 parchmint = [
-    {file = "parchmint-0.2.3-py3-none-any.whl", hash = "sha256:bd631ee29354c10c73681736237e9ce8f8fd20fea1be1ad7ded4e826c3901d3d"},
-    {file = "parchmint-0.2.3.tar.gz", hash = "sha256:aa520b1d63ee94d2bebc4fabb45ec384af9f59b35715bac4a98a8e8e980f7548"},
+    {file = "parchmint-0.2.6-py3-none-any.whl", hash = "sha256:29fc70f4d5a10e3c2ca153ca731370c9289bfb00c8a0d00ad29abc0a98009048"},
+    {file = "parchmint-0.2.6.tar.gz", hash = "sha256:ae99c3fa1e38c4549b8e0895ff57e09cbf7cb0b343bbbda2b97f915a26d342b0"},
 ]
 pathspec = [
     {file = "pathspec-0.8.1-py2.py3-none-any.whl", hash = "sha256:aa0cb481c4041bf52ffa7b0d8fa6cd3e88a2ca4879c533c9153882ee2556790d"},
