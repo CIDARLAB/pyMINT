@@ -4,7 +4,7 @@ from pymint.mintcomponent import MINTComponent
 
 class MINTTerminal(MINTComponent):
     def __init__(self, name: str, port_number: int, layer: str = "0") -> None:
-        super().__init__(name, "TERMINAL", {}, layer)
+        super(MINTTerminal, self).__init__(name, "TERMINAL", {}, layer)
         self.__port_number = port_number
 
     @property
@@ -12,7 +12,7 @@ class MINTTerminal(MINTComponent):
         """Returns the port number of the terminal (at a device level)
 
         Returns:
-            int: port value 
+            int: port value
         """
         return self.__port_number
 

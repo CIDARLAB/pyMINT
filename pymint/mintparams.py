@@ -8,7 +8,7 @@ class MINTParams(Params):
         Args:
             pairs (dict): [description]
         """
-        super().__init__(None)
+        super(MINTParams, self).__init__(None)
         for key in pairs.keys():
             self.data[key] = pairs[key]
 

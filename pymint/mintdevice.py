@@ -13,7 +13,7 @@ import sys
 
 class MINTDevice(Device):
     def __init__(self, name: str) -> None:
-        super().__init__()
+        super(MINTDevice, self).__init__()
         """Creates a MINT device
         """
         self.name = name

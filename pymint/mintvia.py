@@ -5,7 +5,7 @@ from pymint.mintcomponent import MINTComponent
 
 class MINTVia(MINTComponent):
     def __init__(self, name: str, width: int, layers: List[MINTLayer]) -> None:
-        super().__init__(name, "VIA", {"width": width}, layers)
+        super(MINTVia, self).__init__(name, "VIA", {"width": width}, layers)
 
     def to_MINT(self) -> str:
         """Returns the MINT string of the via

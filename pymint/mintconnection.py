@@ -26,7 +26,7 @@ class MINTConnection(Connection):
             sinks (List[MINTTarget]): where the connection ends
             layer (MINTLayer, optional): layer information. Defaults to None.
         """
-        super().__init__()
+        super(MINTConnection, self).__init__()
         self.name = name
         self.ID = name
         self.entity = technology

@@ -20,7 +20,7 @@ class MINTComponent(Component):
         Raises:
             Exception: hrows the exception if no layer information is present
         """
-        super().__init__()
+        super(MINTComponent, self).__init__()
         self.name = name
         self.ID = name
         self.entity = technology
