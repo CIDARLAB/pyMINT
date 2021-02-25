@@ -50,7 +50,7 @@ class MINTLayer(Layer):
             group (str): group name
             layer_type (MINTLayerType): layer type of the layer
         """
-        super().__init__()
+        super(MINTLayer, self).__init__()
         self.ID = id
         self.group = group
         self.name = name
