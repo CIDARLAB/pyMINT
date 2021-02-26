@@ -154,9 +154,9 @@ directionParam:
 
 param_element: ID;
 
-intParam: param_element '=' WS* value;
+intParam: param_element WS* '=' WS* value;
 
-boolParam: param_element '=' boolvalue;
+boolParam: param_element WS* '=' WS* boolvalue;
 
 widthParam:
 	key = 'width' WS* '=' WS* value

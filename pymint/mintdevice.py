@@ -7,7 +7,7 @@ from pymint.mintlayer import MINTLayer, MINTLayerType
 from parchmint.device import Device
 from pymint.mintcomponent import MINTComponent
 from pymint.mintconnection import MINTConnection
-from typing import List, Optional
+from typing import List
 import sys
 
 
@@ -18,7 +18,6 @@ class MINTDevice(Device):
         """
         self.name = name
         self._layout_constraints = []
-        self._valve_map = dict()
         self._terminals = []
         self._vias = []
 
@@ -135,15 +134,6 @@ class MINTDevice(Device):
 
         full = "DEVICE {}\n\n{}".format(self.name, full_layer_text)
         return full
-
-    def map_valve(self, valve: MINTComponent, connection: MINTConnection) -> None:
-        """Maps the valve to a connection in the device
-
-        Args:
-            valve (MINTComponent): valve component
-            connection (MINTConnection): connection on which the valve is mapped
-        """
-        self._valve_map[valve] = connection
 
     def add_terminal(self, name: str, pin_number: int, layer: str) -> MINTTerminal:
         """Creates and adds a terminal to the device with an associated pin number
