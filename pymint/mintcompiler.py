@@ -106,6 +106,10 @@ class MINTCompiler(mintListener):
         self.current_entity = None
         self.current_params = dict()
 
+    def enterControlStat(self, ctx: mintParser.ControlStatContext):
+        self.current_entity = None
+        self.current_params = dict()
+
     def exitPrimitiveStat(self, ctx: mintParser.PrimitiveStatContext):
         entity = self.current_entity
         if entity is None:
