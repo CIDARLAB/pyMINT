@@ -2,7 +2,7 @@ from __future__ import annotations
 from pymint.mintparams import MINTParams
 from parchmint.connection import Connection
 from pymint.minttarget import MINTTarget
-from typing import List, Tuple
+from typing import List
 from pymint import MINTLayer
 
 

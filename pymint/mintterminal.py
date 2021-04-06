@@ -1,10 +1,10 @@
-from pymint.mintparams import MINTParams
+from pymint.mintlayer import MINTLayer
 from pymint.mintcomponent import MINTComponent
 
 
 class MINTTerminal(MINTComponent):
-    def __init__(self, name: str, port_number: int, layer: str = "0") -> None:
-        super(MINTTerminal, self).__init__(name, "TERMINAL", {}, layer)
+    def __init__(self, name: str, port_number: int, layer: MINTLayer) -> None:
+        super(MINTTerminal, self).__init__(name, "TERMINAL", {}, [layer])
         self.__port_number = port_number
 
     @property

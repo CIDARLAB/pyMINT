@@ -5,5 +5,5 @@
     "python.formatting.provider": "black",
     "editor.formatOnSave": true,
     "python.linting.pylintEnabled": false,  
-    "python.pythonPath": "/home/krishna/.cache/pypoetry/virtualenvs/pymint-foaR6RZD-py3.8"
+    "python.pythonPath": "/home/krishna/.cache/pypoetry/virtualenvs/pymint-foaR6RZD-py3.8/bin/python3"
 }

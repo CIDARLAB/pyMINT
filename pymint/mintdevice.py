@@ -71,6 +71,7 @@ class MINTDevice(Device):
         layer = super().get_layer(layer_id)
         if layer is None:
             raise Exception("Cannot create new MINT connection with invalid layer")
+        assert layer is not None
         connection = MINTConnection(name, technology, params, source, sinks, layer)
         super().add_connection(connection)
         return connection
@@ -135,17 +136,27 @@ class MINTDevice(Device):
         full = "DEVICE {}\n\n{}".format(self.name, full_layer_text)
         return full
 
-    def add_terminal(self, name: str, pin_number: int, layer: str) -> MINTTerminal:
+    def map_valve(self, valve: MINTComponent, connection: MINTConnection) -> None:
+        """Maps the valve to a connection in the device
+
+        Args:
+            valve (MINTComponent): valve component
+            connection (MINTConnection): connection on which the valve is mapped
+        """
+        self._valve_map[valve] = connection
+
+    def add_terminal(self, name: str, pin_number: int, layer_id: str) -> MINTTerminal:
         """Creates and adds a terminal to the device with an associated pin number
 
         Args:
             name (str): name of the pin
             pin_number (int): pin number of the terminal
-            layer (str): layer associated with the terminal
+            layer (str): layerid associated with the terminal
 
         Returns:
             MINTTerminal: The newly created terminal
         """
+        layer = self.get_layer(layer_id)
         ret = MINTTerminal(name, pin_number, layer)
         self._terminals.append(ret)
         self.components.append(ret)
@@ -228,6 +239,9 @@ class MINTDevice(Device):
         listener = MINTCompiler()
 
         walker.walk(listener, tree)
+
+        assert listener.current_device is not None
+        current_device = listener.current_device
 
         if skip_constraints is not True:
             print("Computing Constraints")
