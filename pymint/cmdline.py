@@ -29,7 +29,6 @@ def main():
 
     tt = os.path.join(OUTPUT_DIR, "{}.json".format(current_device.name))
     with open(tt, "w") as f:
-        string = json.dumps(current_device.to_parchmint_v1())
         json.dump(current_device.to_parchmint_v1(), f)
 
 
