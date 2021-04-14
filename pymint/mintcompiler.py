@@ -94,6 +94,7 @@ class MINTCompiler(mintListener):
 
     def enterWidthParam(self, ctx: mintParser.WidthParamContext):
         value = ctx.value().getText()
+        assert ctx.key is not None
         key = ctx.key.text
         if key is None:
             raise Exception("Error in parsing the width parameter")
@@ -139,6 +140,7 @@ class MINTCompiler(mintListener):
 
         for ufname in ctx.ufnames().ufname():
             component_name = ufname.getText()
+            assert self._current_layer.ID is not None
             self.current_device.create_mint_component(
                 component_name,
                 entity,
@@ -153,6 +155,7 @@ class MINTCompiler(mintListener):
 
         self._cleanup_BANK_params()
 
+        assert ctx.dim is not None
         dim = int(ctx.dim.text)
 
         name = ctx.ufname().getText()
@@ -177,6 +180,7 @@ class MINTCompiler(mintListener):
 
         for ufname in ctx.ufnames().ufname():
             component_name = ufname.getText()
+            assert self._current_layer.ID is not None
             self.current_device.create_mint_component(
                 component_name,
                 entity,
@@ -284,6 +288,7 @@ class MINTCompiler(mintListener):
 
         # Loop for each of the components that need to be created with this param
         for ufname in ctx.ufnames().ufname():
+            assert self._current_layer.ID is not None
             self.current_device.create_mint_component(
                 ufname.getText(),
                 entity,
