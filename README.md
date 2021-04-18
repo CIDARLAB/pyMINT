@@ -8,7 +8,7 @@ MINT is a language to describe Microfluidic Hardware Netlists. MINT is the name 
 
 ## Documentation
 
-Chechttps://pymint.readthedocs.io/en/latest/
+Check: https://pymint.readthedocs.io/en/latest/
 
 
 ## Updating the ANTLR parser 
