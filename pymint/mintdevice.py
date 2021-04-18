@@ -12,10 +12,19 @@ import sys
 
 
 class MINTDevice(Device):
-    def __init__(self, name: str) -> None:
-        super(MINTDevice, self).__init__()
+    def __init__(self, name: str, json=None) -> None:
         """Creates a MINT device
+
+        A MINT device has the extra bells and whistles necessary for genrating
+        structured MINT. Pass the ParchMINT JSON to the `json` arg if you want
+        to initialize from a JSON file.
+
+        Args:
+            name (str): name of the device
+            json (str, optional): JSON string. Defaults to None.
         """
+        super(MINTDevice, self).__init__(json=json)
+
         self.name = name
         self._layout_constraints = []
         self._terminals = []
