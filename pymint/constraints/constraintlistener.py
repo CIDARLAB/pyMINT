@@ -1,16 +1,15 @@
-from pymint.constraints.mirrorconstraint import MirrorConstraint
 import logging
-from pymint.mintcomponent import MINTComponent
-from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
-from pymint.constraints.arrayconstraint import ArrayConstraint
-from pymint.constraints.positionconstraint import PositionConstraint
+
 from pymint.antlrgen.mintListener import mintListener
-from pymint.mintdevice import MINTDevice
 from pymint.antlrgen.mintParser import mintParser
-from pymint.constraints.orientationconstraint import (
-    ComponentOrientation,
-    OrientationConstraint,
-)
+from pymint.constraints.arrayconstraint import ArrayConstraint
+from pymint.constraints.mirrorconstraint import MirrorConstraint
+from pymint.constraints.orientationconstraint import (ComponentOrientation,
+                                                      OrientationConstraint)
+from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
+from pymint.constraints.positionconstraint import PositionConstraint
+from pymint.mintcomponent import MINTComponent
+from pymint.mintdevice import MINTDevice
 
 
 class ConstraintListener(mintListener):

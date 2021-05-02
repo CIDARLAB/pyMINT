@@ -1,8 +1,9 @@
 import argparse
-from pathlib import Path
-from pymint import MINTDevice
-import os
 import json
+import os
+from pathlib import Path
+
+from pymint import MINTDevice
 
 
 def main():

@@ -1,10 +1,11 @@
 import logging
-from pymint.minttarget import MINTTarget
-from pymint.mintdevice import MINTDevice
+from typing import Optional
+
 from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
+from pymint.mintdevice import MINTDevice
 from pymint.mintlayer import MINTLayer, MINTLayerType
-from typing import Optional
+from pymint.minttarget import MINTTarget
 
 
 class MINTCompiler(mintListener):

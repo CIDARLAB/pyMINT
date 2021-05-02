@@ -1,14 +1,17 @@
 from __future__ import annotations
-from pymint.mintvia import MINTVia
-from pymint.mintterminal import MINTTerminal
-from pymint.constraints.constraint import LayoutConstraint
-from pymint.minttarget import MINTTarget
-from pymint.mintlayer import MINTLayer, MINTLayerType
+
+import sys
+from typing import List
+
 from parchmint.device import Device
+
+from pymint.constraints.constraint import LayoutConstraint
 from pymint.mintcomponent import MINTComponent
 from pymint.mintconnection import MINTConnection
-from typing import List
-import sys
+from pymint.mintlayer import MINTLayer, MINTLayerType
+from pymint.minttarget import MINTTarget
+from pymint.mintterminal import MINTTerminal
+from pymint.mintvia import MINTVia
 
 
 class MINTDevice(Device):
@@ -214,13 +217,15 @@ class MINTDevice(Device):
         Returns:
             MINTDevice: The parsed device from the MINT file
         """
-        from antlr4 import CommonTokenStream, ParseTreeWalker, FileStream
-        from pymint.constraints.constraintlistener import ConstraintListener
-        from pymint.mintErrorListener import MINTErrorListener
+        import io
+
+        from antlr4 import CommonTokenStream, FileStream, ParseTreeWalker
+
         from pymint.antlrgen.mintLexer import mintLexer
         from pymint.antlrgen.mintParser import mintParser
+        from pymint.constraints.constraintlistener import ConstraintListener
         from pymint.mintcompiler import MINTCompiler
-        import io
+        from pymint.mintErrorListener import MINTErrorListener
 
         finput = FileStream(filepath)
 
