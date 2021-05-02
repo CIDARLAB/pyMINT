@@ -1,7 +1,8 @@
-from pymint.constraints.constraint import LayoutConstraint
-from typing import Dict
-from pymint.mintcomponent import MINTComponent
 from enum import Enum
+from typing import Dict
+
+from pymint.constraints.constraint import LayoutConstraint
+from pymint.mintcomponent import MINTComponent
 
 
 class ComponentOrientation(Enum):

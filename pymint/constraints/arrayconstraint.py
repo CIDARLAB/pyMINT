@@ -1,6 +1,7 @@
+from typing import List
+
 from pymint.constraints.constraint import LayoutConstraint
 from pymint.mintcomponent import MINTComponent
-from typing import List
 
 
 class ArrayConstraint(LayoutConstraint):

@@ -1,9 +1,12 @@
 from __future__ import annotations
-from pymint.mintparams import MINTParams
-from parchmint.connection import Connection
-from pymint.minttarget import MINTTarget
+
 from typing import List
+
+from parchmint.connection import Connection
+
 from pymint import MINTLayer
+from pymint.mintparams import MINTParams
+from pymint.minttarget import MINTTarget
 
 
 class MINTConnection(Connection):

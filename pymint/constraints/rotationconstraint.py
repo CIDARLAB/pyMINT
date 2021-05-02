@@ -1,5 +1,5 @@
-from pymint.constraints.constraint import LayoutConstraint
 from pymint import MINTComponent
+from pymint.constraints.constraint import LayoutConstraint
 
 
 class RotationConstraint(LayoutConstraint):

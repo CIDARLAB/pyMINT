@@ -1,7 +1,8 @@
 from enum import Enum
-from pymint.mintconnection import MINTConnection
-from pymint.mintcomponent import MINTComponent
 from typing import List
+
+from pymint.mintcomponent import MINTComponent
+from pymint.mintconnection import MINTConnection
 
 
 class OperationType(Enum):

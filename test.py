@@ -1,6 +1,7 @@
-from pymint.mintdevice import MINTDevice
-import pathlib
 import json
+import pathlib
+
+from pymint.mintdevice import MINTDevice
 
 filepath = "/home/krishna/CIDAR/pyfluigi/test/chthesis/net_mux.mint"
 

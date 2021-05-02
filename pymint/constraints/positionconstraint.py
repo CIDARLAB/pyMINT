@@ -1,6 +1,7 @@
+from typing import Optional
+
 from pymint.constraints.constraint import LayoutConstraint
 from pymint.mintcomponent import MINTComponent
-from typing import Optional
 
 
 class PositionConstraint(LayoutConstraint):
