@@ -1,6 +1,7 @@
 from typing import List
-from pymint.mintlayer import MINTLayer
+
 from pymint.mintcomponent import MINTComponent
+from pymint.mintlayer import MINTLayer
 
 
 class MINTVia(MINTComponent):

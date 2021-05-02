@@ -1,5 +1,6 @@
-from antlr4.error.ErrorListener import ErrorListener
 from io import StringIO
+
+from antlr4.error.ErrorListener import ErrorListener
 
 
 class MINTErrorListener(ErrorListener):
