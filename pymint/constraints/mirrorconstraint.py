@@ -1,7 +1,8 @@
-from pymint.mintdevice import MINTDevice
-from pymint.constraints.constraint import LayoutConstraint
 from typing import List
+
+from pymint.constraints.constraint import LayoutConstraint
 from pymint.mintcomponent import MINTComponent
+from pymint.mintdevice import MINTDevice
 
 
 class MirrorConstraint(LayoutConstraint):

@@ -1,8 +1,10 @@
-from pymint.mintdevice import MINTDevice
-from pymint.mintcomponent import MINTComponent
-from pymint.constraints.constraint import LayoutConstraint
 from typing import List
+
 import networkx as nx
+
+from pymint.constraints.constraint import LayoutConstraint
+from pymint.mintcomponent import MINTComponent
+from pymint.mintdevice import MINTDevice
 
 
 class OrthogonalConstraint(LayoutConstraint):

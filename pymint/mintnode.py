@@ -1,5 +1,5 @@
-from pymint.mintlayer import MINTLayer
 from pymint.mintcomponent import MINTComponent
+from pymint.mintlayer import MINTLayer
 
 
 class MINTNode(MINTComponent):

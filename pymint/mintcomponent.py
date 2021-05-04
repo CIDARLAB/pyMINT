@@ -1,8 +1,11 @@
 from __future__ import annotations
+
 from typing import List
-from pymint.mintparams import MINTParams
+
 from parchmint.component import Component
+
 from pymint import MINTLayer
+from pymint.mintparams import MINTParams
 
 
 class MINTComponent(Component):
