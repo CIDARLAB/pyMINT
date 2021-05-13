@@ -14,7 +14,7 @@ class OperationType(Enum):
     PARAMETER_MATCH = 6
 
 
-class LayoutConstraint(object):
+class LayoutConstraint:
     def __init__(self) -> None:
         """Creates a new instance of the LayoutConstraint"""
         self._components = []
