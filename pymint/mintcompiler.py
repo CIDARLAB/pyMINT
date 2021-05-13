@@ -335,9 +335,7 @@ class MINTCompiler(mintListener):
 
     def enterViaStat(self, ctx: mintParser.ViaStatContext):
         for ufname in ctx.ufnames().ufname():
-            self.current_device.add_via(
-                ufname.getText(),
-            )
+            self.current_device.add_via(ufname.getText(), [])
 
     def enterTerminalStat(self, ctx: mintParser.TerminalStatContext):
         terminal_name = ctx.ufname().getText()

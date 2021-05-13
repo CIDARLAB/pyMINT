@@ -171,7 +171,7 @@ class MINTDevice(Device):
         self.components.append(ret)
         return ret
 
-    def add_via(self, name: str, width: int, layers: List[MINTLayer]) -> MINTVia:
+    def add_via(self, name: str, layers: List[MINTLayer]) -> MINTVia:
         """Creates and adds a via to the device
 
         Args:
@@ -182,7 +182,7 @@ class MINTDevice(Device):
         Returns:
             MINTVia: The newly created via
         """
-        ret = MINTVia(name, width, layers)
+        ret = MINTVia(name, layers)
         self._vias.append(ret)
         self.components.append(ret)
         return ret
