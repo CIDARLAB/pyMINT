@@ -205,7 +205,8 @@ class ConstraintListener(mintListener):
 
     def exitLayerBlock(self, ctx: mintParser.LayerBlockContext):
         for constraint in self._mirror_constraints:
-            assert isinstance(constraint, MirrorConstraint)
+            if not isinstance(constraint, MirrorConstraint):
+                raise AssertionError
             try:
                 constraint.find_mirror_candidates(self.current_device)
                 self.current_device.add_constraint(constraint)

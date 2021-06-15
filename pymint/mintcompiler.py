@@ -95,7 +95,8 @@ class MINTCompiler(mintListener):
 
     def enterWidthParam(self, ctx: mintParser.WidthParamContext):
         value = ctx.value().getText()
-        assert ctx.key is not None
+        if ctx.key is None:
+            raise AssertionError
         key = ctx.key.text
         if key is None:
             raise Exception("Error in parsing the width parameter")
@@ -121,9 +122,10 @@ class MINTCompiler(mintListener):
         for ufname in ctx.ufnames().ufname():
             if self._current_layer is None:
                 raise Exception("Current layer is set to None")
-            assert (
+            if not (
                 self._current_layer is not None and self._current_layer.ID is not None
-            )
+            ):
+                raise AssertionError
             self.current_device.create_mint_component(
                 ufname.getText(),
                 entity,
@@ -141,7 +143,8 @@ class MINTCompiler(mintListener):
 
         for ufname in ctx.ufnames().ufname():
             component_name = ufname.getText()
-            assert self._current_layer.ID is not None
+            if self._current_layer.ID is None:
+                raise AssertionError
             self.current_device.create_mint_component(
                 component_name,
                 entity,
@@ -156,7 +159,8 @@ class MINTCompiler(mintListener):
 
         self._cleanup_BANK_params()
 
-        assert ctx.dim is not None
+        if ctx.dim is None:
+            raise AssertionError
         dim = int(ctx.dim.text)
 
         name = ctx.ufname().getText()
@@ -165,9 +169,10 @@ class MINTCompiler(mintListener):
             component_name = name + "_" + str(i)
             if self._current_layer is None:
                 raise Exception("Current Layer not Set")
-            assert (
+            if not (
                 self._current_layer is not None and self._current_layer.ID is not None
-            )
+            ):
+                raise AssertionError
             self.current_device.create_mint_component(
                 component_name, entity, self.current_params, [self._current_layer.ID]
             )
@@ -181,7 +186,8 @@ class MINTCompiler(mintListener):
 
         for ufname in ctx.ufnames().ufname():
             component_name = ufname.getText()
-            assert self._current_layer.ID is not None
+            if self._current_layer.ID is None:
+                raise AssertionError
             self.current_device.create_mint_component(
                 component_name,
                 entity,
@@ -228,7 +234,8 @@ class MINTCompiler(mintListener):
         self._cleanup_CHANNEL_params()
 
         # Create a connection between the different components in the device
-        assert self._current_layer is not None and self._current_layer.ID is not None
+        if not (self._current_layer is not None and self._current_layer.ID is not None):
+            raise AssertionError
         self.current_device.create_mint_connection(
             connection_name,
             entity,
@@ -264,7 +271,8 @@ class MINTCompiler(mintListener):
                 sink_port = None
 
             sink_uftargets.append(MINTTarget(sink_id, sink_port))
-        assert self._current_layer is not None and self._current_layer.ID is not None
+        if not (self._current_layer is not None and self._current_layer.ID is not None):
+            raise AssertionError
         self.current_device.create_mint_connection(
             connection_name,
             entity,
@@ -289,7 +297,8 @@ class MINTCompiler(mintListener):
 
         # Loop for each of the components that need to be created with this param
         for ufname in ctx.ufnames().ufname():
-            assert self._current_layer.ID is not None
+            if self._current_layer.ID is None:
+                raise AssertionError
             self.current_device.create_mint_component(
                 ufname.getText(),
                 entity,
@@ -301,7 +310,8 @@ class MINTCompiler(mintListener):
         entity = "NODE"
 
         # Loop for each of the components that need to be created with this param
-        assert self._current_layer is not None and self._current_layer.ID is not None
+        if not (self._current_layer is not None and self._current_layer.ID is not None):
+            raise AssertionError
         for ufname in ctx.ufnames().ufname():
             self.current_device.create_mint_component(
                 ufname.getText(),
@@ -316,7 +326,8 @@ class MINTCompiler(mintListener):
             logging.error("Could not find entitry information for valve")
             raise Exception("Could not find entitry information for valve")
         valve_name = ctx.ufname()[0].getText()
-        assert self._current_layer is not None and self._current_layer.ID is not None
+        if not (self._current_layer is not None and self._current_layer.ID is not None):
+            raise AssertionError
         valve_component = self.current_device.create_mint_component(
             valve_name,
             entity,
@@ -341,7 +352,8 @@ class MINTCompiler(mintListener):
     def enterTerminalStat(self, ctx: mintParser.TerminalStatContext):
         terminal_name = ctx.ufname().getText()
         pin_number = int(ctx.INT.getText())
-        assert self._current_layer is not None and self._current_layer.ID is not None
+        if not (self._current_layer is not None and self._current_layer.ID is not None):
+            raise AssertionError
         self.current_device.add_terminal(
             terminal_name,
             pin_number,

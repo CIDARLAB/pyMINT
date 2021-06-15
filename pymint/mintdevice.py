@@ -83,7 +83,8 @@ class MINTDevice(Device):
         layer = super().get_layer(layer_id)
         if layer is None:
             raise Exception("Cannot create new MINT connection with invalid layer")
-        assert layer is not None
+        if layer is None:
+            raise AssertionError
         connection = MINTConnection(name, technology, params, source, sinks, layer)
         super().add_connection(connection)
         return connection
@@ -254,7 +255,8 @@ class MINTDevice(Device):
 
         walker.walk(listener, tree)
 
-        assert listener.current_device is not None
+        if listener.current_device is None:
+            raise AssertionError
         current_device = listener.current_device
 
         if skip_constraints is not True:
