@@ -1,6 +1,7 @@
+from typing import List
+
 from pymint.constraints.constraint import LayoutConstraint
 from pymint.mintconnection import MINTConnection
-from typing import List
 
 
 class LengthConstraint(LayoutConstraint):
