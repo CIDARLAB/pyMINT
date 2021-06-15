@@ -149,7 +149,7 @@ class MirrorConstraint(LayoutConstraint):
         # If all the entities are the same, include them into the mirror groups
         entity_0 = entities[0]
         fail_flag = False
-        for i in range(1, len(sink_ids)):
+        for i, element in enumerate(sink_ids):
             entity_i = entities[i]
             if entity_i != entity_0:
                 fail_flag = True
@@ -226,7 +226,7 @@ class MirrorConstraint(LayoutConstraint):
         # If all the entities are the same, include them into the mirror groups
         entity_0 = entities[0]
         fail_flag = False
-        for i in range(1, len(sink_ids)):
+        for i, element in enumerate(sink_ids):
             entity_i = entities[i]
             if entity_i != entity_0:
                 fail_flag = True

@@ -49,7 +49,6 @@ class OrthogonalConstraint(LayoutConstraint):
                 root_node (str): node from which we need to do the traversal
             """
             neighbors = list(nx.neighbors(G, root_node))
-            pass
             for neighbor in neighbors:
                 component = current_device.get_component(neighbor)
                 if component in nodes:
