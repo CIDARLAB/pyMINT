@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
@@ -40,7 +41,7 @@ class ConstraintListener(mintListener):
         self._orientation = None
 
         # Global Relative Orientation Constraints
-        self._global_relative_operations = []
+        self._global_relative_operations: List[OrientationConstraint] = []
 
     def enterPositionConstraintStat(
         self, ctx: mintParser.PositionConstraintStatContext
@@ -164,7 +165,7 @@ class ConstraintListener(mintListener):
         # In general check whats there and set the constraint for all the items in the statement
         constraint = self._global_relative_operations[-1]
         for component in self._constrained_components:
-            constraint.add_component(component, self._orientation)
+            constraint.add_component_orientation_pair(component, self._orientation)
 
         self.current_device.add_constraint(constraint)
 

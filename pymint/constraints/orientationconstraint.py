@@ -21,7 +21,7 @@ class OrientationConstraint(LayoutConstraint):
         super().__init__()
         self.__orientation_map: Dict[MINTComponent, ComponentOrientation] = {}
 
-    def add_component(
+    def add_component_orientation_pair(
         self, component: MINTComponent, orientation: ComponentOrientation
     ) -> None:
         """Adds a component onto the constraint
