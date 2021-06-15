@@ -10,7 +10,7 @@ class MINTNode(MINTComponent):
             name (str): name of the node
             layer (str, optional): [description].
         """
-        super(MINTNode, self).__init__(name, "NODE", dict(), [layer])
+        super(MINTNode, self).__init__(name, "NODE", {}, [layer])
 
     def to_MINT(self) -> str:
         """Returns the MINT for the NODE
