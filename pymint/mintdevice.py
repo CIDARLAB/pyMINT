@@ -196,7 +196,7 @@ class MINTDevice(Device):
         Returns:
             dict: dictionary representing the json datastructure
         """
-        ret = dict()
+        ret = {}
         ret["name"] = self.name
         ret["components"] = [c.to_parchmint_v1() for c in self.components]
         ret["connections"] = [c.to_parchmint_v1() for c in self.connections]
