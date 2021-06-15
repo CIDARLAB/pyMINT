@@ -18,7 +18,7 @@ class MINTCompiler(mintListener):
         self.control_layer_count = 0
         self.integration_layer_count = 0
         self.current_entity: Optional[str]
-        self.current_params = dict()
+        self.current_params = {}
         self._current_layer: Optional[MINTLayer] = None
 
     def enterNetlist(self, ctx: mintParser.NetlistContext):
@@ -70,7 +70,7 @@ class MINTCompiler(mintListener):
         self.current_entity = ctx.getText()
 
     def enterParamsStat(self, ctx: mintParser.ParamsStatContext):
-        self.current_params = dict()
+        self.current_params = {}
 
     def enterIntParam(self, ctx: mintParser.IntParamContext):
         value = ctx.value().getText()
@@ -106,11 +106,11 @@ class MINTCompiler(mintListener):
 
     def enterFlowStat(self, ctx: mintParser.FlowStatContext):
         self.current_entity = None
-        self.current_params = dict()
+        self.current_params = {}
 
     def enterControlStat(self, ctx: mintParser.ControlStatContext):
         self.current_entity = None
-        self.current_params = dict()
+        self.current_params = {}
 
     def exitPrimitiveStat(self, ctx: mintParser.PrimitiveStatContext):
         entity = self.current_entity

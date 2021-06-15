@@ -14,7 +14,7 @@ class OrientationConstraint(LayoutConstraint):
     def __init__(self) -> None:
         """Creates an instance of the orientation constraint"""
         super().__init__()
-        self.__orientation_map: Dict[MINTComponent, ComponentOrientation] = dict()
+        self.__orientation_map: Dict[MINTComponent, ComponentOrientation] = {}
 
     def add_component(
         self, component: MINTComponent, orientation: ComponentOrientation
