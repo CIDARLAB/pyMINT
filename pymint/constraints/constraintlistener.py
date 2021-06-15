@@ -22,7 +22,6 @@ class ConstraintListener(mintListener):
     def __init__(self, device: MINTDevice):
         super().__init__()
         self.current_device = device
-        self.__current_constraints = []
 
         # Temporary store for constrained components
         self._constrained_components = []
