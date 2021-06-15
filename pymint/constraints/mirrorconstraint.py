@@ -77,7 +77,8 @@ class MirrorConstraint(LayoutConstraint):
                 edges_to_use = incoming_edges
             else:
                 raise Exception(
-                    "Unable to compute mirror group for source: {}, please check if outgoing and incoming channels are declared correctly".format(
+                    "Unable to compute mirror group for source: {}, please check if"
+                    " outgoing and incoming channels are declared correctly".format(
                         self.__mirror_source
                     )
                 )

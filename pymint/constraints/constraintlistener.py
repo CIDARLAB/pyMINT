@@ -5,8 +5,10 @@ from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
 from pymint.constraints.arrayconstraint import ArrayConstraint
 from pymint.constraints.mirrorconstraint import MirrorConstraint
-from pymint.constraints.orientationconstraint import (ComponentOrientation,
-                                                      OrientationConstraint)
+from pymint.constraints.orientationconstraint import (
+    ComponentOrientation,
+    OrientationConstraint,
+)
 from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
 from pymint.constraints.positionconstraint import PositionConstraint
 from pymint.mintcomponent import MINTComponent
@@ -14,6 +16,11 @@ from pymint.mintdevice import MINTDevice
 
 
 class ConstraintListener(mintListener):
+    """Listener that is used to catch all the layout constratints
+    from the MINT design
+
+    """
+
     def __init__(self, device: MINTDevice):
         super().__init__()
         self.current_device = device

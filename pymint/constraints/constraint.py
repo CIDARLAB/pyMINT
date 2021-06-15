@@ -6,6 +6,8 @@ from pymint.mintconnection import MINTConnection
 
 
 class OperationType(Enum):
+    """Enum that represents all the differnt types of constraints"""
+
     EXPLICIT_OPERATION = 0
     OPTIONAL_OPERATION = 1
     ALIGNMENT_OPERATION = 2

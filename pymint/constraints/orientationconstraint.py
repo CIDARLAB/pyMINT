@@ -6,6 +6,8 @@ from pymint.mintcomponent import MINTComponent
 
 
 class ComponentOrientation(Enum):
+    """Enum ot represent component's relative orientation"""
+
     HORIZONTAL = 0
     VERTICAL = 1
 

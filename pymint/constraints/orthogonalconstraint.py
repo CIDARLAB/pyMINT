@@ -8,6 +8,11 @@ from pymint.mintdevice import MINTDevice
 
 
 class OrthogonalConstraint(LayoutConstraint):
+    """Layout constraint used to represent an orthogonal layout
+    requirement for a sub-netlist
+
+    """
+
     def __init__(self, components: List[MINTComponent]) -> None:
         """Creates an orthogonal constraint
 
