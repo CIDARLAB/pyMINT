@@ -9,6 +9,11 @@ from pymint.mintparams import MINTParams
 
 
 class MINTComponent(Component):
+    """Component Class abstracting parchmint component
+    while adding helper methods to generate MINT
+
+    """
+
     def __init__(
         self, name: str, technology: str, params: dict, layers: List[MINTLayer] = None
     ) -> None:

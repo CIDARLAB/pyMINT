@@ -3,6 +3,11 @@ from pymint.constraints.constraint import LayoutConstraint
 
 
 class RotationConstraint(LayoutConstraint):
+    """Layout constraint that fixed the absolute rotation
+    of the component
+
+    """
+
     def __init__(self, component: MINTComponent, rotation: float) -> None:
         """Creates a Rotation constraint
 

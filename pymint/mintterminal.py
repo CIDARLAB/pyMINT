@@ -3,6 +3,11 @@ from pymint.mintlayer import MINTLayer
 
 
 class MINTTerminal(MINTComponent):
+    """Class for representing the MINT terminal, its modelled as a
+    Parchmint Component while giving helpful methods to model the design
+
+    """
+
     def __init__(self, name: str, port_number: int, layer: MINTLayer) -> None:
         super(MINTTerminal, self).__init__(name, "TERMINAL", {}, [layer])
         self.__port_number = port_number

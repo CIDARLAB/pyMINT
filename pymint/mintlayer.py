@@ -35,6 +35,10 @@ class MINTLayerType(Enum):
 
 
 class MINTLayer(Layer):
+    """MINT Layer class that abstracts the Layer class and adds additional
+    methods to help generating MINT
+    """
+
     def __init__(
         self,
         id: str,

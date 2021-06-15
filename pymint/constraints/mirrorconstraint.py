@@ -6,6 +6,10 @@ from pymint.mintdevice import MINTDevice
 
 
 class MirrorConstraint(LayoutConstraint):
+    """Layout constraint when two differnt sub-netlists need to have
+    the same layout
+    """
+
     def __init__(self, source_component: MINTComponent, mirror_count=None):
         """Create a new instance of the mirror constraint
 

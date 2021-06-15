@@ -9,6 +9,8 @@ from pymint.minttarget import MINTTarget
 
 
 class MINTCompiler(mintListener):
+    """Primary ANTLR listener class for the compiler"""
+
     def __init__(self):
         super().__init__()
         self.current_device: Optional[MINTDevice] = None

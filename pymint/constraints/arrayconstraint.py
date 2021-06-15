@@ -5,6 +5,10 @@ from pymint.mintcomponent import MINTComponent
 
 
 class ArrayConstraint(LayoutConstraint):
+    """Array Constraint represents a 1D / 2D array with fixed spacings
+    in both dimensions
+    """
+
     def __init__(
         self,
         components: List[MINTComponent],

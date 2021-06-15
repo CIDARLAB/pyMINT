@@ -15,6 +15,11 @@ class OperationType(Enum):
 
 
 class LayoutConstraint:
+    """Base layout constraint class over which all the other constriaint
+    classes will be based upon
+
+    """
+
     def __init__(self) -> None:
         """Creates a new instance of the LayoutConstraint"""
         self._components = []

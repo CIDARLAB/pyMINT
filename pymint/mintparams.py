@@ -2,8 +2,13 @@ from parchmint.params import Params
 
 
 class MINTParams(Params):
+    """Params class that abstracts Parchmint Params with
+    MINT compatible options
+
+    """
+
     def __init__(self, pairs: dict) -> None:
-        """[summary]
+        """Creates a MINTParams object
 
         Args:
             pairs (dict): [description]

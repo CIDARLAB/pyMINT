@@ -4,8 +4,10 @@ from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
 from pymint.constraints.arrayconstraint import ArrayConstraint
 from pymint.constraints.mirrorconstraint import MirrorConstraint
-from pymint.constraints.orientationconstraint import (ComponentOrientation,
-                                                      OrientationConstraint)
+from pymint.constraints.orientationconstraint import (
+    ComponentOrientation,
+    OrientationConstraint,
+)
 from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
 from pymint.constraints.positionconstraint import PositionConstraint
 from pymint.mintcomponent import MINTComponent
@@ -187,6 +189,10 @@ class ConstraintListener(mintListener):
             self.current_device.add_constraint(constraint)
 
         # TODO: Add all the components onto the list and create the constraint
+        pass
+
+    def exitChannelStat(self, ctx: mintParser.ChannelStatContext):
+        # TODO - If length constraints exists, create them here
         pass
 
     def exitSpanStat(self, ctx: mintParser.SpanStatContext):

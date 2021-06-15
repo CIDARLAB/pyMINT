@@ -11,6 +11,11 @@ class ComponentOrientation(Enum):
 
 
 class OrientationConstraint(LayoutConstraint):
+    """Layout constraint that setups relative orientations for a
+    number of components inside a single layer
+
+    """
+
     def __init__(self) -> None:
         """Creates an instance of the orientation constraint"""
         super().__init__()

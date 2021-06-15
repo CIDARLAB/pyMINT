@@ -5,6 +5,8 @@ from pymint.mintcomponent import MINTComponent
 
 
 class PositionConstraint(LayoutConstraint):
+    """Layout constraint that fixes the location"""
+
     def __init__(
         self,
         component: MINTComponent,

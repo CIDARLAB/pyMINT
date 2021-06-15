@@ -5,6 +5,11 @@ from pymint.mintlayer import MINTLayer
 
 
 class MINTVia(MINTComponent):
+    """Class to represent MINT Vias that are modelled as a Parchmint component.
+    The class has helpful methods for adding and modifying the vias
+
+    """
+
     def __init__(self, name: str, layers: List[MINTLayer]) -> None:
         """Creates a new instance of a Via
 

@@ -15,6 +15,9 @@ from pymint.mintvia import MINTVia
 
 
 class MINTDevice(Device):
+    """Device class abstracting parchmint Device object adding additional
+    methods for generating MINT"""
+
     def __init__(self, name: str, json=None) -> None:
         """Creates a MINT device
 
