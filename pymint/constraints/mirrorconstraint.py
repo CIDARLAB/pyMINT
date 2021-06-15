@@ -23,6 +23,11 @@ class MirrorConstraint(LayoutConstraint):
         self.__mirror_count: int = mirror_count
 
     def add_group(self, components: List[MINTComponent]) -> None:
+        """Adds the passed componets to a new group
+
+        Args:
+            components (List[MINTComponent]): List of components that need to be in a mirror group
+        """
         self.__mirror_groups.append(components)
 
     @property
@@ -107,6 +112,19 @@ class MirrorConstraint(LayoutConstraint):
         mirror_groups: List[List[MINTComponent]],
         device: MINTDevice,
     ) -> bool:
+        """Steps in the forward direction
+
+        Args:
+            sources (List[str]): [description]
+            mirror_groups (List[List[MINTComponent]]): [description]
+            device (MINTDevice): [description]
+
+        Raises:
+            Exception: [description]
+
+        Returns:
+            bool: [description]
+        """
         G = device.G
         outgoing_edges = []
         for source in sources:
@@ -170,6 +188,20 @@ class MirrorConstraint(LayoutConstraint):
         mirror_groups: List[List[MINTComponent]],
         device: MINTDevice,
     ) -> bool:
+        """Takes a step in reverse
+
+
+        Args:
+            sources (List[str]): [description]
+            mirror_groups (List[List[MINTComponent]]): [description]
+            device (MINTDevice): [description]
+
+        Raises:
+            Exception: [description]
+
+        Returns:
+            bool: [description]
+        """
         G = device.G
         incoming_edges = []
         for source in sources:
