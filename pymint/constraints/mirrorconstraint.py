@@ -6,11 +6,16 @@ from pymint.mintdevice import MINTDevice
 
 
 class MirrorConstraint(LayoutConstraint):
+    """Layout constraint when two differnt sub-netlists need to have
+    the same layout
+    """
+
     def __init__(self, source_component: MINTComponent, mirror_count=None):
         """Create a new instance of the mirror constraint
 
         Args:
-            source_component (MINTComponent): source for the mirror component to search for mirror groups
+            source_component (MINTComponent): source for the mirror component to search
+            for mirror groups
             mirror_count ([type], optional): number of mirror groups. Defaults to None.
         """
         super().__init__()
@@ -19,6 +24,12 @@ class MirrorConstraint(LayoutConstraint):
         self.__mirror_count: int = mirror_count
 
     def add_group(self, components: List[MINTComponent]) -> None:
+        """Adds the passed componets to a new group
+
+        Args:
+            components (List[MINTComponent]): List of components that need to be in a
+            mirror group
+        """
         self.__mirror_groups.append(components)
 
     @property
@@ -50,7 +61,8 @@ class MirrorConstraint(LayoutConstraint):
         """
         forward_traverse = True
         # TODO -
-        # Step 1 - Go through all the outgoing components and create create mirror groups
+        # Step 1 - Go through all the outgoing components and create create mirror
+        # groups
         G = device.G
         mirror_groups = []
 
@@ -73,7 +85,8 @@ class MirrorConstraint(LayoutConstraint):
                 edges_to_use = incoming_edges
             else:
                 raise Exception(
-                    "Unable to compute mirror group for source: {}, please check if outgoing and incoming channels are declared correctly".format(
+                    "Unable to compute mirror group for source: {}, please check if"
+                    " outgoing and incoming channels are declared correctly".format(
                         self.__mirror_source
                     )
                 )
@@ -102,6 +115,19 @@ class MirrorConstraint(LayoutConstraint):
         mirror_groups: List[List[MINTComponent]],
         device: MINTDevice,
     ) -> bool:
+        """Steps in the forward direction
+
+        Args:
+            sources (List[str]): [description]
+            mirror_groups (List[List[MINTComponent]]): [description]
+            device (MINTDevice): [description]
+
+        Raises:
+            Exception: [description]
+
+        Returns:
+            bool: [description]
+        """
         G = device.G
         outgoing_edges = []
         for source in sources:
@@ -111,7 +137,8 @@ class MirrorConstraint(LayoutConstraint):
         for edge in list(outgoing_edges):
             sink_ids.append(edge[1])
 
-        # If there is a only 1 common sink, or less than the mirror count, then we gotto kill the mirror groupings
+        # If there is a only 1 common sink, or less than the mirror count, then we
+        # gotto kill the mirror groupings
         if len(sink_ids) < self.__mirror_count:
             return False
 
@@ -126,7 +153,7 @@ class MirrorConstraint(LayoutConstraint):
         # If all the entities are the same, include them into the mirror groups
         entity_0 = entities[0]
         fail_flag = False
-        for i in range(1, len(sink_ids)):
+        for i, unused_element in enumerate(sink_ids):
             entity_i = entities[i]
             if entity_i != entity_0:
                 fail_flag = True
@@ -134,8 +161,9 @@ class MirrorConstraint(LayoutConstraint):
         if fail_flag is True:
             return False
 
-        # Since it works, we add everything to the mirror groups, for each of the components see which group the
-        # predecessor is in and place it in the corresponding group, if its not in any of the groups something
+        # Since it works, we add everything to the mirror groups, for each of the
+        # components see which group the predecessor is in and place it in the
+        # corresponding group, if its not in any of the groups something
         # went wrong in the alg
         for component in components:
             assing_group_found_flag = False
@@ -165,6 +193,20 @@ class MirrorConstraint(LayoutConstraint):
         mirror_groups: List[List[MINTComponent]],
         device: MINTDevice,
     ) -> bool:
+        """Takes a step in reverse
+
+
+        Args:
+            sources (List[str]): [description]
+            mirror_groups (List[List[MINTComponent]]): [description]
+            device (MINTDevice): [description]
+
+        Raises:
+            Exception: [description]
+
+        Returns:
+            bool: [description]
+        """
         G = device.G
         incoming_edges = []
         for source in sources:
@@ -174,7 +216,8 @@ class MirrorConstraint(LayoutConstraint):
         for edge in list(incoming_edges):
             sink_ids.append(edge[0])
 
-        # If there is a only 1 common sink, or less than the mirror count, then we gotto kill the mirror groupings
+        # If there is a only 1 common sink, or less than the mirror count, then we
+        # gotto kill the mirror groupings
         if len(sink_ids) < self.__mirror_count:
             return False
 
@@ -189,7 +232,7 @@ class MirrorConstraint(LayoutConstraint):
         # If all the entities are the same, include them into the mirror groups
         entity_0 = entities[0]
         fail_flag = False
-        for i in range(1, len(sink_ids)):
+        for i, unused_element in enumerate(sink_ids):
             entity_i = entities[i]
             if entity_i != entity_0:
                 fail_flag = True
@@ -197,8 +240,9 @@ class MirrorConstraint(LayoutConstraint):
         if fail_flag is True:
             return False
 
-        # Since it works, we add everything to the mirror groups, for each of the components see which group the
-        # predecessor is in and place it in the corresponding group, if its not in any of the groups something
+        # Since it works, we add everything to the mirror groups, for each of the
+        # components see which group the predecessor is in and place it in the
+        # corresponding group, if its not in any of the groups something
         # went wrong in the alg
         for component in components:
             assing_group_found_flag = False

@@ -1,9 +1,16 @@
+from typing import List
+
 from pymint.constraints.constraint import LayoutConstraint
-from pymint.mintcomponent import MINTComponent
+from pymint.mintconnection import MINTConnection
 
 
 class LengthConstraint(LayoutConstraint):
-    def __init__(self, component: MINTComponent, length: float) -> None:
+    """Layout Constriant that will be used for specifying a fixed length
+    for a connection
+
+    """
+
+    def __init__(self, connection: MINTConnection, length: float) -> None:
         """Creates a length constraint
 
         Args:
@@ -11,17 +18,18 @@ class LengthConstraint(LayoutConstraint):
             length (float): length of the connection that needs to be fixed
         """
         super().__init__()
-        self._components.append(component)
+        self._connections = []
+        self._connections.append(connection)
         self.__length = length
 
     @property
-    def component(self) -> MINTComponent:
+    def connections(self) -> List[MINTConnection]:
         """Returns the component covered by the constraint
 
         Returns:
             MINTComponent: constrained component
         """
-        return self._components[0]
+        return self._connections
 
     @property
     def length(self) -> float:

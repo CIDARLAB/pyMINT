@@ -8,6 +8,11 @@ from pymint.mintdevice import MINTDevice
 
 
 class OrthogonalConstraint(LayoutConstraint):
+    """Layout constraint used to represent an orthogonal layout
+    requirement for a sub-netlist
+
+    """
+
     def __init__(self, components: List[MINTComponent]) -> None:
         """Creates an orthogonal constraint
 
@@ -36,8 +41,14 @@ class OrthogonalConstraint(LayoutConstraint):
         nodes.append(component)
 
         def dfs_traverse_nodes(root_node: str):
+            """Does a DFS traversal based on the node
+
+            (to be used as a recursive function)
+
+            Args:
+                root_node (str): node from which we need to do the traversal
+            """
             neighbors = list(nx.neighbors(G, root_node))
-            pass
             for neighbor in neighbors:
                 component = current_device.get_component(neighbor)
                 if component in nodes:

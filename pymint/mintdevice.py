@@ -15,6 +15,11 @@ from pymint.mintvia import MINTVia
 
 
 class MINTDevice(Device):
+    """Device class abstracting parchmint Device object adding additional
+    methods for generating MINT
+
+    """
+
     def __init__(self, name: str, json=None) -> None:
         """Creates a MINT device
 
@@ -109,7 +114,8 @@ class MINTDevice(Device):
         return layer
 
     def get_constraints(self) -> List[LayoutConstraint]:
-        """Returns the layout constraints of the device. Currently does not support the constraints
+        """Returns the layout constraints of the device. Currently does not support the
+        constraints
 
         Returns:
             List[LayoutConstraint]: List of layout constriants objects
@@ -130,7 +136,8 @@ class MINTDevice(Device):
         Returns:
             str: MINT string
         """
-        # TODO: Eventually I need to modify the MINT generation to account for all the layout constraints
+        # TODO: Eventually I need to modify the MINT generation to account for all the
+        # layout constraints
 
         full_layer_text = ""
         # Loop Over all the layers
@@ -149,15 +156,6 @@ class MINTDevice(Device):
         full = "DEVICE {}\n\n{}".format(self.name, full_layer_text)
         return full
 
-    def map_valve(self, valve: MINTComponent, connection: MINTConnection) -> None:
-        """Maps the valve to a connection in the device
-
-        Args:
-            valve (MINTComponent): valve component
-            connection (MINTConnection): connection on which the valve is mapped
-        """
-        self._valve_map[valve] = connection
-
     def add_terminal(self, name: str, pin_number: int, layer_id: str) -> MINTTerminal:
         """Creates and adds a terminal to the device with an associated pin number
 
@@ -175,7 +173,7 @@ class MINTDevice(Device):
         self.components.append(ret)
         return ret
 
-    def add_via(self, name: str, width: int, layers: List[MINTLayer]) -> MINTVia:
+    def add_via(self, name: str, layers: List[MINTLayer]) -> MINTVia:
         """Creates and adds a via to the device
 
         Args:
@@ -186,7 +184,7 @@ class MINTDevice(Device):
         Returns:
             MINTVia: The newly created via
         """
-        ret = MINTVia(name, width, layers)
+        ret = MINTVia(name, layers)
         self._vias.append(ret)
         self.components.append(ret)
         return ret
@@ -213,7 +211,8 @@ class MINTDevice(Device):
 
         Args:
             filepath (str): absolute filepath of the mint file
-            skip_constraints (bool, optional): flag to accept / skip constraint parsing. Defaults to False.
+            skip_constraints (bool, optional): flag to accept / skip constraint parsing.
+            Defaults to False.
 
         Returns:
             MINTDevice: The parsed device from the MINT file

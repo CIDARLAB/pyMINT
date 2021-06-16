@@ -4,6 +4,8 @@ from parchmint.target import Target
 
 
 class MINTTarget(Target):
+    """Target class that abstracts Parchmint Target class"""
+
     def __init__(self, componentstring: str, portstring: Optional[str] = None) -> None:
         super(MINTTarget, self).__init__(None)
         self.component = componentstring

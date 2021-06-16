@@ -7,7 +7,7 @@ from pymint import MINTDevice
 
 
 def main():
-
+    """Scaffhold for running the command line interface"""
     # do the arg parsing here
     parser = argparse.ArgumentParser()
 

@@ -6,6 +6,8 @@ from pymint.mintconnection import MINTConnection
 
 
 class OperationType(Enum):
+    """Enum that represents all the differnt types of constraints"""
+
     EXPLICIT_OPERATION = 0
     OPTIONAL_OPERATION = 1
     ALIGNMENT_OPERATION = 2
@@ -15,6 +17,11 @@ class OperationType(Enum):
 
 
 class LayoutConstraint:
+    """Base layout constraint class over which all the other constriaint
+    classes will be based upon
+
+    """
+
     def __init__(self) -> None:
         """Creates a new instance of the LayoutConstraint"""
         self._components = []

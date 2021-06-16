@@ -9,6 +9,8 @@ from pymint.minttarget import MINTTarget
 
 
 class MINTCompiler(mintListener):
+    """Primary ANTLR listener class for the compiler"""
+
     def __init__(self):
         super().__init__()
         self.current_device: Optional[MINTDevice] = None
@@ -347,9 +349,7 @@ class MINTCompiler(mintListener):
 
     def enterViaStat(self, ctx: mintParser.ViaStatContext):
         for ufname in ctx.ufnames().ufname():
-            self.current_device.add_via(
-                ufname.getText(),
-            )
+            self.current_device.add_via(ufname.getText(), [])
 
     def enterTerminalStat(self, ctx: mintParser.TerminalStatContext):
         terminal_name = ctx.ufname().getText()

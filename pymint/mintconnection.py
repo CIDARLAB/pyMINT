@@ -10,6 +10,11 @@ from pymint.minttarget import MINTTarget
 
 
 class MINTConnection(Connection):
+    """Connection class abstracting parchmint Connection class that adding
+    helper methods to generate MINT
+
+    """
+
     def __init__(
         self,
         name: str,

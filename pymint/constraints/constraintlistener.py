@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
@@ -13,10 +14,14 @@ from pymint.mintdevice import MINTDevice
 
 
 class ConstraintListener(mintListener):
+    """Listener that is used to catch all the layout constratints
+    from the MINT design
+
+    """
+
     def __init__(self, device: MINTDevice):
         super().__init__()
         self.current_device = device
-        self.__current_constraints = []
 
         # Temporary store for constrained components
         self._constrained_components = []
@@ -38,7 +43,7 @@ class ConstraintListener(mintListener):
         self._orientation = None
 
         # Global Relative Orientation Constraints
-        self._global_relative_operations = []
+        self._global_relative_operations: List[OrientationConstraint] = []
 
     def enterPositionConstraintStat(
         self, ctx: mintParser.PositionConstraintStatContext
@@ -135,7 +140,6 @@ class ConstraintListener(mintListener):
         elif self.current_device.connection_exists(element_name):
             connection = self.current_device.get_connection(element_name)
         if component is not None:
-            # raise Exception("Could not find component in device : {}".format(component_name))
             self._constrained_components.append(component)
         elif connection is not None:
             self._constrained_components.append(connection)
@@ -159,15 +163,17 @@ class ConstraintListener(mintListener):
         if self._orientation is None:
             return
 
-        # In general check whats there and set the constraint for all the items in the statement
+        # In general check whats there and set the constraint for all the items
+        # in the statement
         constraint = self._global_relative_operations[-1]
         for component in self._constrained_components:
-            constraint.add_component(component, self._orientation)
+            constraint.add_component_orientation_pair(component, self._orientation)
 
         self.current_device.add_constraint(constraint)
 
     def exitNodeStat(self, ctx: mintParser.NodeStatContext):
-        # TODO: Expand on neighbours until we hit all the components on the node periphery
+        # TODO: Expand on neighbours until we hit all the components on the node
+        # periphery
         for component in self._constrained_components:
             if component is None:
                 raise Exception(
@@ -179,7 +185,7 @@ class ConstraintListener(mintListener):
             if self._checkIfComponentConstranied(component):
                 continue
 
-            # TODO check if component exists in any of the of existing constraints
+            # TODO: check if component exists in any of the of existing constraints
             components = OrthogonalConstraint.traverse_node_component_neighbours(
                 component, self.current_device
             )
@@ -187,6 +193,10 @@ class ConstraintListener(mintListener):
             self.current_device.add_constraint(constraint)
 
         # TODO: Add all the components onto the list and create the constraint
+        pass
+
+    def exitChannelStat(self, ctx: mintParser.ChannelStatContext):
+        # TODO - If length constraints exists, create them here
         pass
 
     def exitSpanStat(self, ctx: mintParser.SpanStatContext):
