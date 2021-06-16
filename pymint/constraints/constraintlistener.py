@@ -1,7 +1,5 @@
 import logging
-
 from typing import List
-
 
 from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
