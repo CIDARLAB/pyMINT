@@ -4,6 +4,7 @@ from pymint.constraints.constraint import LayoutConstraint
 from pymint.mintconnection import MINTConnection
 
 
+
 class LengthConstraint(LayoutConstraint):
     """Layout Constriant that will be used for specifying a fixed length
     for a connection
