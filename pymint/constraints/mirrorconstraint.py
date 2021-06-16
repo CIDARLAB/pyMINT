@@ -14,7 +14,8 @@ class MirrorConstraint(LayoutConstraint):
         """Create a new instance of the mirror constraint
 
         Args:
-            source_component (MINTComponent): source for the mirror component to search for mirror groups
+            source_component (MINTComponent): source for the mirror component to search
+            for mirror groups
             mirror_count ([type], optional): number of mirror groups. Defaults to None.
         """
         super().__init__()
@@ -26,7 +27,8 @@ class MirrorConstraint(LayoutConstraint):
         """Adds the passed componets to a new group
 
         Args:
-            components (List[MINTComponent]): List of components that need to be in a mirror group
+            components (List[MINTComponent]): List of components that need to be in a
+            mirror group
         """
         self.__mirror_groups.append(components)
 
@@ -59,7 +61,8 @@ class MirrorConstraint(LayoutConstraint):
         """
         forward_traverse = True
         # TODO -
-        # Step 1 - Go through all the outgoing components and create create mirror groups
+        # Step 1 - Go through all the outgoing components and create create mirror
+        # groups
         G = device.G
         mirror_groups = []
 
@@ -134,7 +137,8 @@ class MirrorConstraint(LayoutConstraint):
         for edge in list(outgoing_edges):
             sink_ids.append(edge[1])
 
-        # If there is a only 1 common sink, or less than the mirror count, then we gotto kill the mirror groupings
+        # If there is a only 1 common sink, or less than the mirror count, then we
+        # gotto kill the mirror groupings
         if len(sink_ids) < self.__mirror_count:
             return False
 
@@ -157,8 +161,9 @@ class MirrorConstraint(LayoutConstraint):
         if fail_flag is True:
             return False
 
-        # Since it works, we add everything to the mirror groups, for each of the components see which group the
-        # predecessor is in and place it in the corresponding group, if its not in any of the groups something
+        # Since it works, we add everything to the mirror groups, for each of the
+        # components see which group the predecessor is in and place it in the
+        # corresponding group, if its not in any of the groups something
         # went wrong in the alg
         for component in components:
             assing_group_found_flag = False
@@ -211,7 +216,8 @@ class MirrorConstraint(LayoutConstraint):
         for edge in list(incoming_edges):
             sink_ids.append(edge[0])
 
-        # If there is a only 1 common sink, or less than the mirror count, then we gotto kill the mirror groupings
+        # If there is a only 1 common sink, or less than the mirror count, then we
+        # gotto kill the mirror groupings
         if len(sink_ids) < self.__mirror_count:
             return False
 
@@ -234,8 +240,9 @@ class MirrorConstraint(LayoutConstraint):
         if fail_flag is True:
             return False
 
-        # Since it works, we add everything to the mirror groups, for each of the components see which group the
-        # predecessor is in and place it in the corresponding group, if its not in any of the groups something
+        # Since it works, we add everything to the mirror groups, for each of the
+        # components see which group the predecessor is in and place it in the
+        # corresponding group, if its not in any of the groups something
         # went wrong in the alg
         for component in components:
             assing_group_found_flag = False

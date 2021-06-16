@@ -13,7 +13,8 @@ class MINTErrorListener(ErrorListener):
         """Constructor
 
         Args:
-            output (StringIO): IO stream object where the output is supposed to be written to
+            output (StringIO): IO stream object where the output is supposed to be
+            written to
         """
         super().__init__()
         self.output = output

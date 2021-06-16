@@ -40,6 +40,7 @@ class OrientationConstraint(LayoutConstraint):
         """Retuns the map of all the components and their corresponding orientation
 
         Returns:
-            Dict[MINTComponent, ComponentOrientation]: dict mapping the components and thier orientations
+            Dict[MINTComponent, ComponentOrientation]: dict mapping the components and
+             their orientations
         """
         return self.__orientation_map

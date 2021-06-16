@@ -114,7 +114,8 @@ class MINTDevice(Device):
         return layer
 
     def get_constraints(self) -> List[LayoutConstraint]:
-        """Returns the layout constraints of the device. Currently does not support the constraints
+        """Returns the layout constraints of the device. Currently does not support the
+        constraints
 
         Returns:
             List[LayoutConstraint]: List of layout constriants objects
@@ -135,7 +136,8 @@ class MINTDevice(Device):
         Returns:
             str: MINT string
         """
-        # TODO: Eventually I need to modify the MINT generation to account for all the layout constraints
+        # TODO: Eventually I need to modify the MINT generation to account for all the
+        # layout constraints
 
         full_layer_text = ""
         # Loop Over all the layers
@@ -209,7 +211,8 @@ class MINTDevice(Device):
 
         Args:
             filepath (str): absolute filepath of the mint file
-            skip_constraints (bool, optional): flag to accept / skip constraint parsing. Defaults to False.
+            skip_constraints (bool, optional): flag to accept / skip constraint parsing.
+            Defaults to False.
 
         Returns:
             MINTDevice: The parsed device from the MINT file

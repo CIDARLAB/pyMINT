@@ -5,8 +5,10 @@ from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
 from pymint.constraints.arrayconstraint import ArrayConstraint
 from pymint.constraints.mirrorconstraint import MirrorConstraint
-from pymint.constraints.orientationconstraint import (ComponentOrientation,
-                                                      OrientationConstraint)
+from pymint.constraints.orientationconstraint import (
+    ComponentOrientation,
+    OrientationConstraint,
+)
 from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
 from pymint.constraints.positionconstraint import PositionConstraint
 from pymint.mintcomponent import MINTComponent
@@ -147,9 +149,8 @@ class ConstraintListener(mintListener):
             self._constrained_components.append(connection)
         else:
             print(
-                'Could not find component or connection with the ID "{}" in device'.format(
-                    element_name
-                )
+                'Could not find component or connection with the ID "{}" in device'
+                .format(element_name)
             )
 
     def enterLayerBlock(self, ctx: mintParser.LayerBlockContext):
@@ -173,13 +174,13 @@ class ConstraintListener(mintListener):
         self.current_device.add_constraint(constraint)
 
     def exitNodeStat(self, ctx: mintParser.NodeStatContext):
-        # TODO: Expand on neighbours until we hit all the components on the node periphery
+        # TODO: Expand on neighbours until we hit all the components on the node
+        # periphery
         for component in self._constrained_components:
             if component is None:
                 raise Exception(
-                    "Could not apply Orthogonal Constraint, {} component not found !".format(
-                        ctx.getText()
-                    )
+                    "Could not apply Orthogonal Constraint, {} component not found !"
+                    .format(ctx.getText())
                 )
 
             if self._checkIfComponentConstranied(component):
