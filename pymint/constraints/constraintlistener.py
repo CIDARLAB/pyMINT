@@ -5,8 +5,10 @@ from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
 from pymint.constraints.arrayconstraint import ArrayConstraint
 from pymint.constraints.mirrorconstraint import MirrorConstraint
-from pymint.constraints.orientationconstraint import (ComponentOrientation,
-                                                      OrientationConstraint)
+from pymint.constraints.orientationconstraint import (
+    ComponentOrientation,
+    OrientationConstraint,
+)
 from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
 from pymint.constraints.positionconstraint import PositionConstraint
 from pymint.mintcomponent import MINTComponent
@@ -140,15 +142,13 @@ class ConstraintListener(mintListener):
         elif self.current_device.connection_exists(element_name):
             connection = self.current_device.get_connection(element_name)
         if component is not None:
-            # raise Exception("Could not find component in device : {}".format(component_name))
             self._constrained_components.append(component)
         elif connection is not None:
             self._constrained_components.append(connection)
         else:
             print(
-                'Could not find component or connection with the ID "{}" in device'.format(
-                    element_name
-                )
+                'Could not find component or connection with the ID "{}" in device'
+                .format(element_name)
             )
 
     def enterLayerBlock(self, ctx: mintParser.LayerBlockContext):
@@ -164,7 +164,8 @@ class ConstraintListener(mintListener):
         if self._orientation is None:
             return
 
-        # In general check whats there and set the constraint for all the items in the statement
+        # In general check whats there and set the constraint for all the items
+        # in the statement
         constraint = self._global_relative_operations[-1]
         for component in self._constrained_components:
             constraint.add_component_orientation_pair(component, self._orientation)
@@ -177,15 +178,14 @@ class ConstraintListener(mintListener):
         for component in self._constrained_components:
             if component is None:
                 raise Exception(
-                    "Could not apply Orthogonal Constraint, {} component not found !".format(
-                        ctx.getText()
-                    )
+                    "Could not apply Orthogonal Constraint, {} component not found !"
+                    .format(ctx.getText())
                 )
 
             if self._checkIfComponentConstranied(component):
                 continue
 
-            # TODO check if component exists in any of the of existing constraints
+            # TODO: check if component exists in any of the of existing constraints
             components = OrthogonalConstraint.traverse_node_component_neighbours(
                 component, self.current_device
             )

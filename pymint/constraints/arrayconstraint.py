@@ -20,11 +20,14 @@ class ArrayConstraint(LayoutConstraint):
         """Creates an instance of the array Constraints
 
         Args:
-            components (List[MINTComponent]): List of components that need be covered by the constraint
+            components (List[MINTComponent]): List of components that need be covered
+            by the constraint
             xdim (int, optional): X dimension of the array. Defaults to 1.
             ydim (int, optional): Y dimension of the array. Defaults to 1.
-            horizontal_spacing (float, optional): horizontal spacing between the components (x-dimension). Defaults to None.
-            vertical_spacing (float, optional): vertical spacing between the components (y-dimension). Defaults to None.
+            horizontal_spacing (float, optional): horizontal spacing between the
+            components (x-dimension). Defaults to None.
+            vertical_spacing (float, optional): vertical spacing between the components
+            (y-dimension). Defaults to None.
         """
         super().__init__()
         self._components.extend(components)
