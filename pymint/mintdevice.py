@@ -20,7 +20,7 @@ class MINTDevice(Device):
 
     """
 
-    def __init__(self, name: str, json=None) -> None:
+    def __init__(self, name: str, json_data=None) -> None:
         """Creates a MINT device
 
         A MINT device has the extra bells and whistles necessary for genrating
@@ -31,7 +31,7 @@ class MINTDevice(Device):
             name (str): name of the device
             json (str, optional): JSON string. Defaults to None.
         """
-        super(MINTDevice, self).__init__(json=json)
+        super(MINTDevice, self).__init__(json_data=json_data)
 
         self.name = name
         self._layout_constraints = []
