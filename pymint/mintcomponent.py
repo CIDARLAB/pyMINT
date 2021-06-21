@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-from typing import List
+from typing import TYPE_CHECKING, List
 
 from parchmint.component import Component
 
-from pymint import MINTLayer
+if TYPE_CHECKING:
+    from pymint import MINTLayer
+
 from pymint.mintparams import MINTParams
 
 
