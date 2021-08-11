@@ -20,7 +20,7 @@ class MINTDevice(Device):
 
     """
 
-    def __init__(self, name: str, json=None) -> None:
+    def __init__(self, name: str, json_data=None) -> None:
         """Creates a MINT device
 
         A MINT device has the extra bells and whistles necessary for genrating
@@ -31,7 +31,7 @@ class MINTDevice(Device):
             name (str): name of the device
             json (str, optional): JSON string. Defaults to None.
         """
-        super(MINTDevice, self).__init__(json=json)
+        super(MINTDevice, self).__init__(json_data=json_data)
 
         self.name = name
         self._layout_constraints = []
@@ -85,13 +85,13 @@ class MINTDevice(Device):
         Returns:
             MINTConnection: Returns the newly created connection
         """
-        layer = super().get_layer(layer_id)
+        layer = self.get_layer(layer_id)
         if layer is None:
             raise Exception("Cannot create new MINT connection with invalid layer")
         if layer is None:
-            raise AssertionError
+            raise Exception("Layer is None")
         connection = MINTConnection(name, technology, params, source, sinks, layer)
-        super().add_connection(connection)
+        self.add_connection(connection)
         return connection
 
     def create_mint_layer(
