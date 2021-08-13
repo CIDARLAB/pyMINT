@@ -183,7 +183,7 @@ class MirrorConstraint(LayoutConstraint):
                 )
 
         next_sources = [c.ID for c in components]
-        self.step_forward(next_sources, mirror_groups, device)
+        # self.step_forward(next_sources, mirror_groups, device)
 
         return True
 
@@ -262,6 +262,6 @@ class MirrorConstraint(LayoutConstraint):
                 )
 
         next_sources = [c.ID for c in components]
-        self.step_forward(next_sources, mirror_groups, device)
+        # self.step_forward(next_sources, mirror_groups, device)
 
         return True
