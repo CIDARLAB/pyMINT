@@ -85,13 +85,13 @@ class MINTDevice(Device):
         Returns:
             MINTConnection: Returns the newly created connection
         """
-        layer = super().get_layer(layer_id)
+        layer = self.get_layer(layer_id)
         if layer is None:
             raise Exception("Cannot create new MINT connection with invalid layer")
         if layer is None:
-            raise AssertionError
+            raise Exception("Layer is None")
         connection = MINTConnection(name, technology, params, source, sinks, layer)
-        super().add_connection(connection)
+        self.add_connection(connection)
         return connection
 
     def create_mint_layer(

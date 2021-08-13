@@ -5,12 +5,15 @@ from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
 from pymint.constraints.arrayconstraint import ArrayConstraint
 from pymint.constraints.mirrorconstraint import MirrorConstraint
-from pymint.constraints.orientationconstraint import (ComponentOrientation,
-                                                      OrientationConstraint)
+from pymint.constraints.orientationconstraint import (
+    ComponentOrientation,
+    OrientationConstraint,
+)
 from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
 from pymint.constraints.positionconstraint import PositionConstraint
 from pymint.mintcomponent import MINTComponent
 from pymint.mintdevice import MINTDevice
+import re
 
 
 class ConstraintListener(mintListener):
@@ -144,11 +147,28 @@ class ConstraintListener(mintListener):
         elif connection is not None:
             self._constrained_components.append(connection)
         else:
-            print(
-                'Could not find component or connection with the ID "{}" in device'.format(
-                    element_name
-                )
+            # Check if theres a regex match against all the component names/id's
+            component_names = [
+                component.ID for component in self.current_device.components
+            ]
+            # Check if theres a regex match against all the connection id's in component_name
+            matches = map(
+                lambda x: re.match(f"{element_name}_\\d+(_\\d+)?", x), component_names
             )
+            for match in matches:
+                if match is not None:
+                    self._constrained_components.append(
+                        self.current_device.get_component(match.group(0))
+                    )
+                    break
+            else:
+                print(
+                    'Could not find component or connection with the ID "{}" in device'
+                    .format(element_name)
+                )
+                raise Exception(
+                    f"Component {element_name} not found while processing constraint"
+                )
 
     def enterLayerBlock(self, ctx: mintParser.LayerBlockContext):
         # Create a new relative orientation constraint for the whole layer
@@ -177,9 +197,8 @@ class ConstraintListener(mintListener):
         for component in self._constrained_components:
             if component is None:
                 raise Exception(
-                    "Could not apply Orthogonal Constraint, {} component not found !".format(
-                        ctx.getText()
-                    )
+                    "Could not apply Orthogonal Constraint, {} component not found !"
+                    .format(ctx.getText())
                 )
 
             if self._checkIfComponentConstranied(component):

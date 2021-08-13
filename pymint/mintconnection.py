@@ -24,7 +24,7 @@ class MINTConnection(Connection):
         params: dict,
         source: MINTTarget,
         sinks: List[MINTTarget],
-        layer: MINTLayer = None,
+        layer: MINTLayer,
     ) -> None:
         """Creates a new connection
 
