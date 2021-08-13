@@ -1,12 +1,11 @@
 [tool.poetry]
 name = "pymint"
-version = "0.2.10"
+version = "0.2.12"
 description = "MINT is a human readable language to describe Microfluidic Hardware Netlists. MINT is the name of the Microfluidic Netlist language used to describe microfluidic devices for Fluigi to place and route. Mint is a flavor of (MHDL) Microfluidic Hardware Description Language that can be used to represent Microfluidic Circuits."
 authors = ["Radhakrishna Sanka <rkrishnasanka@gmail.com>"]
 license = "BSD-3-Clause"
-packages = [
-    { include = "pymint/*.py" }
-]
+packages = [ {include = "pymint"}]
+
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -28,12 +27,13 @@ sphinxcontrib-napoleon = "^0.7"
 from = {format = "poetry", path = "pyproject.toml"}
 to = {format = "setuppy", path = "setup.py"}
 
-[build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
-
 [tool.poetry.scripts]
 mint-tools = "pymint.cmdline:main"
 
 [tool.poetry.extras]
 docs = ["sphinx"]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
