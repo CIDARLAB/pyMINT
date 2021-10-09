@@ -1,5 +1,4 @@
 import pytest
-
 from parchmint import Layer
 from parchmint.device import Device
 
