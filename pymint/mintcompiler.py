@@ -362,9 +362,6 @@ class MINTCompiler(mintListener):
             self._current_layer.ID,
         )
 
-    def exitNetlist(self, ctx: mintParser.NetlistContext):
-        self.current_device.generate_network()
-
     def _cleanup_BANK_params(self):
         if "spacing" in self.current_params.keys():
             del self.current_params["spacing"]
