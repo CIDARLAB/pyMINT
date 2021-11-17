@@ -1,6 +1,6 @@
 from typing import List
 
-from pymint.constraints.constraint import LayoutConstraint
+from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
 from pymint.mintcomponent import MINTComponent
 
 
@@ -29,22 +29,70 @@ class ArrayConstraint(LayoutConstraint):
             vertical_spacing (float, optional): vertical spacing between the components
             (y-dimension). Defaults to None.
         """
-        super().__init__()
+        super().__init__(OperationType.ALIGNMENT_OPERATION)
         self._components.extend(components)
-        self.__is1D = False
-        self._horizontal_spacing = horizontal_spacing
-        self._vertical_spacing = vertical_spacing
+        self.is1D = False
+        self.horizontal_spacing = horizontal_spacing
+        self.vertical_spacing = vertical_spacing
 
         if xdim is None:
-            self.__xdim = len(self._components)
+            self.xdim = len(self._components)
         else:
-            self.__xdim = xdim
+            self.xdim = xdim
 
         if ydim is None:
-            self.__is1D = True
-            self.__ydim = 1
+            self.is1D = True
+            self.ydim = 1
         else:
-            self.__ydim = ydim
+            self.ydim = ydim
+
+    @property
+    def horizontal_spacing(self) -> float:
+        """Gets the horizontal spacing between the components
+
+        Raises:
+            KeyError: If the horizontal spacing is not set
+
+        Returns:
+            float: The horizontal spacing
+        """
+        if self._params.exists("horizontal_spacing"):
+            return self._params.get_param("horizontal_spacing")
+        else:
+            raise KeyError("Horizontal spacing is not set in the constraint")
+
+    @horizontal_spacing.setter
+    def horizontal_spacing(self, value: float) -> None:
+        """sets the horizontal spacing
+
+        Args:
+            value (float): The horizontal spacing
+        """
+        self._params.set_param("horizontal_spacing", value)
+
+    @property
+    def vertical_spacing(self) -> float:
+        """Gets the vertical spacing between the components
+
+        Raises:
+            KeyError: If the vertical spacing is not set
+
+        Returns:
+            float: The vertical spacing
+        """
+        if self._params.exists("vertical_spacing"):
+            return self._params.get_param("vertical_spacing")
+        else:
+            raise KeyError("Vertical spacing is not set in the constraint")
+
+    @vertical_spacing.setter
+    def vertical_spacing(self, value: float) -> None:
+        """Sets the vertical spacing
+
+        Args:
+            value (float): The vertical spacing
+        """
+        self._params.set_param("vertical_spacing", value)
 
     @property
     def is1D(self) -> bool:
@@ -53,7 +101,14 @@ class ArrayConstraint(LayoutConstraint):
         Returns:
             bool: true if BANK
         """
-        return self.__is1D
+        if self._params.exists("is1D"):
+            return self._params.get_param("is1D")
+        else:
+            raise KeyError("is1D not set in the constraint")
+
+    @is1D.setter
+    def is1D(self, value: bool) -> None:
+        self._params.set_param("is1D", value)
 
     @property
     def xdim(self) -> int:
@@ -62,7 +117,19 @@ class ArrayConstraint(LayoutConstraint):
         Returns:
             int: size
         """
-        return self.__xdim
+        if self._params.exists("xdim"):
+            return self._params.get_param("xdim")
+        else:
+            raise KeyError("is1D not set in the constraint")
+
+    @xdim.setter
+    def xdim(self, value: int) -> None:
+        """Sets the x dimension of the array
+
+        Args:
+            value (int): x dimension
+        """
+        self._params.set_param("xdim", value)
 
     @property
     def ydim(self) -> int:
@@ -71,7 +138,19 @@ class ArrayConstraint(LayoutConstraint):
         Returns:
             int: size
         """
-        return self.__ydim
+        if self._params.exists("ydim"):
+            return self._params.get_param("ydim")
+        else:
+            raise KeyError("ydim not set in the constraint")
+
+    @ydim.setter
+    def ydim(self, value: int) -> None:
+        """Sets the y dimension of the array
+
+        Args:
+            value (int): y dimension
+        """
+        self._params.set_param("ydim", value)
 
     @property
     def dim(self) -> int:
@@ -80,4 +159,16 @@ class ArrayConstraint(LayoutConstraint):
         Returns:
             int: size
         """
-        return self.__xdim
+        if self._params.exists("xdim"):
+            return self._params.get_param("xdim")
+        else:
+            raise KeyError("xdim not set in the constraint")
+
+    @dim.setter
+    def dim(self, value: int) -> None:
+        """Sets the size of the array
+
+        Args:
+            value (int): size
+        """
+        self._params.set_param("xdim", value)

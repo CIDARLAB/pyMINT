@@ -2,7 +2,7 @@ from typing import List
 
 import networkx as nx
 
-from pymint.constraints.constraint import LayoutConstraint
+from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
 from pymint.mintcomponent import MINTComponent
 from pymint.mintdevice import MINTDevice
 
@@ -19,7 +19,7 @@ class OrthogonalConstraint(LayoutConstraint):
         Args:
             components (List[MINTComponent]): components covered by the constraint
         """
-        super().__init__()
+        super().__init__(OperationType.ALIGNMENT_OPERATION)
         self._components.extend(components)
 
     @staticmethod

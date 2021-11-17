@@ -7,7 +7,7 @@ from parchmint.connection import Connection
 
 from parchmint.device import Device, ValveType
 
-from pymint.constraints.constraint import LayoutConstraint
+from pymint.constraints.layoutconstraint import LayoutConstraint
 from pymint.mintcomponent import MINTComponent
 from pymint.mintconnection import MINTConnection
 from pymint.mintlayer import MINTLayer, MINTLayerType

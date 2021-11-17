@@ -1,6 +1,6 @@
 from typing import List
 
-from pymint.constraints.constraint import LayoutConstraint
+from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
 from pymint.mintcomponent import MINTComponent
 from pymint.mintdevice import MINTDevice
 
@@ -18,10 +18,10 @@ class MirrorConstraint(LayoutConstraint):
             for mirror groups
             mirror_count ([type], optional): number of mirror groups. Defaults to None.
         """
-        super().__init__()
-        self.__mirror_source: MINTComponent = source_component
-        self.__mirror_groups: List[List[MINTComponent]] = []
-        self.__mirror_count: int = mirror_count
+        super().__init__(OperationType.SYMMETRY_OPERATION)
+        self._relationship_map["source"] = source_component
+        self._relationship_map["mirror_count"] = mirror_count
+        self._relationship_map["mirror_groups"] = []
 
     def add_group(self, components: List[MINTComponent]) -> None:
         """Adds the passed componets to a new group
@@ -30,7 +30,26 @@ class MirrorConstraint(LayoutConstraint):
             components (List[MINTComponent]): List of components that need to be in a
             mirror group
         """
-        self.__mirror_groups.append(components)
+        # self.__mirror_groups.append(components)
+        self._relationship_map["mirror_groups"].append(components)
+
+    @property
+    def mirror_count(self) -> int:
+        """Number of mirror groups
+
+        Returns:
+            int: number of mirror groups
+        """
+        return self._relationship_map["mirror_count"]
+
+    @mirror_count.setter
+    def mirror_count(self, value: int):
+        """Set the number of mirror groups
+
+        Args:
+            value (int): number of mirror groups
+        """
+        self._relationship_map["mirror_count"] = value
 
     @property
     def mirror_source(self) -> MINTComponent:
@@ -39,7 +58,17 @@ class MirrorConstraint(LayoutConstraint):
         Returns:
             MINTComponent: mirror source
         """
-        return self.__mirror_source
+        return self._relationship_map["source"]
+
+    @mirror_source.setter
+    def mirror_source(self, value: MINTComponent):
+        """Sets the mirror source component
+
+
+        Args:
+            value (MINTComponent): Mirror source component
+        """
+        self._relationship_map["source"] = value
 
     @property
     def mirror_groups(self) -> List[List[MINTComponent]]:
@@ -48,7 +77,16 @@ class MirrorConstraint(LayoutConstraint):
         Returns:
             List[List[MINTComponent]]: Mirror groups covered by the constraint
         """
-        return self.__mirror_groups
+        return self._relationship_map["mirror_groups"]
+
+    @mirror_groups.setter
+    def mirror_groups(self, value: List[List[MINTComponent]]):
+        """Sets the mirror groups
+
+        Args:
+            value (List[List[MINTComponent]]): List of lists of components
+        """
+        self._relationship_map["mirror_groups"] = value
 
     def find_mirror_candidates(self, device: MINTDevice) -> None:
         """Traverses the device on the mirror groups
@@ -66,34 +104,34 @@ class MirrorConstraint(LayoutConstraint):
         G = device.G
         mirror_groups = []
 
-        outgoing_edges = list(G.out_edges(self.__mirror_source.ID))
-        incoming_edges = list(G.in_edges(self.__mirror_source.ID))
+        outgoing_edges = list(G.out_edges(self.mirror_source.ID))
+        incoming_edges = list(G.in_edges(self.mirror_source.ID))
         edges_to_use = None
-        if len(outgoing_edges) == self.__mirror_count:
+        if len(outgoing_edges) == self.mirror_count:
             forward_traverse = True
             edges_to_use = outgoing_edges
-        elif len(incoming_edges) == self.__mirror_count:
+        elif len(incoming_edges) == self.mirror_count:
             forward_traverse = False
             edges_to_use = incoming_edges
         else:
             # Reverse Case Considtion
-            if len(incoming_edges) == self.__mirror_count:
+            if len(incoming_edges) == self.mirror_count:
                 forward_traverse = True
                 edges_to_use = outgoing_edges
-            elif len(outgoing_edges) == self.__mirror_count:
+            elif len(outgoing_edges) == self.mirror_count:
                 forward_traverse = False
                 edges_to_use = incoming_edges
             else:
                 raise Exception(
                     "Unable to compute mirror group for source: {}, please check if"
                     " outgoing and incoming channels are declared correctly".format(
-                        self.__mirror_source
+                        self.mirror_source
                     )
                 )
 
         sources = []
 
-        for i in range(self.__mirror_count):
+        for i in range(self.mirror_count):
             if forward_traverse is True:
                 component = device.get_component(edges_to_use[i][1])
             else:
@@ -139,7 +177,7 @@ class MirrorConstraint(LayoutConstraint):
 
         # If there is a only 1 common sink, or less than the mirror count, then we
         # gotto kill the mirror groupings
-        if len(sink_ids) < self.__mirror_count:
+        if len(sink_ids) < self.mirror_count:
             return False
 
         # Check if all the types of the components are the same
@@ -218,7 +256,7 @@ class MirrorConstraint(LayoutConstraint):
 
         # If there is a only 1 common sink, or less than the mirror count, then we
         # gotto kill the mirror groupings
-        if len(sink_ids) < self.__mirror_count:
+        if len(sink_ids) < self.mirror_count:
             return False
 
         # Check if all the types of the components are the same
