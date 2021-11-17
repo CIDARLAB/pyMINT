@@ -185,7 +185,12 @@ class MINTDevice(Device):
                 ]
             )
 
-            valvetext = "\n".join([Device.to_valve_MINT(item) for item in valve_list])
+            valvetext = "\n".join(
+                [
+                    MINTDevice.to_valve_MINT(item, self.get_valve_connection(item))
+                    for item in valve_list
+                ]
+            )
 
             connectiontext = "\n".join(
                 [item.to_MINT() for item in self.connections if item.layer == layer]
