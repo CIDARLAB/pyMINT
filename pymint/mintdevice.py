@@ -185,12 +185,15 @@ class MINTDevice(Device):
                 ]
             )
 
-            valvetext = "\n".join(
-                [
-                    MINTDevice.to_valve_MINT(item, self.get_valve_connection(item))
-                    for item in valve_list
-                ]
-            )
+            valvetext = ""
+            if layer.type is str(MINTLayerType.CONTROL):
+                valvetext = "\n".join(
+                    [
+                        MINTDevice.to_valve_MINT(item, self.get_valve_connection(item))
+                        for item in valve_list
+                        if layer in item.layers
+                    ]
+                )
 
             connectiontext = "\n".join(
                 [item.to_MINT() for item in self.connections if item.layer == layer]
@@ -198,7 +201,7 @@ class MINTDevice(Device):
 
             full_layer_text += (
                 layer.to_MINT(
-                    "{}\n\n{}".format(componenttext, valvetext, connectiontext)
+                    "{}\n\n{}\n\n{}".format(componenttext, valvetext, connectiontext)
                 )
                 + "\n\n"
             )
