@@ -1,3 +1,5 @@
+from typing import Union
+from parchmint.layer import Layer
 from pymint.mintcomponent import MINTComponent
 from pymint.mintlayer import MINTLayer
 
@@ -8,7 +10,9 @@ class MINTTerminal(MINTComponent):
 
     """
 
-    def __init__(self, name: str, port_number: int, layer: MINTLayer) -> None:
+    def __init__(
+        self, name: str, port_number: int, layer: Union[MINTLayer, Layer]
+    ) -> None:
         super(MINTTerminal, self).__init__(name, "TERMINAL", {}, [layer])
         self.__port_number = port_number
 

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Union
 
 from parchmint.component import Component
+from parchmint.layer import Layer
 
 if TYPE_CHECKING:
     from pymint import MINTLayer
@@ -17,7 +18,11 @@ class MINTComponent(Component):
     """
 
     def __init__(
-        self, name: str, technology: str, params: dict, layers: List[MINTLayer] = None
+        self,
+        name: str,
+        technology: str,
+        params: dict,
+        layers: List[Union[MINTLayer, Layer]] = None,
     ) -> None:
         """Creates a MINT component
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import sys
 from typing import List, Union
+from parchmint.component import Component
 from parchmint.connection import Connection
 
 from parchmint.device import Device, ValveType
@@ -171,18 +172,30 @@ class MINTDevice(Device):
         # TODO: Eventually I need to modify the MINT generation to account for all the
         # layout constraints
 
+        # Generate a valve list for the device
+        valve_list = self.valves
         full_layer_text = ""
         # Loop Over all the layers
         for layer in self.layers:
             componenttext = "\n".join(
-                [item.to_MINT() for item in self.components if item.layers[0] == layer]
+                [
+                    item.to_MINT()
+                    for item in self.components
+                    if item.layers[0] == layer and item not in valve_list
+                ]
             )
+
+            valvetext = "\n".join([Device.to_valve_MINT(item) for item in valve_list])
+
             connectiontext = "\n".join(
                 [item.to_MINT() for item in self.connections if item.layer == layer]
             )
 
             full_layer_text += (
-                layer.to_MINT("{}\n\n{}".format(componenttext, connectiontext)) + "\n\n"
+                layer.to_MINT(
+                    "{}\n\n{}".format(componenttext, valvetext, connectiontext)
+                )
+                + "\n\n"
             )
 
         full = "DEVICE {}\n\n{}".format(self.name, full_layer_text)
@@ -236,6 +249,26 @@ class MINTDevice(Device):
         ret["version"] = 1
 
         return ret
+
+    @staticmethod
+    def to_valve_MINT(
+        component: Union[MINTComponent, Component],
+        connection: Union[MINTConnection, Connection],
+    ) -> str:
+        """Returns the MINT string of a valve
+
+        This functions returns the MINT string of a valve.
+
+        Args:
+            component (Union[MINTComponent, Component]): [description]
+            connection (Union[MINTConnection, Connection]): [description]
+
+        Returns:
+            str: [description]
+        """
+        return "{} {} on {} {};".format(
+            component.entity, component.ID, connection.ID, component.params.to_MINT()
+        )
 
     @staticmethod
     def from_mint_file(filepath: str, skip_constraints: bool = False) -> MINTDevice:

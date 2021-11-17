@@ -1,3 +1,6 @@
+from typing import Union
+
+from parchmint.layer import Layer
 from pymint.mintcomponent import MINTComponent
 from pymint.mintlayer import MINTLayer
 
@@ -11,7 +14,7 @@ class MINTNode(MINTComponent):
 
     """
 
-    def __init__(self, name: str, layer: MINTLayer) -> None:
+    def __init__(self, name: str, layer: Union[MINTLayer, Layer]) -> None:
         """Creates a new NODE object
 
         Args:

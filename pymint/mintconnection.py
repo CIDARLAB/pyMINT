@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Union
 
 from parchmint.connection import Connection
+from parchmint.layer import Layer
+from parchmint.target import Target
 
 if TYPE_CHECKING:
     from pymint import MINTLayer
@@ -22,9 +24,9 @@ class MINTConnection(Connection):
         name: str,
         technology: str,
         params: dict,
-        source: MINTTarget,
+        source: Union[MINTTarget, Target],
         sinks: List[MINTTarget],
-        layer: MINTLayer,
+        layer: Union[MINTLayer, Layer],
     ) -> None:
         """Creates a new connection
 
@@ -41,7 +43,7 @@ class MINTConnection(Connection):
         self.ID = name
         self.entity = technology
         self.params: MINTParams = MINTParams(params)
-        self.source: MINTTarget = source
+        self.source: Union[MINTTarget, Target] = source
         self.sinks: List[MINTTarget] = sinks
         self.layer = layer
 

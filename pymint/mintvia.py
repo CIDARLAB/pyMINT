@@ -1,4 +1,6 @@
-from typing import List
+from typing import List, Union
+
+from parchmint.layer import Layer
 
 from pymint.mintcomponent import MINTComponent
 from pymint.mintlayer import MINTLayer
@@ -10,7 +12,7 @@ class MINTVia(MINTComponent):
 
     """
 
-    def __init__(self, name: str, layers: List[MINTLayer]) -> None:
+    def __init__(self, name: str, layers: List[Union[MINTLayer, Layer]]) -> None:
         """Creates a new instance of a Via
 
         Args:
