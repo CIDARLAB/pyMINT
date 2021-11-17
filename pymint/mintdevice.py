@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import sys
-from typing import List
+from typing import List, Union
+from parchmint.connection import Connection
 
-from parchmint.device import Device
+from parchmint.device import Device, ValveType
 
 from pymint.constraints.constraint import LayoutConstraint
 from pymint.mintcomponent import MINTComponent
@@ -112,6 +113,37 @@ class MINTDevice(Device):
         layer = MINTLayer(id, name, group, layer_type)
         super().add_layer(layer)
         return layer
+
+    def create_valve(
+        self,
+        name: str,
+        technology: str,
+        params: dict,
+        layer_ids: List[str],
+        connection: Union[MINTConnection, Connection],
+        valve_type: ValveType = ValveType.NORMALLY_OPEN,
+    ) -> MINTComponent:
+        """Creates a new valve and adds it to the device
+
+        Args:
+            name (str): name of the valve
+            technology (str): MINT string
+            params (dict): dictionary of the paraeters
+            layer_ids (List[str]): list of layer ids
+            connection (Union[MINTConnection, Connection]): connection to attach the valve to
+            valve_type (ValveType, optional): valve type of the valve . Defaults to ValveType.NORMALLY_OPEN.
+
+        Raises:
+            Exception: [description]
+
+        Returns:
+            MINTComponent: [description]
+        """
+        valve = self.create_mint_component(name, technology, params, layer_ids)
+        if connection not in self.connections:
+            raise Exception("Connection {} not found".format(connection.ID))
+        self.map_valve(valve, connection, valve_type)
+        return valve
 
     def get_constraints(self) -> List[LayoutConstraint]:
         """Returns the layout constraints of the device. Currently does not support the
