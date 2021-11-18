@@ -107,10 +107,8 @@ terminalStat:
 channelStat: (entity | 'CHANNEL') WS+ ufname WS+ 'from' WS+ source = uftarget WS+ 'to' WS+ sink =
 		uftarget WS* (WS+ paramsStat)? statTerminaion;
 
-netStat: (entity | 'NET') WS+ ufname WS+ 'from' WS+ source = uftarget WS+ 'to' WS+ sinks = uftargets
-		(
-		WS+ paramsStat
-	)? statTerminaion;
+netStat: (entity | 'NET' | 'CHANNEL') WS+ ufname WS+ 'from' WS+ source = uftarget WS+ 'to' WS+ sinks
+		= uftargets (WS+ paramsStat)? statTerminaion;
 
 //Common Parser Rules
 
