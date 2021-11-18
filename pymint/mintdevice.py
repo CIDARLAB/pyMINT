@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import sys
 from typing import List, Union
+
 from parchmint.component import Component
 from parchmint.connection import Connection
-
 from parchmint.device import Device, ValveType
 
 from pymint.constraints.layoutconstraint import LayoutConstraint

@@ -1,6 +1,7 @@
 from typing import Union
 
 from parchmint.component import Component
+
 from pymint import MINTComponent
 from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
 
