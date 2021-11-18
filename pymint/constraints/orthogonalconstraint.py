@@ -62,3 +62,8 @@ class OrthogonalConstraint(LayoutConstraint):
         dfs_traverse_nodes(component.ID)
 
         return nodes
+
+    def to_parchmint_v1_x(self):
+        ret = super().to_parchmint_v1_x()
+        ret["type"] = "ORTHOGONAL CONSTRAINT"
+        return ret

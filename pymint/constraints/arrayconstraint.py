@@ -40,7 +40,7 @@ class ArrayConstraint(LayoutConstraint):
         else:
             self.xdim = xdim
 
-        if ydim is None:
+        if ydim is None or ydim == 1:
             self.is1D = True
             self.ydim = 1
         else:
@@ -56,8 +56,8 @@ class ArrayConstraint(LayoutConstraint):
         Returns:
             float: The horizontal spacing
         """
-        if self._params.exists("horizontal_spacing"):
-            return self._params.get_param("horizontal_spacing")
+        if self._params.exists("horizontalSpacing"):
+            return self._params.get_param("horizontalSpacing")
         else:
             raise KeyError("Horizontal spacing is not set in the constraint")
 
@@ -68,7 +68,7 @@ class ArrayConstraint(LayoutConstraint):
         Args:
             value (float): The horizontal spacing
         """
-        self._params.set_param("horizontal_spacing", value)
+        self._params.set_param("horizontalSpacing", value)
 
     @property
     def vertical_spacing(self) -> float:
@@ -80,8 +80,8 @@ class ArrayConstraint(LayoutConstraint):
         Returns:
             float: The vertical spacing
         """
-        if self._params.exists("vertical_spacing"):
-            return self._params.get_param("vertical_spacing")
+        if self._params.exists("verticalSpacing"):
+            return self._params.get_param("verticalSpacing")
         else:
             raise KeyError("Vertical spacing is not set in the constraint")
 
@@ -92,7 +92,7 @@ class ArrayConstraint(LayoutConstraint):
         Args:
             value (float): The vertical spacing
         """
-        self._params.set_param("vertical_spacing", value)
+        self._params.set_param("verticalSpacing", value)
 
     @property
     def is1D(self) -> bool:
@@ -172,3 +172,8 @@ class ArrayConstraint(LayoutConstraint):
             value (int): size
         """
         self._params.set_param("xdim", value)
+
+    def to_parchmint_v1_x(self):
+        ret = super().to_parchmint_v1_x()
+        ret["type"] = "ARRAY CONSTRAINT"
+        return ret

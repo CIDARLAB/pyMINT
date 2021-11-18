@@ -11,6 +11,27 @@ class ComponentOrientation(Enum):
     HORIZONTAL = 0
     VERTICAL = 1
 
+    def __str__(self) -> str:
+        if self == ComponentOrientation.HORIZONTAL:
+            return "HORIZONTAL"
+        elif self == ComponentOrientation.VERTICAL:
+            return "VERTICAL"
+        else:
+            raise Exception("Could not generate MINT Layer string")
+
+    def __eq__(self, o: object) -> bool:
+        if o.__class__ is ComponentOrientation:
+            return super().__eq__(o)
+        elif o.__class__ is str:
+            if self is ComponentOrientation.HORIZONTAL and o == "HORIZONTAL":
+                return True
+            elif self is ComponentOrientation.HORIZONTAL and o == "VERTICAL":
+                return True
+            else:
+                return False
+        else:
+            return False
+
 
 class OrientationConstraint(LayoutConstraint):
     """Layout constraint that setups relative orientations for a
@@ -43,3 +64,8 @@ class OrientationConstraint(LayoutConstraint):
              their orientations
         """
         return self._relationship_map
+
+    def to_parchmint_v1_x(self):
+        ret = super().to_parchmint_v1_x()
+        ret["type"] = "ORIENTATION CONSTRAINT"
+        return ret

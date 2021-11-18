@@ -53,3 +53,8 @@ class LengthConstraint(LayoutConstraint):
             length (float): length constrained
         """
         self._params.set_param("length", length)
+
+    def to_parchmint_v1_x(self):
+        ret = super().to_parchmint_v1_x()
+        ret["type"] = "LENGTH CONSTRAINT"
+        return ret

@@ -95,41 +95,31 @@ class LayoutConstraint:
         return connection in self._connections
 
     def convert_objects_to_json_dict(self):
+        def convert_entry(entry):
+            if isinstance(entry, MINTComponent) or isinstance(entry, MINTConnection):
+                ret = entry.ID
+            elif isinstance(entry, str) or isinstance(entry, int):
+                ret = entry
+            elif isinstance(entry, list):
+                ret = []
+                for e in entry:
+                    ret.append(convert_entry(e))
+            elif isinstance(entry, Enum):
+                ret = str(entry)
+            else:
+                raise Exception(
+                    "Unsupported type for key in relationship map: {}".format(
+                        type(entry)
+                    )
+                )
+            return ret
+
         ret = {}
         for key in self._relationship_map.keys():
             value = self._relationship_map[key]
-            if isinstance(key, MINTComponent) or isinstance(key, MINTConnection):
-                save_key = key.ID
-            elif isinstance(key, str) or isinstance(key, int):
-                save_key = key
-            else:
-                raise Exception(
-                    "Unsupported type for key in relationship map: {}".format(type(key))
-                )
+            save_key = convert_entry(key)
 
-            if isinstance(value, MINTComponent) or isinstance(value, MINTConnection):
-                save_value = value.ID
-            elif isinstance(key, str) or isinstance(key, int):
-                save_value = value.ID
-            elif isinstance(value, list):
-                if isinstance(value[0], MINTComponent) or isinstance(
-                    value[0], MINTConnection
-                ):
-                    save_value = [v.ID for v in value]
-                elif isinstance(value[0], str) or isinstance(value[0], int):
-                    save_value = [v for v in value]
-                else:
-                    raise Exception(
-                        "Unsupported type for value in relationship map: {}".format(
-                            type(value[0])
-                        )
-                    )
-            else:
-                raise Exception(
-                    "Unsupported type for value in relationship map: {}".format(
-                        type(value)
-                    )
-                )
+            save_value = convert_entry(value)
 
             ret[save_key] = save_value
         return ret

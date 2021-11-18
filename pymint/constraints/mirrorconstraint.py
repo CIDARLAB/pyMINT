@@ -303,3 +303,8 @@ class MirrorConstraint(LayoutConstraint):
         # self.step_forward(next_sources, mirror_groups, device)
 
         return True
+
+    def to_parchmint_v1_x(self):
+        ret = super().to_parchmint_v1_x()
+        ret["type"] = "MIRROR CONSTRAINT"
+        return ret

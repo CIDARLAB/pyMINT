@@ -26,9 +26,9 @@ class PositionConstraint(LayoutConstraint):
         """
         super().__init__(OperationType.EXPLICIT_OPERATION)
         self.add_component(component)
-        self.__xpos = xpos
-        self.__ypos = ypos
-        self.__zpos = zpos
+        self.xpos = xpos
+        self.ypos = ypos
+        self.zpos = zpos
 
     def get_component(self) -> Union[MINTComponent, Component]:
         """Returns the component constrained by the component
@@ -107,3 +107,8 @@ class PositionConstraint(LayoutConstraint):
             value (Optional[int]): z coordinate of the component
         """
         self._params.set_param("zpos", value)
+
+    def to_parchmint_v1_x(self):
+        ret = super().to_parchmint_v1_x()
+        ret["type"] = "POSITION CONSTRAINT"
+        return ret
