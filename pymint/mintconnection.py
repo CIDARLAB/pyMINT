@@ -83,7 +83,7 @@ class MINTConnection(Connection):
             self.entity,
             self.name,
             self.source.to_MINT(),
-            " ".join([item.to_MINT() for item in self.sinks]),
+            ", ".join([item.to_MINT() for item in self.sinks]),
             self.params.to_MINT(),
         )
         return ret
