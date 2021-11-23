@@ -53,24 +53,6 @@ class MINTComponent(Component):
         """
         self.ID = id
 
-    @property
-    def component_spacing(self) -> int:
-        """Returns the component spacing of the component
-
-        Returns:
-            int: Component Spacing Value in microns
-        """
-        return self.params.get_param("component_spacing")
-
-    @component_spacing.setter
-    def connection_spacing(self, value: int) -> None:
-        """Sets the component spacing of the component
-
-        Args:
-            value (int): Value for the component spacing in microns
-        """
-        self.params.set_param("component_spacing", value)
-
     def to_MINT(self) -> str:
         """Returns the MINT String for the component
 
