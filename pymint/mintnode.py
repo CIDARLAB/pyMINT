@@ -1,6 +1,7 @@
 from typing import Union
 
 from parchmint.layer import Layer
+
 from pymint.mintcomponent import MINTComponent
 from pymint.mintlayer import MINTLayer
 
