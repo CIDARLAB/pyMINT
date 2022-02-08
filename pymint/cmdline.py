@@ -32,7 +32,7 @@ def main():
 
     tt = os.path.join(OUTPUT_DIR, "{}.json".format(current_device.name))
     with open(tt, "w") as f:
-        json.dump(current_device.to_parchmint_v1(), f)
+        json.dump(current_device.to_parchmint_json(), f)
 
 
 if __name__ == "__main__":

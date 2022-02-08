@@ -242,22 +242,6 @@ class MINTDevice(Device):
         self.components.append(ret)
         return ret
 
-    def to_parchmint_v1(self) -> dict:
-        """Returns the Parchmint Version 1.0 in the form of a dictionary
-
-        Returns:
-            dict: dictionary representing the json datastructure
-        """
-        ret = {}
-        ret["name"] = self.name
-        ret["components"] = [c.to_parchmint_v1() for c in self.components]
-        ret["connections"] = [c.to_parchmint_v1() for c in self.connections]
-        ret["params"] = self.params.to_parchmint_v1()
-        ret["layers"] = [layer.to_parchmint_v1() for layer in self.layers]
-        ret["version"] = 1
-
-        return ret
-
     @staticmethod
     def to_valve_MINT(
         component: Union[MINTComponent, Component],
@@ -277,6 +261,15 @@ class MINTDevice(Device):
         return "{} {} on {} {};".format(
             component.entity, component.ID, connection.ID, component.params.to_MINT()
         )
+
+    def to_parchmint_json(self) -> dict:
+        parchmint_json = self.to_parchmint_v1_x()
+        # Generate json from all the layout constraints
+        parchmint_json["layoutConstraints"] = [
+            constraint.to_parchmint_v1_x() for constraint in self._layout_constraints
+        ]
+        return parchmint_json
+
 
     @staticmethod
     def from_mint_file(filepath: str, skip_constraints: bool = False) -> MINTDevice:
@@ -340,3 +333,4 @@ class MINTDevice(Device):
             current_device = listener.current_device
 
         return current_device
+

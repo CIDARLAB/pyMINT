@@ -48,6 +48,8 @@ class ConstraintListener(mintListener):
         # Global Relative Orientation Constraints
         self._global_relative_operations: List[OrientationConstraint] = []
 
+        self._orthogonal_origin_candidates = []
+
     def enterPositionConstraintStat(
         self, ctx: mintParser.PositionConstraintStatContext
     ):
@@ -204,15 +206,7 @@ class ConstraintListener(mintListener):
             if self._checkIfComponentConstranied(component):
                 continue
 
-            # TODO: check if component exists in any of the of existing constraints
-            components = OrthogonalConstraint.traverse_node_component_neighbours(
-                component, self.current_device
-            )
-            constraint = OrthogonalConstraint(components)
-            self.current_device.add_constraint(constraint)
-
-        # TODO: Add all the components onto the list and create the constraint
-        pass
+            self._orthogonal_origin_candidates.append(component)
 
     def exitChannelStat(self, ctx: mintParser.ChannelStatContext):
         # TODO - If length constraints exists, create them here
@@ -241,6 +235,15 @@ class ConstraintListener(mintListener):
                 self.current_device.add_constraint(constraint)
             except Exception as e:
                 print(e)
+
+    def exitNetlist(self, ctx: mintParser.NetlistContext):
+        # TODO: check if component exists in any of the of existing constraints
+        for node_component in self._orthogonal_origin_candidates:
+            components = OrthogonalConstraint.traverse_node_component_neighbours(
+                node_component, self.current_device
+            )
+            constraint = OrthogonalConstraint(components)
+            self.current_device.add_constraint(constraint)
 
     # ------------ Helpers ----------
 
