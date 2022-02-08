@@ -354,8 +354,10 @@ class MINTCompiler(mintListener):
     def exitNodeStat(self, ctx: mintParser.NodeStatContext):
         entity = "NODE"
         if self.current_device is None:
-            raise Exception("Error Initializing the device. Could not find the current device")
-            
+            raise Exception(
+                "Error Initializing the device. Could not find the current device"
+            )
+
         # Loop for each of the components that need to be created with this param
         if not (self._current_layer is not None and self._current_layer.ID is not None):
             raise AssertionError
