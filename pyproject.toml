@@ -8,11 +8,10 @@ packages = [ {include = "pymint"}]
 
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.8,<3.11"
 pip = "^20.2.2"
 install = "^1.3.3"
 antlr4-python3-runtime = "^4.8"
-parchmint = "^0.2.11"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.790"
@@ -23,6 +22,8 @@ Sphinx = "^3.4.3"
 sphinx-rtd-theme = "^0.5.1"
 sphinxcontrib-napoleon = "^0.7"
 pytest = "^6.2.5"
+parchmint = {git = "git://github.com/CIDARLAB/pyparchmint.git", branch = "master"}
+
 
 [tool.dephell.main]
 from = {format = "poetry", path = "pyproject.toml"}
