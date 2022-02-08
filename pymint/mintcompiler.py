@@ -29,7 +29,6 @@ class MINTCompiler(mintListener):
     def exitNetlist(self, ctx: mintParser.NetlistContext):
         if self.current_device is None:
             raise Exception("Could not find the device")
-        self.current_device.generate_network()
 
     def enterHeader(self, ctx: mintParser.HeaderContext):
         if ctx.device_name is None:
