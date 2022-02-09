@@ -105,7 +105,7 @@ def mirror_constraint_json():
     ret = {
         "type": "MIRROR_CONSTRAINT",
         "operation_type": "SYMMETRY_OPERATION",
-        "components": [],
+        "components": ["c1", "c2", "c3", "c4"],
         "connections": [],
         "params": {},
         "relationships": {
