@@ -173,4 +173,3 @@ class ArrayConstraint(LayoutConstraint):
             value (int): size
         """
         self._params.set_param("xdim", value)
-

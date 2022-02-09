@@ -24,7 +24,6 @@ class MirrorConstraint(LayoutConstraint):
         self._relationship_map["mirror_count"] = mirror_count
         self._relationship_map["mirror_groups"] = []
 
-
     def add_group(self, components: List[MINTComponent]) -> None:
         """Adds the passed componets to a new group
 

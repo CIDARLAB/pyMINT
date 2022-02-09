@@ -270,7 +270,6 @@ class MINTDevice(Device):
         ]
         return parchmint_json
 
-
     @staticmethod
     def from_mint_file(filepath: str, skip_constraints: bool = False) -> MINTDevice:
         """Compiles the MINT file at the given path
@@ -333,4 +332,3 @@ class MINTDevice(Device):
             current_device = listener.current_device
 
         return current_device
-
