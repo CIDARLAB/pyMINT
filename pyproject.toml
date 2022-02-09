@@ -22,7 +22,8 @@ Sphinx = "^3.4.3"
 sphinx-rtd-theme = "^0.5.1"
 sphinxcontrib-napoleon = "^0.7"
 pytest = "^6.2.5"
-parchmint = {git = "git://github.com/CIDARLAB/pyparchmint.git", branch = "master"}
+parchmint = {path = "../pyparchmint", develop = true}
+# parchmint = {git = "git://github.com/CIDARLAB/pyparchmint.git", branch = "master"}
 
 
 [tool.dephell.main]

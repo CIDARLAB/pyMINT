@@ -19,9 +19,11 @@ class MirrorConstraint(LayoutConstraint):
             mirror_count ([type], optional): number of mirror groups. Defaults to None.
         """
         super().__init__(OperationType.SYMMETRY_OPERATION)
+        self._type = "MIRROR_CONSTRAINT"
         self._relationship_map["source"] = source_component
         self._relationship_map["mirror_count"] = mirror_count
         self._relationship_map["mirror_groups"] = []
+
 
     def add_group(self, components: List[MINTComponent]) -> None:
         """Adds the passed componets to a new group
@@ -303,8 +305,3 @@ class MirrorConstraint(LayoutConstraint):
         # self.step_forward(next_sources, mirror_groups, device)
 
         return True
-
-    def to_parchmint_v1_x(self):
-        ret = super().to_parchmint_v1_x()
-        ret["type"] = "MIRROR CONSTRAINT"
-        return ret

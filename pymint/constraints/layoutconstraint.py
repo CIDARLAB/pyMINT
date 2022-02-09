@@ -33,12 +33,15 @@ class LayoutConstraint:
         """Creates a new instance of the LayoutConstraint"""
         self._components: List[Union[MINTComponent, Component]] = []
         self._connections: List[Union[MINTConnection, Connection]] = []
-        self._id: str = ""
         self._type: str = ""
         self._operation_type: OperationType = operation_type
         self._params: MINTParams = MINTParams({})
 
         self._relationship_map = {}
+
+    @property
+    def type(self) -> str:
+        return self._type
 
     def add_component(self, component: MINTComponent):
         """Adds a component to be covered by the layout constraint
@@ -131,7 +134,6 @@ class LayoutConstraint:
             Dict: constraint in Parchmint v1.x format
         """
         ret = {}
-        ret["id"] = self._id
         ret["type"] = self._type
         ret["operation_type"] = self._operation_type.name
         ret["components"] = [c.ID for c in self._components]

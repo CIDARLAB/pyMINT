@@ -22,6 +22,7 @@ class RotationConstraint(LayoutConstraint):
         super().__init__(OperationType.EXPLICIT_OPERATION)
         self._components.append(component)
         self.rotation = rotation
+        self._type = "ROTATION_CONSTRAINT"
 
     @property
     def component(self) -> Union[MINTComponent, Component]:
@@ -52,8 +53,3 @@ class RotationConstraint(LayoutConstraint):
             rotation (float): rotation value
         """
         self._params.set_param("rotation", rotation)
-
-    def to_parchmint_v1_x(self):
-        ret = super().to_parchmint_v1_x()
-        ret["type"] = "ROTATION CONSTRAINT"
-        return ret

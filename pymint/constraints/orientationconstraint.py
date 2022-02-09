@@ -42,6 +42,7 @@ class OrientationConstraint(LayoutConstraint):
     def __init__(self) -> None:
         """Creates an instance of the orientation constraint"""
         super().__init__(OperationType.RELATIVE_OPERATIONS)
+        self._type = "ORIENTATION_CONSTRAINT"
 
     def add_component_orientation_pair(
         self, component: MINTComponent, orientation: ComponentOrientation
@@ -64,8 +65,3 @@ class OrientationConstraint(LayoutConstraint):
              their orientations
         """
         return self._relationship_map
-
-    def to_parchmint_v1_x(self):
-        ret = super().to_parchmint_v1_x()
-        ret["type"] = "ORIENTATION CONSTRAINT"
-        return ret

@@ -21,6 +21,45 @@ class OrthogonalConstraint(LayoutConstraint):
         """
         super().__init__(OperationType.ALIGNMENT_OPERATION)
         self._components.extend(components)
+        self._type = "ORTHOGONAL_CONSTRAINT"
+
+    def generate_constraints(
+        self,
+        orthogonal_driving_components: List[MINTComponent],
+        device: MINTDevice,
+    ) -> None:
+        """Generates the constraints for the orthogonal constraint
+
+        Args:
+            orthogonal_driving_components (List[Union[MINTComponent, Component]]): components that are driving the orthogonal constraint
+            device (MINTDevice): device to generate the constraints for
+        """
+        # TODO - Implement this
+        orthogonal_component_groups = []
+
+        # Go through the orthogonal driving components and find the groups by performing traversals
+        for orthogonal_driving_component in orthogonal_driving_components:
+            # Check to see if the component is in any of the groups
+            found_group = False
+            for group in orthogonal_component_groups:
+                if orthogonal_driving_component in group:
+                    found_group = True
+                    break
+
+            # Skip if the component is already in a group
+            if found_group:
+                continue
+
+            component_group = OrthogonalConstraint.traverse_node_component_neighbours(
+                orthogonal_driving_component, device
+            )
+            orthogonal_component_groups.append(component_group)
+
+        # Create the orthogonal components
+        for component_group in orthogonal_component_groups:
+            # TODO - Implement this
+            constraint = OrthogonalConstraint(component_group)
+            device.add_constraint(constraint)
 
     @staticmethod
     def traverse_node_component_neighbours(
@@ -62,8 +101,3 @@ class OrthogonalConstraint(LayoutConstraint):
         dfs_traverse_nodes(component.ID)
 
         return nodes
-
-    def to_parchmint_v1_x(self):
-        ret = super().to_parchmint_v1_x()
-        ret["type"] = "ORTHOGONAL CONSTRAINT"
-        return ret

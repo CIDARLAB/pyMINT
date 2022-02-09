@@ -288,6 +288,7 @@ description = "Parchmint is data interchange standard for representing microflui
 category = "dev"
 optional = false
 python-versions = ">=3.8,<3.11"
+develop = true
 
 [package.dependencies]
 argparse = ">=1.4.0,<2.0.0"
@@ -296,10 +297,8 @@ networkx = ">=2.5,<3.0"
 numpy = ">=1.21.4,<2.0.0"
 
 [package.source]
-type = "git"
-url = "git://github.com/CIDARLAB/pyparchmint.git"
-reference = "master"
-resolved_reference = "b8b89fd1aedf3f103fe01a50914546551f3cde55"
+type = "directory"
+url = "../pyparchmint"
 
 [[package]]
 name = "pathspec"
@@ -637,7 +636,7 @@ docs = []
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "21922accd69e8c5d4390dcae5baf371b447db9475ed75fd959e2df97a26a74d6"
+content-hash = "ab49df195958640f26cd80b209909196931d5b4f3cbc2f2b9d7d115f0a2859bc"
 
 [metadata.files]
 alabaster = [

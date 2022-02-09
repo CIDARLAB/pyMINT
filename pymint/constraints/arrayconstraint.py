@@ -30,6 +30,7 @@ class ArrayConstraint(LayoutConstraint):
             (y-dimension). Defaults to None.
         """
         super().__init__(OperationType.ALIGNMENT_OPERATION)
+        self._type = "ARRAY_CONSTRAINT"
         self._components.extend(components)
         self.is1D = False
         self.horizontal_spacing = horizontal_spacing
@@ -173,7 +174,3 @@ class ArrayConstraint(LayoutConstraint):
         """
         self._params.set_param("xdim", value)
 
-    def to_parchmint_v1_x(self):
-        ret = super().to_parchmint_v1_x()
-        ret["type"] = "ARRAY CONSTRAINT"
-        return ret

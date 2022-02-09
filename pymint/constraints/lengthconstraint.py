@@ -20,6 +20,7 @@ class LengthConstraint(LayoutConstraint):
             length (float): length of the connection that needs to be fixed
         """
         super().__init__()
+        self._type = "LENGTH_CONSTRAINT"
         self._connections = []
         self._connections.append(connection)
         self.length = length
@@ -53,8 +54,3 @@ class LengthConstraint(LayoutConstraint):
             length (float): length constrained
         """
         self._params.set_param("length", length)
-
-    def to_parchmint_v1_x(self):
-        ret = super().to_parchmint_v1_x()
-        ret["type"] = "LENGTH CONSTRAINT"
-        return ret

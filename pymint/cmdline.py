@@ -28,9 +28,10 @@ def main():
     OUTPUT_DIR = Path(args.outpath).resolve()
     file_path = str(Path(args.input).resolve())
 
-    current_device = MINTDevice.from_mint_file(file_path, skip_constraints=True)
+    current_device = MINTDevice.from_mint_file(file_path, skip_constraints=False)
 
     tt = os.path.join(OUTPUT_DIR, "{}.json".format(current_device.name))
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
     with open(tt, "w") as f:
         json.dump(current_device.to_parchmint_json(), f)
 

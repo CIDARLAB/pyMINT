@@ -71,8 +71,7 @@ def device_dict(
 @pytest.fixture
 def array_constraint_json():
     ret = {
-        "id": "",
-        "type": "ARRAY CONSTRAINT",
+        "type": "ARRAY_CONSTRAINT",
         "operation_type": "ALIGNMENT_OPERATION",
         "components": ["c1", "c2", "c3", "c4"],
         "connections": [],
@@ -91,8 +90,7 @@ def array_constraint_json():
 @pytest.fixture
 def length_constraint_json():
     ret = {
-        "id": "",
-        "type": "LENGTH CONSTRAINT",
+        "type": "LENGTH_CONSTRAINT",
         "operation_type": "CUTSOM_OPERATION",
         "components": [],
         "connections": ["mcon1"],
@@ -105,8 +103,7 @@ def length_constraint_json():
 @pytest.fixture
 def mirror_constraint_json():
     ret = {
-        "id": "",
-        "type": "MIRROR CONSTRAINT",
+        "type": "MIRROR_CONSTRAINT",
         "operation_type": "SYMMETRY_OPERATION",
         "components": [],
         "connections": [],
@@ -123,8 +120,7 @@ def mirror_constraint_json():
 @pytest.fixture
 def orientation_constraint_json():
     ret = {
-        "id": "",
-        "type": "ORIENTATION CONSTRAINT",
+        "type": "ORIENTATION_CONSTRAINT",
         "operation_type": "RELATIVE_OPERATIONS",
         "components": ["c1", "c2", "c3", "c4"],
         "connections": [],
@@ -142,8 +138,7 @@ def orientation_constraint_json():
 @pytest.fixture
 def position_constraint_json():
     ret = {
-        "id": "",
-        "type": "POSITION CONSTRAINT",
+        "type": "POSITION_CONSTRAINT",
         "operation_type": "EXPLICIT_OPERATION",
         "components": ["source"],
         "connections": [],
@@ -156,8 +151,7 @@ def position_constraint_json():
 @pytest.fixture
 def rotation_constraint_json():
     ret = {
-        "id": "",
-        "type": "ROTATION CONSTRAINT",
+        "type": "ROTATION_CONSTRAINT",
         "operation_type": "EXPLICIT_OPERATION",
         "components": ["source"],
         "connections": [],
@@ -170,8 +164,7 @@ def rotation_constraint_json():
 @pytest.fixture
 def orthogonal_constraint_json():
     ret = {
-        "id": "",
-        "type": "ORTHOGONAL CONSTRAINT",
+        "type": "ORTHOGONAL_CONSTRAINT",
         "operation_type": "ALIGNMENT_OPERATION",
         "components": ["source", "c1", "c2", "c3", "c4"],
         "connections": [],
