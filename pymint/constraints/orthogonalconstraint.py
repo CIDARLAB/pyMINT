@@ -23,8 +23,8 @@ class OrthogonalConstraint(LayoutConstraint):
         self._components.extend(components)
         self._type = "ORTHOGONAL_CONSTRAINT"
 
+    @staticmethod
     def generate_constraints(
-        self,
         orthogonal_driving_components: List[MINTComponent],
         device: MINTDevice,
     ) -> None:
@@ -75,7 +75,8 @@ class OrthogonalConstraint(LayoutConstraint):
             List[MINTComponent]: list of components covered by the constraint
         """
         current_device = device
-        G = device.G
+        G = device.G.copy().to_undirected()
+        print(G)
         nodes = []
         nodes.append(component)
 

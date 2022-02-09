@@ -237,13 +237,9 @@ class ConstraintListener(mintListener):
                 print(e)
 
     def exitNetlist(self, ctx: mintParser.NetlistContext):
-        # TODO: check if component exists in any of the of existing constraints
-        for node_component in self._orthogonal_origin_candidates:
-            components = OrthogonalConstraint.traverse_node_component_neighbours(
-                node_component, self.current_device
-            )
-            constraint = OrthogonalConstraint(components)
-            self.current_device.add_constraint(constraint)
+        OrthogonalConstraint.generate_constraints(
+            self._orthogonal_origin_candidates, self.current_device
+        )
 
     # ------------ Helpers ----------
 
