@@ -1,5 +1,5 @@
 {
-    "name": "node_test1",
+    "name": "mirror_test2",
     "components": [
         {
             "name": "p_in1",
@@ -93,15 +93,83 @@
                 "0"
             ],
             "params": {
+                "in": 1,
+                "out": 4,
                 "position": [
                     -1,
                     -1
-                ],
-                "in": 1,
-                "out": 4
+                ]
             },
             "ports": [],
             "entity": "TREE",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "lct1",
+            "id": "lct1",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "LONG CELL TRAP",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "lct2",
+            "id": "lct2",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "LONG CELL TRAP",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "lct3",
+            "id": "lct3",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "LONG CELL TRAP",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "lct4",
+            "id": "lct4",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "LONG CELL TRAP",
             "x-span": -1,
             "y-span": -1
         }
@@ -128,6 +196,78 @@
         {
             "sinks": [
                 {
+                    "component": "lct1",
+                    "port": null
+                }
+            ],
+            "name": "c_lct1",
+            "id": "c_lct1",
+            "source": {
+                "component": "t1",
+                "port": "2"
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "lct2",
+                    "port": null
+                }
+            ],
+            "name": "c_lct2",
+            "id": "c_lct2",
+            "source": {
+                "component": "t1",
+                "port": "3"
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "lct3",
+                    "port": null
+                }
+            ],
+            "name": "c_lct3",
+            "id": "c_lct3",
+            "source": {
+                "component": "t1",
+                "port": "4"
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "lct4",
+                    "port": null
+                }
+            ],
+            "name": "c_lct4",
+            "id": "c_lct4",
+            "source": {
+                "component": "t1",
+                "port": "5"
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
                     "component": "p_out1",
                     "port": null
                 }
@@ -135,8 +275,8 @@
             "name": "c_out1",
             "id": "c_out1",
             "source": {
-                "component": "t1",
-                "port": "2"
+                "component": "lct1",
+                "port": null
             },
             "params": {},
             "layer": "0",
@@ -153,8 +293,8 @@
             "name": "c_out2",
             "id": "c_out2",
             "source": {
-                "component": "t1",
-                "port": "3"
+                "component": "lct2",
+                "port": null
             },
             "params": {},
             "layer": "0",
@@ -171,8 +311,8 @@
             "name": "c_out3",
             "id": "c_out3",
             "source": {
-                "component": "t1",
-                "port": "4"
+                "component": "lct3",
+                "port": null
             },
             "params": {},
             "layer": "0",
@@ -189,8 +329,8 @@
             "name": "c_out4",
             "id": "c_out4",
             "source": {
-                "component": "t1",
-                "port": "5"
+                "component": "lct4",
+                "port": null
             },
             "params": {},
             "layer": "0",
@@ -220,6 +360,10 @@
             "type": "MIRROR_CONSTRAINT",
             "operation_type": "SYMMETRY_OPERATION",
             "components": [
+                "lct1",
+                "lct2",
+                "lct3",
+                "lct4",
                 "p_out1",
                 "p_out2",
                 "p_out3",
@@ -232,15 +376,19 @@
                 "mirror_count": 4,
                 "mirror_groups": [
                     [
+                        "lct1",
                         "p_out1"
                     ],
                     [
+                        "lct2",
                         "p_out2"
                     ],
                     [
+                        "lct3",
                         "p_out3"
                     ],
                     [
+                        "lct4",
                         "p_out4"
                     ]
                 ]

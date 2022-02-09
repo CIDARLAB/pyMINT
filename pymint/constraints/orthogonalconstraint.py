@@ -28,7 +28,7 @@ class OrthogonalConstraint(LayoutConstraint):
         orthogonal_driving_components: List[MINTComponent],
         device: MINTDevice,
     ) -> None:
-        """Generates the constraints for the orthogonal constraint
+        """Generates the orthogonal constraints for the device
 
         Args:
             orthogonal_driving_components (List[Union[MINTComponent, Component]]): components that are driving the orthogonal constraint
