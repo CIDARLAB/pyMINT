@@ -30,7 +30,7 @@ class ConstraintListener(mintListener):
         self._constrained_components = []
 
         # Temporary storage for mirrored components source
-        self._mirror_constraints = []
+        self._mirror_constraint_driving_components = []
 
         # Temporary store for position constraints
         self._xpos = None
@@ -218,23 +218,16 @@ class ConstraintListener(mintListener):
             in_size = int(ctx.indim.text)
             out_size = int(ctx.outdim.text)
 
-            if in_size != 1:
-                constraint = MirrorConstraint(component, in_size)
-                self._mirror_constraints.append(constraint)
+            if in_size > 0:
+                self._mirror_constraint_driving_components.append(component)
 
-            if out_size != 1:
-                constraint = MirrorConstraint(component, out_size)
-                self._mirror_constraints.append(constraint)
+            if out_size > 0:
+                self._mirror_constraint_driving_components.append(component)
 
     def exitLayerBlock(self, ctx: mintParser.LayerBlockContext):
-        for constraint in self._mirror_constraints:
-            if not isinstance(constraint, MirrorConstraint):
-                raise AssertionError
-            try:
-                constraint.find_mirror_candidates(self.current_device)
-                self.current_device.add_constraint(constraint)
-            except Exception as e:
-                print(e)
+        MirrorConstraint.generate_constraints(
+            self._mirror_constraint_driving_components, self.current_device
+        )
 
     def exitNetlist(self, ctx: mintParser.NetlistContext):
         OrthogonalConstraint.generate_constraints(

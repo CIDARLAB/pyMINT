@@ -13,7 +13,6 @@ def test_to_parchmint_v1_x(mirror_constraint_json):
 
     mc_source = MINTComponent("source", "TEST", {"test-key": "test-value"}, [mlayer])
 
-    mirror_constraint = MirrorConstraint(mc_source, 2)
-    mirror_constraint.mirror_groups = [[mc1, mc2], [mc3, mc4]]
+    mirror_constraint = MirrorConstraint(mc_source, 2, [[mc1, mc2], [mc3, mc4]])
 
     assert mirror_constraint_json == mirror_constraint.to_parchmint_v1_x()

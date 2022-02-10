@@ -355,42 +355,5 @@
     "version": "1.2",
     "valveMap": {},
     "valveTypeMap": {},
-    "layoutConstraints": [
-        {
-            "type": "MIRROR_CONSTRAINT",
-            "operation_type": "SYMMETRY_OPERATION",
-            "components": [
-                "lct1",
-                "lct2",
-                "lct3",
-                "p_out1",
-                "p_out2",
-                "p_out3"
-            ],
-            "connections": [],
-            "params": {},
-            "relationships": {
-                "source": "t1",
-                "mirror_count": 3,
-                "mirror_groups": [
-                    [
-                        "lct1",
-                        "p_out1"
-                    ],
-                    [
-                        "lct2",
-                        "p_out2"
-                    ],
-                    [
-                        "lct3",
-                        "p_out3"
-                    ],
-                    [
-                        "m1",
-                        "p_out4"
-                    ]
-                ]
-            }
-        }
-    ]
+    "layoutConstraints": []
 }
