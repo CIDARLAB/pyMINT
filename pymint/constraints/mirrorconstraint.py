@@ -1,3 +1,4 @@
+import queue
 from typing import List, Dict
 import networkx as nx
 from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
@@ -5,148 +6,203 @@ from pymint.mintcomponent import MINTComponent
 from pymint.mintdevice import MINTDevice
 
 
-class DistanceDictionaries:
-    def __init__(
-        self, groups_size: int, device: MINTDevice, undirected_netlist
-    ) -> None:
-
-        # Initialize the dictionaries (the base data structure) with as many
-        # dictionaries as we have groups
-        self.dictionaries: List[Dict[int, List[str]]] = [{} for x in range(groups_size)]
-        self.netlist = undirected_netlist
-        self.device = device
-
-    def load_group_dfs_nodes(self, group_index, dfs_nodes: List[str]) -> None:
-        """
-        Loads the DFS nodes of a group into the dictionary.
-        """
-
-        # Find the source node of the group
-        source = dfs_nodes[0]
-        self.set_source(group_index, source)
-        # Find distances of each of the DFS nodes to the source node and save it into
-        # the dictionary
-        for node in dfs_nodes:
-            shortest_path = nx.shortest_path(self.netlist, source=source, target=node)
-            self.set_group_node(group_index, node, len(shortest_path))
-
-    def set_source(self, group_index: int, node: str):
-        self.dictionaries[group_index][0].append(node)
-
-    def set_group_node(self, group_index: int, node: str, distance: int):
-        self.dictionaries[group_index][distance].append(node)
-
-    def prune_uneven_distaces(self) -> None:
-        # Step 1 - Find the largest distance in each of the dictionaries
-        largest_distances = []
-        for group_dictionary in self.dictionaries:
-            largest_distances.append(max(group_dictionary.keys()))
-
-        # Step 2 - Find the min of these last distances and remove all the distances
-        # beyond that from the dictionaries
-        min_distance = min(largest_distances)
-
-        for group_dictionary in self.dictionaries:
-            for key in group_dictionary.keys():
-                if key > min_distance:
-                    del group_dictionary[key]
-
-    def prune_non_group_nodes(self) -> None:
-        # Step 1 - Go through each group
-        # Step 2 - Go through the nodes at each distance
-        # Step 3 - Get the shortest path from the source to each node
-        # Step 4 - If all the nodes in the shortest path are not in the group, remove
-        # the node from the group
-        for group_index in range(len(self.dictionaries)):
-            group_dictionary = self.dictionaries[group_index]
-            source = group_dictionary[0][0]
-            for distance in group_dictionary.keys():
-                nodes = group_dictionary[distance]
-                # Get shortest path
-                shortest_path = nx.shortest_path(
-                    self.netlist, source=source, target=nodes[0]
-                )
-                # If any of the noes in the shortest_path are not in the group, remove the node
-                for node in shortest_path:
-                    if self.is_node_in_group(node=node, group_index=group_index):
-                        self.remove_node_from_group(group_index, node)
-
-    def prune_non_matching_nodes(self) -> None:
-
-        # Step 1 - Delete all the distances beyond non-matching number of nodes
-        ref_group = self.dictionaries[0]
-        found_flag = False
-        limit = 0
-        for key in ref_group.keys():
-            for group_index in range(1, len(self.dictionaries)):
-                group_dict = self.dictionaries[group_index]
-                if len(group_dict[key]) != len(ref_group[key]):
-                    limit = key
-                    found_flag = True
-                    break
-            if found_flag:
-                break
-
-        # Delete all values for keys beyond the limit
-        for group_dictionary in self.dictionaries:
-            for key in group_dictionary.keys():
-                if key >= limit:
-                    del group_dictionary[key]
-
-        # Step 2 - Delete all the distances beyond non-matching types of nodes
-        found_flag = False
-        limit = 0
-        ref_component_type_dict = {}
-
-        for key in ref_group.keys():
-            nodes = ref_group[key]
-            component_types = [
-                self.device.get_component(component_id).entity for component_id in nodes
-            ]
-            ref_component_type_dict[key] = component_types
-
-        # Now check all the other dictionaries
-        for group_index in range(1, len(self.dictionaries)):
-            group_dictionary = self.dictionaries[group_index]
-            for key in group_dictionary.keys():
-                nodes = group_dictionary[key]
-                component_types = [
-                    self.device.get_component(component_id).entity
-                    for component_id in nodes
-                ]
-                if ref_component_type_dict[key] != component_types:
-                    limit = key
-                    found_flag = True
-                    break
-            if found_flag:
-                break
-
-        # Delete all values for keys beyond the limit
-        for key in ref_group.keys():
-            nodes = ref_group[key]
-            component_types = [
-                self.device.get_component(component_id).entity for component_id in nodes
-            ]
-            ref_component_type_dict[key] = component_types
-
-    def is_node_in_group(self, group_index: int, node: str) -> bool:
-        group_dictionary = self.dictionaries[group_index]
-        for nodes in group_dictionary.values():
-            if node in nodes:
-                return True
-        return False
-
-    def remove_node_from_group(self, group_index: int, node: str) -> None:
-        group_dictionary = self.dictionaries[group_index]
-        for nodes in group_dictionary.values():
-            if node in nodes:
-                nodes.remove(node)
-
-
 class MirrorConstraint(LayoutConstraint):
     """Layout constraint when two differnt sub-netlists need to have
     the same layout
     """
+
+    class DistanceDictionaries:
+        """Distance dictionaries are the data structures we are using to solve the
+        mirror grouping problem. This algoithm creates dictionaries based on the
+        distances of each of the components to the `source components`that are the 
+        original decendentants of the `mirror driving component`.
+
+        The datastructure essentially looks like this:
+        -----                                                                 -----
+        | 0 : [source_node]      0: [source_node]      0: [source_node]           |
+        | 1 : [node1, node2]     1: [node1, node2]     1: [node1, node2]          |
+        | 2 : [node1, node2]     2: [node1, node2]     2: [node1, node2]          |
+        | 3 : [node1, node2]  ,  3: [node1, node2]  ,  3: [node1, node2] ,  ...   |
+        | 4 : [node1, node2]     4: [node1, node2]     4: [node1, node2]          |
+        | 5 : [node1, node2]     5: [node1, node2]     5: [node1, node2]          |
+        | 6 : [node1, node2]     6: [node1, node2]     6: [node1, node2]          |
+        | 7 : [node1, node2]     7: [node1, node2]     7: [node1, node2]          |
+        -----                                                                 -----
+
+        Its a list of dictionaries where the keys are the distances to the source.
+        If we trim and prune this entire data structure, we will get the final 
+        list of groups that we can export.
+
+        """
+
+        def __init__(
+            self, groups_size: int, device: MINTDevice, undirected_netlist
+        ) -> None:
+
+            # Initialize the dictionaries (the base data structure) with as many
+            # dictionaries as we have groups
+            self.dictionaries: List[Dict[int, List[str]]] = [
+                {} for x in range(groups_size)
+            ]
+            self.netlist = undirected_netlist
+            self.device = device
+
+        def load_group_dfs_nodes(self, group_index, dfs_nodes: List[str]) -> None:
+            """
+            Loads the DFS nodes of a group into the dictionary.
+            """
+
+            # Find the source node of the group
+            source = dfs_nodes[0]
+            self.set_source(group_index, source)
+            # Find distances of each of the DFS nodes to the source node and save it into
+            # the dictionary
+            for node in dfs_nodes:
+                shortest_path = nx.shortest_path(
+                    self.netlist, source=source, target=node
+                )
+                self.set_group_node(group_index, node, len(shortest_path))
+
+        def set_source(self, group_index: int, node: str):
+            self.dictionaries[group_index][0].append(node)
+
+        def set_group_node(self, group_index: int, node: str, distance: int):
+            self.dictionaries[group_index][distance].append(node)
+
+        def trim_uneven_distaces(self) -> None:
+            # Step 1 - Find the largest distance in each of the dictionaries
+            largest_distances = []
+            for group_dictionary in self.dictionaries:
+                largest_distances.append(max(group_dictionary.keys()))
+
+            # Step 2 - Find the min of these last distances and remove all the distances
+            # beyond that from the dictionaries
+            min_distance = min(largest_distances)
+
+            self.trim_dictionaries(min_distance + 1)
+
+        def trim_dictionaries(self, limit: int) -> None:
+            """Removes all the dictionarie entries that have a distance greater than or
+            equal to the limit"""
+            for group_dictionary in self.dictionaries:
+                for distance_key in group_dictionary.keys():
+                    if distance_key >= limit:
+                        del group_dictionary[distance_key]
+
+        def prune_non_group_nodes(self) -> None:
+            # Step 1 - Go through each group
+            # Step 2 - Go through the nodes at each distance
+            # Step 3 - Get the shortest path from the source to each node
+            # Step 4 - If all the nodes in the shortest path are not in the group, remove
+            # the node from the group
+            for group_index in range(len(self.dictionaries)):
+                group_dictionary = self.dictionaries[group_index]
+                source = group_dictionary[0][0]
+                for distance in group_dictionary.keys():
+                    nodes = group_dictionary[distance]
+                    # Get shortest path
+                    shortest_path = nx.shortest_path(
+                        self.netlist, source=source, target=nodes[0]
+                    )
+                    # If any of the noes in the shortest_path are not in the group, remove the node
+                    for node in shortest_path:
+                        if self.is_node_in_group(node=node, group_index=group_index):
+                            self.remove_node_from_group(group_index, node)
+
+        def prune_non_matching_nodes(self) -> None:
+
+            # First check if the intersection of every level of types is null or not
+            # this will get rid of any levels that don't have the same types of nodes
+            ref_group = self.dictionaries[0]
+            found_flag = False
+            limit = 0
+            for distance_key in ref_group.keys():
+                ref_component_type_set = set(
+                    [
+                        self.device.get_component(cid).entity
+                        for cid in ref_group[distance_key]
+                    ]
+                )
+                for group_index in range(1, len(self.dictionaries)):
+                    group_to_test = self.dictionaries[group_index]
+                    type_set_to_test = set(
+                        [
+                            self.device.get_component(cid).entity
+                            for cid in group_to_test[distance_key]
+                        ]
+                    )
+                    if (
+                        len(set.intersection(ref_component_type_set, type_set_to_test))
+                        == 0
+                    ):
+                        found_flag = True
+                        limit = distance_key
+                        break
+
+                if found_flag:
+                    break
+
+            # If we find the mismatch, we delete the entire range starting from the limit
+            if found_flag:
+                self.trim_dictionaries(limit)
+
+            # Now we need to prune the excess components at each distance (This should get
+            # rid of excess cross links at distance = 1)
+
+            # Create a dictionary that keeps the list of the component types at each
+            # distance. This becomes the reference list that we pull for every group
+            # and pop elements from the copy to get the excess components
+            ref_group_types = {}
+            for distance_key in ref_group.keys():
+                nodes = ref_group[distance_key]
+                ref_group_types[distance_key] = [
+                    self.device.get_component(cid).entity for cid in nodes
+                ]
+
+            for test_group_index in range(1, len(self.dictionaries)):
+                test_group = self.dictionaries[test_group_index]
+
+                for distance_key in test_group.keys():
+                    ref_types_list = ref_group_types[distance_key].copy()
+                    test_nodes = test_group[distance_key]
+                    # Loop through the test nodes and remove their corresponding types from the ref_types_list
+                    for node_index in range(len(test_nodes)):
+                        test_node = test_nodes[node_index]
+                        ref_types_list.remove(
+                            self.device.get_component(test_node).entity
+                        )
+                        if len(ref_types_list) == 0:
+                            # Remove all the remaining nodes and break from the loop
+                            for node_to_remove_index in range(
+                                node_index + 1, len(test_nodes)
+                            ):
+                                self.remove_node_from_group(
+                                    test_group_index, test_nodes[node_to_remove_index]
+                                )
+                            break
+
+        def is_node_in_group(self, group_index: int, node: str) -> bool:
+            group_dictionary = self.dictionaries[group_index]
+            for nodes in group_dictionary.values():
+                if node in nodes:
+                    return True
+            return False
+
+        def remove_node_from_group(self, group_index: int, node: str) -> None:
+            group_dictionary = self.dictionaries[group_index]
+            for nodes in group_dictionary.values():
+                if node in nodes:
+                    nodes.remove(node)
+
+        def generate_groups(self) -> List[List[str]]:
+            groups = []
+            for group_index in range(len(self.dictionaries)):
+                group_dictionary = self.dictionaries[group_index]
+                nodes = []
+                for distance in group_dictionary.keys():
+                    nodes.extend(group_dictionary[distance])
+                groups.append(nodes)
+            return groups
 
     def __init__(
         self,
@@ -242,6 +298,8 @@ class MirrorConstraint(LayoutConstraint):
     def find_mirror_groups(
         driving_component: MINTComponent, device: MINTDevice, mirror_count: int
     ) -> List[List[MINTComponent]]:
+        def find_component_references(groups: List[List[str]]):
+            return [[device.get_component(cid) for cid in group] for group in groups]
 
         groups = []
         print(
@@ -274,7 +332,7 @@ class MirrorConstraint(LayoutConstraint):
                     mirror_count, driving_component.ID
                 )
             )
-            return groups
+            return find_component_references(groups)
 
         # Check all the level 1 components to see if they are the same type of
         # components
@@ -302,30 +360,41 @@ class MirrorConstraint(LayoutConstraint):
                     mirror_count, driving_component.ID
                 )
             )
-            return groups
+            return find_component_references(groups)
 
-        # Now traverse the latest level components with each step in the graph and kill the iteraor if the is_level_valid function returns false
+        # Generate the mirror groups using the level Distance Dictionary datastructure.
+        # Step 1 - Initialize an instance of the distance dictionaries object
+        # Step 2 - Load all the DFS preordered nodes from the each of the sources we find in the currently loaded groups variables
+        # Step 3 - Trim the distance dictionary to have min distance of all dfs nodes
+        # Step 4 - Run the pruning algorithm (distance + group matching)
+        # Step 5 - Run the pruning algorithm (type matching)
 
-        # seed the group index dictionary
-        group_dictionary = {}
-        for i in range(len(groups)):
-            group_dictionary[i] = groups[i]
+        distance_dictionaries = DistanceDictionaries(
+            groups_size=len(groups),
+            device=device,
+            undirected_netlist=undirected_netlist,
+        )
 
-        def find_component_group(component: str) -> int:
-            """Find the component group return -1 if not found"""
-            for key, value in group_dictionary.items():
-                if component in value:
-                    return key
-            return -1
+        # Find all the dfs orderinging from level_one_components and load them in
+        for group_index in range(len(level_one_components)):
+            source_node = level_one_components[group_index]
+            dfs_nodes = list(nx.dfs_preorder_nodes(undirected_netlist, source_node))
+            distance_dictionaries.load_group_dfs_nodes(group_index, dfs_nodes)
 
-        def add_to_group_dictionary(component: str, index: int) -> None:
-            group_dictionary[index].append(component)
+        # Trim the distance dictionary to have min distance of all dfs nodes
+        distance_dictionaries.trim_uneven_distaces()
 
-        # Step through each of the groups and find the next level of components
-        last_level_components = [group[-1] for group in groups]
+        # TODO - Run the pruning algorithm (distance + group matching @distance=1)
+        # This is a stupid case that the path algorithm doesn't work for
+
+        # Run the pruning algorithm (distance + group matching)
+        distance_dictionaries.prune_non_group_nodes()
+        # Run the pruning based on types
+        distance_dictionaries.prune_non_matching_nodes()
+
         # Now search for the next level of compon
-        list(nx.dfs_preorder_nodes(undirected_netlist, source=0))
-        return groups
+        # list(nx.dfs_preorder_nodes(undirected_netlist, source=0))
+        return find_component_references(groups)
 
     @staticmethod
     def generate_constraints(
@@ -341,34 +410,41 @@ class MirrorConstraint(LayoutConstraint):
             in_mirror_count = mirror_driving_component.params.get_param("in")
             out_mirror_count = mirror_driving_component.params.get_param("out")
 
-            # Find groups for in_mirror_count
-            mirror_groups = MirrorConstraint.find_mirror_groups(
-                mirror_driving_component, device, in_mirror_count
-            )
-
-            if len(mirror_groups) > 0:
-                # If the number of mirror groups found is great than 0 generate the
-                # mirror constraint
-                mirror_constraint = MirrorConstraint(
-                    source_component=mirror_driving_component,
-                    mirror_count=len(mirror_groups),
-                    mirror_groups=mirror_groups,
+            if in_mirror_count > 1:
+                # Find groups for in_mirror_count
+                mirror_groups = MirrorConstraint.find_mirror_groups(
+                    mirror_driving_component, device, in_mirror_count
                 )
 
-                device.add_constraint(mirror_constraint)
+                print("In Mirror Groups")
+                print(mirror_groups)
 
-            # Find groups for out_mirror_count
-            mirror_groups = MirrorConstraint.find_mirror_groups(
-                mirror_driving_component, device, out_mirror_count
-            )
+                if len(mirror_groups) > 0:
+                    # If the number of mirror groups found is great than 0 generate the
+                    # mirror constraint
+                    mirror_constraint = MirrorConstraint(
+                        source_component=mirror_driving_component,
+                        mirror_count=len(mirror_groups),
+                        mirror_groups=mirror_groups,
+                    )
 
-            if len(mirror_groups) > 0:
-                # If the number of mirror groups found is great than 0 generate the
-                # mirror constraint
-                mirror_constraint = MirrorConstraint(
-                    source_component=mirror_driving_component,
-                    mirror_count=len(mirror_groups),
-                    mirror_groups=mirror_groups,
+                    device.add_constraint(mirror_constraint)
+
+            if out_mirror_count > 1:
+                # Find groups for out_mirror_count
+                mirror_groups = MirrorConstraint.find_mirror_groups(
+                    mirror_driving_component, device, out_mirror_count
                 )
+                print("Out Mirror Groups")
+                print(mirror_groups)
 
-                device.add_constraint(mirror_constraint)
+                if len(mirror_groups) > 0:
+                    # If the number of mirror groups found is great than 0 generate the
+                    # mirror constraint
+                    mirror_constraint = MirrorConstraint(
+                        source_component=mirror_driving_component,
+                        mirror_count=len(mirror_groups),
+                        mirror_groups=mirror_groups,
+                    )
+
+                    device.add_constraint(mirror_constraint)

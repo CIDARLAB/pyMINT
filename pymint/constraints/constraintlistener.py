@@ -218,10 +218,10 @@ class ConstraintListener(mintListener):
             in_size = int(ctx.indim.text)
             out_size = int(ctx.outdim.text)
 
-            if in_size > 0:
+            if in_size > 1:
                 self._mirror_constraint_driving_components.append(component)
 
-            if out_size > 0:
+            if out_size > 1:
                 self._mirror_constraint_driving_components.append(component)
 
     def exitLayerBlock(self, ctx: mintParser.LayerBlockContext):

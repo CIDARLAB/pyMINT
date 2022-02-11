@@ -1,4 +1,4 @@
-DEVICE mirror_test2
+DEVICE mirror_test4
 
 LAYER FLOW
 
