@@ -50,9 +50,12 @@ class DistanceDictionaries:
         self.set_source(group_index, source)
         # Find distances of each of the DFS nodes to the source node and save it into
         # the dictionary
-        for node in dfs_nodes:
-            shortest_path = nx.shortest_path(self.netlist, source=source, target=node)
-            self.set_group_node(group_index, node, len(shortest_path))
+        for node_to_add in range(1, len(dfs_nodes)):
+            node_to_add = dfs_nodes[node_to_add]
+            shortest_path = nx.shortest_path(
+                self.netlist, source=source, target=node_to_add
+            )
+            self.set_group_node(group_index, node_to_add, len(shortest_path) - 1)
 
     def set_source(self, group_index: int, node: str):
         self.dictionaries[group_index][0] = [node]
@@ -60,7 +63,7 @@ class DistanceDictionaries:
     def set_group_node(self, group_index: int, node: str, distance: int):
         if distance not in self.dictionaries[group_index]:
             self.dictionaries[group_index][distance] = []
-        
+
         self.dictionaries[group_index][distance].append(node)
 
     def trim_uneven_distaces(self) -> None:
@@ -94,15 +97,22 @@ class DistanceDictionaries:
             source = group_dictionary[0][0]
             for distance in group_dictionary.keys():
                 nodes = group_dictionary[distance]
-                if(len(nodes) < 0):
-                    raise Exception("No nodes found at distance {}, group index {}".format(distance, group_index))
+                if len(nodes) < 0:
+                    raise Exception(
+                        "No nodes found at distance {}, group index {}".format(
+                            distance, group_index
+                        )
+                    )
                 # Get shortest path
                 shortest_path = nx.shortest_path(
                     self.netlist, source=source, target=nodes[0]
                 )
                 # If any of the noes in the shortest_path are not in the group, remove the node
                 for node in shortest_path:
-                    if self.is_node_in_group(node=node, group_index=group_index):
+                    if (
+                        self.is_node_in_group(node=node, group_index=group_index)
+                        is False
+                    ):
                         self.remove_node_from_group(group_index, node)
 
     def prune_non_matching_nodes(self) -> None:
@@ -389,9 +399,9 @@ class MirrorConstraint(LayoutConstraint):
         # Run the pruning based on types
         distance_dictionaries.prune_non_matching_nodes()
 
-        # Now search for the next level of compon
-        # list(nx.dfs_preorder_nodes(undirected_netlist, source=0))
-        return find_component_references(groups)
+        # Generate the mirror groups
+        ret = distance_dictionaries.generate_groups()
+        return find_component_references(ret)
 
     @staticmethod
     def generate_constraints(

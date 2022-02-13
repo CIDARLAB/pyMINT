@@ -4,6 +4,23 @@ import json
 from pymint.mintdevice import MINTDevice
 
 
+def ordered(obj):
+    """Sort a dictionary object.
+
+    Args:
+        obj ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
+    if isinstance(obj, dict):
+        return sorted((k, ordered(v)) for k, v in obj.items())
+    if isinstance(obj, list):
+        return sorted(ordered(x) for x in obj)
+    else:
+        return obj
+
+
 def test_node_test1():
     mint_file = "tests/mint_files/node_test1.mint"
     mint_device = MINTDevice.from_mint_file(mint_file)
