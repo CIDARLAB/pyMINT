@@ -66,7 +66,7 @@ def test_mirror_test2():
     with open(mint_file.replace(".mint", ".json"), "r") as data_file:
         text = data_file.read()
         device_json = json.loads(text)
-        assert parchmint_device == device_json
+        assert ordered(parchmint_device) == ordered(device_json)
 
 
 def test_mirror_test3():
@@ -78,7 +78,7 @@ def test_mirror_test3():
     with open(mint_file.replace(".mint", ".json"), "r") as data_file:
         text = data_file.read()
         device_json = json.loads(text)
-        assert parchmint_device == device_json
+        assert ordered(parchmint_device) == ordered(device_json)
 
 
 def test_mirror_test4():
@@ -90,7 +90,7 @@ def test_mirror_test4():
     with open(mint_file.replace(".mint", ".json"), "r") as data_file:
         text = data_file.read()
         device_json = json.loads(text)
-        assert parchmint_device == device_json
+        assert ordered(parchmint_device) == ordered(device_json)
 
 
 # def test_full_flow():
