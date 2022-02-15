@@ -1,5 +1,5 @@
 import queue
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import networkx as nx
 from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
 from pymint.mintcomponent import MINTComponent
@@ -66,7 +66,68 @@ class DistanceDictionaries:
 
         self.dictionaries[group_index][distance].append(node)
 
+    def find_node_in_group(self, group_index: int, node: str) -> Tuple[bool, int]:
+        """Returns a tuple of (is_node_in_group, distance)
+        return -1 as distance incase the node is not found
+
+        Args:
+            group_index (int): The index of the group to check
+            node (str): The node to check
+
+        Raises:
+            IndexError: If the group index is out of range
+
+        Returns:
+            Tuple[bool, int]: A tuple of (is_node_in_group, distance)
+        """
+        # First check if the group_index is valid
+        if group_index >= len(self.dictionaries):
+            raise IndexError("Group index is out of bounds")
+        # Checks if the node is in the group and returns the distance key
+        group_to_evaluate = self.dictionaries[group_index]
+        for distance_key in group_to_evaluate.keys():
+            nodes_to_evaluate = list(group_to_evaluate[distance_key])
+            if node in nodes_to_evaluate:
+                return (True, distance_key)
+
+        return (False, -1)
+
+    def prune_backpaths(self) -> None:
+        # Check all the new loaded dfs lists and then delete backpaths caused by crosslinks between group nodes
+
+        # Step 1 - Go through each of the groups
+        # Step 2 - For each key in the dictionary, check if the nodes in other groups
+        # Step 3 - If the nodes is in other groups and the key is less than the current key, delete it from the current group
+        for group_index in range(len(self.dictionaries)):
+            group_to_evaluate = self.dictionaries[group_index]
+            for distance_key in group_to_evaluate.keys():
+                nodes_to_evaluate = group_to_evaluate[distance_key]
+                for node_to_evaluate in nodes_to_evaluate:
+                    for other_group_index in range(len(self.dictionaries)):
+                        # Skip if same index
+                        if other_group_index == group_index:
+                            continue
+
+                        # Check if node is in other group
+                        exists, other_distance = self.find_node_in_group(
+                            other_group_index, node_to_evaluate
+                        )
+
+                        if exists is True:
+                            if other_distance < distance_key:
+                                self.remove_node_from_group(
+                                    group_index, node_to_evaluate
+                                )
+
     def trim_uneven_distaces(self) -> None:
+        # First delete all the empty key lists
+        for group_dictionary in self.dictionaries:
+            distance_keys = list(group_dictionary.keys())
+            for distance_key in distance_keys:
+                if distance_key in group_dictionary.keys():
+                    if len(group_dictionary[distance_key]) == 0:
+                        del group_dictionary[distance_key]
+
         # Step 1 - Find the largest distance in each of the dictionaries
         largest_distances = []
         for group_dictionary in self.dictionaries:
@@ -82,7 +143,8 @@ class DistanceDictionaries:
         """Removes all the dictionarie entries that have a distance greater than or
         equal to the limit"""
         for group_dictionary in self.dictionaries:
-            for distance_key in group_dictionary.keys():
+            distance_keys = list(group_dictionary.keys())
+            for distance_key in distance_keys:
                 if distance_key >= limit:
                     del group_dictionary[distance_key]
 
@@ -92,12 +154,15 @@ class DistanceDictionaries:
         # Step 3 - Get the shortest path from the source to each node
         # Step 4 - If all the nodes in the shortest path are not in the group, remove
         # the node from the group
+        # Step 5 - Now implement the fix for the level 1 cross link problem by checking
+        # if the longest chain includes the level 1 node or not. Do this only for the
+        # level 1 nodes that are in other groups too.
         for group_index in range(len(self.dictionaries)):
             group_dictionary = self.dictionaries[group_index]
             source = group_dictionary[0][0]
             for distance in group_dictionary.keys():
-                nodes = group_dictionary[distance]
-                if len(nodes) < 0:
+                level_one_nodes = group_dictionary[distance]
+                if len(level_one_nodes) < 0:
                     raise Exception(
                         "No nodes found at distance {}, group index {}".format(
                             distance, group_index
@@ -105,7 +170,7 @@ class DistanceDictionaries:
                     )
                 # Get shortest path
                 shortest_path = nx.shortest_path(
-                    self.netlist, source=source, target=nodes[0]
+                    self.netlist, source=source, target=level_one_nodes[0]
                 )
                 # If any of the noes in the shortest_path are not in the group, remove the node
                 for node in shortest_path:
@@ -114,6 +179,51 @@ class DistanceDictionaries:
                         is False
                     ):
                         self.remove_node_from_group(group_index, node)
+
+        # Level 1 fixes
+        # Get largest key in the dictionary
+        ref_dict = self.dictionaries[0]
+        max_key = max(list(ref_dict.keys()))
+
+        # Go through each of the groups, and if the node is present in a different
+        # group, run the shortest path test
+        # Frist check if there are more items than level 0
+        if max_key < 1:
+            return
+
+        for group_index in range(len(self.dictionaries)):
+            group_dictionary = self.dictionaries[group_index]
+            level_key = 1
+            level_one_nodes = group_dictionary[level_key]
+            for node in level_one_nodes:
+                # check if node is in other groups
+                found_in_other_groups_flag = False
+                for other_group_index in range(group_index, len(self.dictionaries)):
+                    if self.is_node_in_group(node=node, group_index=other_group_index):
+                        found_in_other_groups_flag = True
+                        break
+
+                # If its foudn in other groups, do the check
+                if found_in_other_groups_flag is True:
+                    source = group_dictionary[0][0]
+
+                    # check if the node is in the shortest paths to the source for all
+                    # the nodes in the max level key
+                    max_level_nodes = group_dictionary[max_key]
+                    found_node_in_paths = False
+                    for max_level_node in max_level_nodes:
+                        shortest_path = nx.shortest_path(
+                            self.netlist, source=source, target=max_level_node
+                        )
+                        if node in shortest_path:
+                            found_node_in_paths = True
+                            break
+
+                    # IF the found_node_in_paths is set to false, then delete the node from the group
+                    if found_node_in_paths is False:
+                        self.remove_node_from_group(group_index, node)
+
+        # Check if node is terminal node in multiple groups
 
     def prune_non_matching_nodes(self) -> None:
 
@@ -390,14 +500,26 @@ class MirrorConstraint(LayoutConstraint):
 
         # Trim the distance dictionary to have min distance of all dfs nodes
         distance_dictionaries.trim_uneven_distaces()
+        # Prune backpaths caused by cross-links
+        distance_dictionaries.prune_backpaths()
+
+        # Trim the distance dictionaries again
+        distance_dictionaries.trim_uneven_distaces()
 
         # TODO - Run the pruning algorithm (distance + group matching @distance=1)
         # This is a stupid case that the path algorithm doesn't work for
 
         # Run the pruning algorithm (distance + group matching)
         distance_dictionaries.prune_non_group_nodes()
+
+        # Trim the distance dictionaries again
+        distance_dictionaries.trim_uneven_distaces()
+
         # Run the pruning based on types
         distance_dictionaries.prune_non_matching_nodes()
+
+        # Trim the distance dictionaries again
+        distance_dictionaries.trim_uneven_distaces()
 
         # Generate the mirror groups
         ret = distance_dictionaries.generate_groups()
