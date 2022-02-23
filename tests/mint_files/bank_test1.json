@@ -1,0 +1,112 @@
+{
+    "name": "bank_test1",
+    "components": [
+        {
+            "name": "p1",
+            "id": "p1",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "p2",
+            "id": "p2",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "p3",
+            "id": "p3",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "p4",
+            "id": "p4",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        }
+    ],
+    "connections": [],
+    "params": {
+        "x-span": null,
+        "y-span": null
+    },
+    "layers": [
+        {
+            "name": "FLOW_0",
+            "id": "0",
+            "type": "FLOW",
+            "params": {},
+            "group": "0"
+        }
+    ],
+    "features": [],
+    "version": "1.2",
+    "valveMap": {},
+    "valveTypeMap": {},
+    "layoutConstraints": [
+        {
+            "type": "ARRAY_CONSTRAINT",
+            "operation_type": "ALIGNMENT_OPERATION",
+            "components": [
+                "p1",
+                "p2",
+                "p3",
+                "p4"
+            ],
+            "connections": [],
+            "params": {
+                "is1D": true,
+                "horizontalSpacing": null,
+                "verticalSpacing": null,
+                "xdim": 4,
+                "ydim": 1
+            },
+            "relationships": {}
+        }
+    ]
+}

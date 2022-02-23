@@ -127,6 +127,15 @@ class ConstraintListener(mintListener):
 
         self.current_device.add_constraint(constraint)
 
+    def exitBankDeclStat(self, ctx: mintParser.BankDeclStatContext):
+        contraint = ArrayConstraint(
+            self._constrained_components,
+            len(self._constrained_components),
+            horizontal_spacing=self._spacing,
+        )
+
+        self.current_device.add_constraint(contraint)
+
     def enterOrientation(self, ctx: mintParser.OrientationContext):
         if ctx.getText() == "H":
             self._orientation = ComponentOrientation.HORIZONTAL

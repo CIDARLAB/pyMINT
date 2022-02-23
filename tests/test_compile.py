@@ -21,6 +21,18 @@ def ordered(obj):
         return obj
 
 
+def test_bank_test1():
+    mint_file = "tests/mint_files/bank_test1.mint"
+    mint_device = MINTDevice.from_mint_file(mint_file)
+    # Convert it to Parchmint
+    parchmint_device = mint_device.to_parchmint_json()
+    # Write the Parchmint to a file
+    with open(mint_file.replace(".mint", ".json"), "r") as data_file:
+        text = data_file.read()
+        device_json = json.loads(text)
+        assert parchmint_device == device_json
+
+
 def test_node_test1():
     mint_file = "tests/mint_files/node_test1.mint"
     mint_device = MINTDevice.from_mint_file(mint_file)
