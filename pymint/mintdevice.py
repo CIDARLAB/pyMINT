@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import sys
-from typing import List, Union
-
+from typing import List, Optional, Union
 from parchmint.component import Component
 from parchmint.connection import Connection
 from parchmint.device import Device, ValveType
@@ -22,7 +21,7 @@ class MINTDevice(Device):
 
     """
 
-    def __init__(self, name: str, json_data=None) -> None:
+    def __init__(self, name: str, device_ref: Optional[Device] = None) -> None:
         """Creates a MINT device
 
         A MINT device has the extra bells and whistles necessary for genrating
@@ -33,12 +32,22 @@ class MINTDevice(Device):
             name (str): name of the device
             json (str, optional): JSON string. Defaults to None.
         """
-        super(MINTDevice, self).__init__(json_data=json_data)
+        super(MINTDevice, self).__init__(name)
 
-        self.name = name
+        self._device = Device() if device_ref is None else device_ref
+
         self._layout_constraints = []
         self._terminals = []
         self._vias = []
+
+    @property
+    def device(self) -> Device:
+        """Returns the underlying parchmint device
+
+        Returns:
+            Device: underlying parchmint device
+        """
+        return self._device
 
     def create_mint_component(
         self, name: str, technology: str, params: dict, layer_ids: List[str]

@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, Dict, List, Union
 
 from parchmint.connection import Connection
 from parchmint.layer import Layer
 from parchmint.target import Target
+from parchmint.params import Params
 
 if TYPE_CHECKING:
     from pymint import MINTLayer
@@ -23,10 +24,10 @@ class MINTConnection(Connection):
         self,
         name: str,
         technology: str,
-        params: dict,
-        source: Union[MINTTarget, Target],
-        sinks: List[MINTTarget],
-        layer: Union[MINTLayer, Layer],
+        params: Dict,
+        source: Target,
+        sinks: List[Target],
+        layer: MINTLayer,
     ) -> None:
         """Creates a new connection
 
@@ -38,14 +39,24 @@ class MINTConnection(Connection):
             sinks (List[MINTTarget]): where the connection ends
             layer (MINTLayer, optional): layer information. Defaults to None.
         """
-        super(MINTConnection, self).__init__()
-        self.name = name
-        self.ID = name
-        self.entity = technology
-        self.params: MINTParams = MINTParams(params)
-        self.source: Union[MINTTarget, Target] = source
-        self.sinks: List[MINTTarget] = sinks
-        self.layer = layer
+        self._connection = Connection(
+            name=name,
+            ID=name,
+            entity=technology,
+            source=source,
+            sinks=sinks,
+            layer=layer,
+            params=Params(params),
+        )
+
+    @property
+    def connection(self) -> Connection:
+        """Returns the connection
+
+        Returns:
+            Connection: the connection
+        """
+        return self._connection
 
     def overwrite_id(self, id: str) -> None:
         """Overwites the ID
@@ -82,7 +93,7 @@ class MINTConnection(Connection):
         ret = "{} {} from {} to {} {} ;".format(
             self.entity,
             self.name,
-            self.source.to_MINT(),
+            self._connection.source.to_MINT(),
             ", ".join([item.to_MINT() for item in self.sinks]),
             self.params.to_MINT(),
         )

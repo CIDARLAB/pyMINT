@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, List, Optional, Union
 
 from parchmint.component import Component
 from parchmint.layer import Layer
@@ -22,7 +22,7 @@ class MINTComponent(Component):
         name: str,
         technology: str,
         params: dict,
-        layers: List[Union[MINTLayer, Layer]] = None,
+        layers: Optional[List[Union[MINTLayer, Layer]]] = None,
     ) -> None:
         """Creates a MINT component
 

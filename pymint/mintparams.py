@@ -1,3 +1,4 @@
+from typing import Dict
 from parchmint.params import Params
 
 
@@ -7,15 +8,13 @@ class MINTParams(Params):
 
     """
 
-    def __init__(self, pairs: dict) -> None:
+    def __init__(self, pairs: Dict = {}) -> None:
         """Creates a MINTParams object
 
         Args:
-            pairs (dict): [description]
+            pairs (Dict): dictionary of key value pairs
         """
-        super(MINTParams, self).__init__(None)
-        for key in pairs.keys():
-            self.data[key] = pairs[key]
+        self._params = Params(pairs)
 
     def to_MINT(self) -> str:
         """Returns the MINT string for the set params, it skips the connection/constriant/position params
@@ -25,7 +24,7 @@ class MINTParams(Params):
         """
         skip_list = ["paths", "wayPoints", "position"]
         ret = ""
-        for key in self.data.keys():
+        for key in self._params.data:
             if key in skip_list:
                 continue
             ret += "{}={} ".format(key, self.data[key])

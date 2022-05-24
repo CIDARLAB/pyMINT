@@ -38,7 +38,7 @@ def convert_to_parchmint(
         current_device = MINTDevice.from_mint_file(str(input_file), skip_constraints)
 
         # Save the device parchmint v1_2 to a file
-        parchmint_text = current_device.to_parchmint_v1_x()
+        parchmint_text = current_device.to_parchmint_v1_2()
 
         # Create new file in outpath with the same name as the current device
         outpath.mkdir(parents=True, exist_ok=True)
@@ -103,7 +103,7 @@ def default_cli(
     skip_layout_constraints: bool,
     generate_graph_view: bool,
 ):
-    ascii_banner = pyfiglet.figlet_format("Fluigi")
+    ascii_banner = pyfiglet.figlet_format("MINT")
     print(ascii_banner)
 
     for input_file in input_files:
