@@ -102,10 +102,10 @@ class MINTDevice(Device):
         """[summary]
 
         Args:
-            id (str): [description]
-            name_postfix (str): [description]
-            group ([type]): [description]
-            layer_type (MINTLayerType): [description]
+            id (str): id of the mint layer
+            name_postfix (str): postfix to add to the layer name
+            group ([type]): group the layer belongs to
+            layer_type (MINTLayerType): layer type of the layer
 
         Returns:
             MINTLayer: [description]
@@ -270,7 +270,6 @@ class MINTDevice(Device):
         ]
         return parchmint_json
 
-
     @staticmethod
     def from_mint_file(filepath: str, skip_constraints: bool = False) -> MINTDevice:
         """Compiles the MINT file at the given path
@@ -333,4 +332,3 @@ class MINTDevice(Device):
             current_device = listener.current_device
 
         return current_device
-

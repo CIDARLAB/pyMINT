@@ -31,7 +31,6 @@ class PositionConstraint(LayoutConstraint):
         self.zpos = zpos
         self._type = "POSITION_CONSTRAINT"
 
-
     def get_component(self) -> Union[MINTComponent, Component]:
         """Returns the component constrained by the component
 

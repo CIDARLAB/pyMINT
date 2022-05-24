@@ -481,7 +481,8 @@ class MirrorConstraint(LayoutConstraint):
 
         # Generate the mirror groups using the level Distance Dictionary datastructure.
         # Step 1 - Initialize an instance of the distance dictionaries object
-        # Step 2 - Load all the DFS preordered nodes from the each of the sources we find in the currently loaded groups variables
+        # Step 2 - Load all the DFS preordered nodes from the each of the sources we 
+        # find in the currently loaded groups variables
         # Step 3 - Trim the distance dictionary to have min distance of all dfs nodes
         # Step 4 - Run the pruning algorithm (distance + group matching)
         # Step 5 - Run the pruning algorithm (type matching)
