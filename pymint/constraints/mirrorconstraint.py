@@ -1,5 +1,4 @@
-import queue
-from typing import Dict, List, Tuple
+from typing import List, Optional, Tuple, Dict
 
 import networkx as nx
 
