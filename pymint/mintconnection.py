@@ -34,7 +34,7 @@ class MINTConnection(Connection):
         Args:
             name (str): name of the connection
             technology (str): MINT string
-            params (dict): parameters
+            params (Dict): parameters
             source (MINTTarget): where the connection starts
             sinks (List[MINTTarget]): where the connection ends
             layer (MINTLayer, optional): layer information. Defaults to None.

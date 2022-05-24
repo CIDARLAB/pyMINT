@@ -21,7 +21,7 @@ class MINTComponent(Component):
         self,
         name: str,
         technology: str,
-        params: dict,
+        params: Dict,
         layers: Optional[List[Union[MINTLayer, Layer]]] = None,
     ) -> None:
         """Creates a MINT component
@@ -29,7 +29,7 @@ class MINTComponent(Component):
         Args:
             name (str): [description]
             technology (str): [description]
-            params (dict): [description]
+            params (Dict): [description]
             layers (List[MINTLayer], optional): [description]. Defaults to None.
 
         Raises:

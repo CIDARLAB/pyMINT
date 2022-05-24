@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from typing import List, Optional, Union
+from typing import Dict, List, Optional, Union
 from parchmint.component import Component
 from parchmint.connection import Connection
 from parchmint.device import Device, ValveType
@@ -10,12 +10,13 @@ from pymint.constraints.layoutconstraint import LayoutConstraint
 from pymint.mintcomponent import MINTComponent
 from pymint.mintconnection import MINTConnection
 from pymint.mintlayer import MINTLayer, MINTLayerType
+from pymint.mintprotocol import MINTProtocol
 from pymint.minttarget import MINTTarget
 from pymint.mintterminal import MINTTerminal
 from pymint.mintvia import MINTVia
 
 
-class MINTDevice(Device):
+class MINTDevice(Device, MINTProtocol):
     """Device class abstracting parchmint Device object adding additional
     methods for generating MINT
 
@@ -50,14 +51,14 @@ class MINTDevice(Device):
         return self._device
 
     def create_mint_component(
-        self, name: str, technology: str, params: dict, layer_ids: List[str]
+        self, name: str, technology: str, params: Dict, layer_ids: List[str]
     ) -> MINTComponent:
         """Creates a new component and adds it to the device
 
         Args:
             name (str): name
             technology (str): MINT string
-            params (dict): params dictionary
+            params (Dict): params dictionary
             layer_ids (List[str]): list of layer ids
 
         Returns:
@@ -75,7 +76,7 @@ class MINTDevice(Device):
         self,
         name: str,
         technology: str,
-        params: dict,
+        params: Dict,
         source: MINTTarget,
         sinks: List[MINTTarget],
         layer_id: str,
@@ -85,7 +86,7 @@ class MINTDevice(Device):
         Args:
             name (str): name of the connection
             technology (str): MINT string
-            params (dict): dictionary of the paraeters
+            params (Dict): dictionary of the paraeters
             source (MINTTarget): object defining where the connection starts
             sinks (List[MINTTarget]): list of objects defining where the connection ends
             layer_id (str): layer id of the connection
@@ -128,7 +129,7 @@ class MINTDevice(Device):
         self,
         name: str,
         technology: str,
-        params: dict,
+        params: Dict,
         layer_ids: List[str],
         connection: Union[MINTConnection, Connection],
         valve_type: ValveType = ValveType.NORMALLY_OPEN,
@@ -138,7 +139,7 @@ class MINTDevice(Device):
         Args:
             name (str): name of the valve
             technology (str): MINT string
-            params (dict): dictionary of the paraeters
+            params (Dict): dictionary of the paraeters
             layer_ids (List[str]): list of layer ids
             connection (Union[MINTConnection, Connection]): connection to attach the valve to
             valve_type (ValveType, optional): valve type of the valve . Defaults to ValveType.NORMALLY_OPEN.
