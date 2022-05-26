@@ -1,21 +1,16 @@
 from __future__ import annotations
 
 import sys
-from typing import Dict, List, Optional, Union
-from parchmint.component import Component
-from parchmint.connection import Connection
-
+from typing import Dict, List, Optional
 from parchmint import Component, Connection, Layer, Target, Params
 from parchmint.device import Device, ValveType
 
-from pymint.constraints.layoutconstraint import LayoutConstraint
-from pymint.mintcomponent import MINTComponent
-from pymint.mintconnection import MINTConnection
-from pymint.mintlayer import MINTLayer, MINTLayerType
+from pymint.constraints.constraint import LayoutConstraint
+from pymint.mintlayer import MINTLayerType
 from pymint.mintprotocol import MINTProtocol
-from pymint.minttarget import MINTTarget
 from pymint.mintterminal import MINTTerminal
 from pymint.mintvia import MINTVia
+from pymint.mintwriter import to_valve_MINT, to_layer_MINT, to_component_MINT, to_connection_MINT, to_target_MINT, to_terminal_MINT, to_via_MINT    
 
 
 class MINTDevice(Device, MINTProtocol):
@@ -54,7 +49,7 @@ class MINTDevice(Device, MINTProtocol):
 
     def create_mint_component(
         self, name: str, technology: str, params: Dict, layer_ids: List[str]
-    ) -> MINTComponent:
+    ) -> Component:
         """Creates a new component and adds it to the device
 
         Args:
@@ -64,7 +59,7 @@ class MINTDevice(Device, MINTProtocol):
             layer_ids (List[str]): list of layer ids
 
         Returns:
-            MINTComponent: the newly created component
+            Component: the newly created component
         """
         # Retrieve the correct layer:
         layers = []
@@ -81,25 +76,25 @@ class MINTDevice(Device, MINTProtocol):
         name: str,
         technology: str,
         params: Dict,
-        source: MINTTarget,
-        sinks: List[MINTTarget],
+        source: Target,
+        sinks: List[Target],
         layer_id: str,
-    ) -> MINTConnection:
+    ) -> Connection:
         """Creates a new MINT connection and adds it to the device
 
         Args:
             name (str): name of the connection
             technology (str): MINT string
             params (Dict): dictionary of the paraeters
-            source (MINTTarget): object defining where the connection starts
-            sinks (List[MINTTarget]): list of objects defining where the connection ends
+            source (Target): object defining where the connection starts
+            sinks (List[Target]): list of objects defining where the connection ends
             layer_id (str): layer id of the connection
 
         Raises:
             Exception: Throws an exception if layer with the given id is not found
 
         Returns:
-            MINTConnection: Returns the newly created connection
+            Connection: Returns the newly created connection
         """
         layer = self.get_layer(layer_id)
         if layer is None:
@@ -119,8 +114,8 @@ class MINTDevice(Device, MINTProtocol):
         return connection
 
     def create_mint_layer(
-        self, id: str, name_postfix: str, group, layer_type: MINTLayerType
-    ) -> MINTLayer:
+        self, ID: str, name_postfix: str, group, layer_type: MINTLayerType
+    ) -> Layer:
         """[summary]
 
         Args:
@@ -130,11 +125,11 @@ class MINTDevice(Device, MINTProtocol):
             layer_type (MINTLayerType): layer type of the layer
 
         Returns:
-            MINTLayer: [description]
+            Layer: [description]
         """
         name = "{}_{}".format(str(MINTLayerType.FLOW), name_postfix)
         layer = Layer()
-        layer.ID = name
+        layer.ID = ID
         layer.name = name
         layer.group = group
         layer.type = str(layer_type)
@@ -147,9 +142,9 @@ class MINTDevice(Device, MINTProtocol):
         technology: str,
         params: Dict,
         layer_ids: List[str],
-        connection: Union[MINTConnection, Connection],
+        connection: Connection,
         valve_type: ValveType = ValveType.NORMALLY_OPEN,
-    ) -> MINTComponent:
+    ) -> Component:
         """Creates a new valve and adds it to the device
 
         Args:
@@ -157,14 +152,14 @@ class MINTDevice(Device, MINTProtocol):
             technology (str): MINT string
             params (Dict): dictionary of the paraeters
             layer_ids (List[str]): list of layer ids
-            connection (Union[MINTConnection, Connection]): connection to attach the valve to
+            connection (Connection): connection to attach the valve to
             valve_type (ValveType, optional): valve type of the valve . Defaults to ValveType.NORMALLY_OPEN.
 
         Raises:
             Exception: [description]
 
         Returns:
-            MINTComponent: [description]
+            Component: [description]
         """
         valve = self.create_mint_component(name, technology, params, layer_ids)
         if connection not in self.connections:
@@ -205,7 +200,7 @@ class MINTDevice(Device, MINTProtocol):
         for layer in self.layers:
             componenttext = "\n".join(
                 [
-                    item.to_MINT()
+                    to_component_MINT(item)
                     for item in self.components
                     if item.layers[0] == layer and item not in valve_list
                 ]
@@ -215,19 +210,19 @@ class MINTDevice(Device, MINTProtocol):
             if layer.type is str(MINTLayerType.CONTROL):
                 valvetext = "\n".join(
                     [
-                        MINTDevice.to_valve_MINT(item, self.get_valve_connection(item))
+                        to_valve_MINT(item, self.get_valve_connection(item))
                         for item in valve_list
                         if layer in item.layers
                     ]
                 )
 
             connectiontext = "\n".join(
-                [item.to_MINT() for item in self.connections if item.layer == layer]
+                [to_connection_MINT(item) for item in self.connections if item.layer == layer]
             )
 
             full_layer_text += (
-                layer.to_MINT(
-                    "{}\n\n{}\n\n{}".format(componenttext, valvetext, connectiontext)
+                to_layer_MINT(layer,
+                    "{}\n\n{}\n\n{}".format(componenttext, valvetext, connectiontext
                 )
                 + "\n\n"
             )
@@ -252,13 +247,13 @@ class MINTDevice(Device, MINTProtocol):
         self.components.append(ret)
         return ret
 
-    def add_via(self, name: str, layers: List[MINTLayer]) -> MINTVia:
+    def add_via(self, name: str, layers: List[Layer]) -> MINTVia:
         """Creates and adds a via to the device
 
         Args:
             name (str): name of the via
             width (int): width of the via
-            layers (List[MINTLayer]): layers associated with the via
+            layers (List[Layer]): layers associated with the via
 
         Returns:
             MINTVia: The newly created via
@@ -267,34 +262,6 @@ class MINTDevice(Device, MINTProtocol):
         self._vias.append(ret)
         self.components.append(ret)
         return ret
-
-    @staticmethod
-    def to_valve_MINT(
-        component: Union[MINTComponent, Component],
-        connection: Union[MINTConnection, Connection],
-    ) -> str:
-        """Returns the MINT string of a valve
-
-        This functions returns the MINT string of a valve.
-
-        Args:
-            component (Union[MINTComponent, Component]): [description]
-            connection (Union[MINTConnection, Connection]): [description]
-
-        Returns:
-            str: [description]
-        """
-        return "{} {} on {} {};".format(
-            component.entity, component.ID, connection.ID, component.params.to_MINT()
-        )
-
-    def to_parchmint_json(self) -> dict:
-        parchmint_json = self.to_parchmint_v1_x()
-        # Generate json from all the layout constraints
-        parchmint_json["layoutConstraints"] = [
-            constraint.to_parchmint_v1_x() for constraint in self._layout_constraints
-        ]
-        return parchmint_json
 
     @staticmethod
     def from_mint_file(filepath: str, skip_constraints: bool = False) -> MINTDevice:

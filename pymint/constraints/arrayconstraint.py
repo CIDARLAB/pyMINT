@@ -1,7 +1,7 @@
 from typing import List
 
-from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
-from pymint.mintcomponent import MINTComponent
+from pymint.constraints.constraint import LayoutConstraint
+from parchmint import Component
 
 
 class ArrayConstraint(LayoutConstraint):
@@ -11,7 +11,7 @@ class ArrayConstraint(LayoutConstraint):
 
     def __init__(
         self,
-        components: List[MINTComponent],
+        components: List[Component],
         xdim: int = 1,
         ydim: int = 1,
         horizontal_spacing: float = None,
@@ -20,7 +20,7 @@ class ArrayConstraint(LayoutConstraint):
         """Creates an instance of the array Constraints
 
         Args:
-            components (List[MINTComponent]): List of components that need be covered
+            components (List[Component]): List of components that need be covered
             by the constraint
             xdim (int, optional): X dimension of the array. Defaults to 1.
             ydim (int, optional): Y dimension of the array. Defaults to 1.

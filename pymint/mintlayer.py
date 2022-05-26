@@ -1,7 +1,5 @@
 from enum import Enum
 
-from parchmint.layer import Layer
-
 
 class MINTLayerType(Enum):
     FLOW = 1
@@ -32,42 +30,3 @@ class MINTLayerType(Enum):
                 return False
         else:
             return False
-
-
-class MINTLayer(Layer):
-    """MINT Layer class that abstracts the Layer class and adds additional
-    methods to help generating MINT
-    """
-
-    def __init__(
-        self,
-        id: str,
-        name: str,
-        group: str,
-        layer_type: MINTLayerType,
-    ) -> None:
-        """Creates a MINT layer object
-
-        Args:
-            id (str): unique id of the layer
-            name (str): name of the layer
-            group (str): group name
-            layer_type (MINTLayerType): layer type of the layer
-        """
-        super(MINTLayer, self).__init__()
-        self.ID = id
-        self.group = group
-        self.name = name
-        self.type = str(layer_type)
-
-    def to_MINT(self, content: str) -> str:
-        """Generates the MINT string for the layer
-
-        Args:
-            content (str): MINT content that needs to be wrapped into the layer MINT
-
-        Returns:
-            str: Returns the MINT string
-        """
-        ret = "LAYER {} \n\n{} \n\nEND LAYER".format(self.type, content)
-        return ret

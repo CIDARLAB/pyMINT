@@ -2,11 +2,8 @@ from typing import Union
 
 from parchmint.layer import Layer
 
-from pymint.mintcomponent import MINTComponent
-from pymint.mintlayer import MINTLayer
 
-
-class MINTNode(MINTComponent):
+class MINTNode(Component):
     """NODE object that is considered a waypoint in the design
     however this is modelled as a component in Parchmint v1.
 
@@ -15,7 +12,7 @@ class MINTNode(MINTComponent):
 
     """
 
-    def __init__(self, name: str, layer: Union[MINTLayer, Layer]) -> None:
+    def __init__(self, name: str, layer: Layer) -> None:
         """Creates a new NODE object
 
         Args:

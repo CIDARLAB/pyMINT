@@ -1,11 +1,10 @@
 import logging
-from typing import Optional
-
+from typing import Dict, Optional
+from parchmint import Layer, Target
 from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
 from pymint.mintdevice import MINTDevice
-from pymint.mintlayer import MINTLayer, MINTLayerType
-from pymint.minttarget import MINTTarget
+from pymint.mintlayer import MINTLayerType
 
 
 class MINTCompiler(mintListener):
@@ -13,15 +12,15 @@ class MINTCompiler(mintListener):
 
     def __init__(self):
         super().__init__()
-        self.current_device: Optional[MINTDevice] = None
+        self.current_device: MINTDevice = MINTDevice("DEFAULT_NAME")
         self.current_block_id = 0
         self.current_layer_id = 0
         self.flow_layer_count = 0
         self.control_layer_count = 0
         self.integration_layer_count = 0
         self.current_entity: Optional[str] = None
-        self.current_params = {}
-        self._current_layer: Optional[MINTLayer] = None
+        self.current_params: Dict = {}
+        self._current_layer: Optional[Layer] = None
 
     def enterNetlist(self, ctx: mintParser.NetlistContext):
         self.current_device = MINTDevice("DEFAULT_NAME")
@@ -169,11 +168,11 @@ class MINTCompiler(mintListener):
             raise Exception("Could not find the technology for the primitive")
 
         # Clean up the constraint specific params
-        self._cleanup_BANK_params()
+        self._cleanup_bank_params()
 
         for ufname in ctx.ufnames().ufname():
             component_name = ufname.getText()
-            if self._current_layer.ID is None:
+            if self._current_layer is None:
                 raise AssertionError
             self.current_device.create_mint_component(
                 component_name,
@@ -187,7 +186,7 @@ class MINTCompiler(mintListener):
         if entity is None:
             raise Exception("Could not find the technology for the primitive")
 
-        self._cleanup_BANK_params()
+        self._cleanup_bank_params()
 
         if ctx.dim is None:
             raise AssertionError
@@ -217,11 +216,11 @@ class MINTCompiler(mintListener):
         if entity is None:
             raise Exception("Could not find the technology for the primitive")
 
-        self._cleanup_GRID_params()
+        self._cleanup_grid_params()
 
         for ufname in ctx.ufnames().ufname():
             component_name = ufname.getText()
-            if self._current_layer.ID is None:
+            if self._current_layer is None:
                 raise AssertionError
             self.current_device.create_mint_component(
                 component_name,
@@ -254,7 +253,8 @@ class MINTCompiler(mintListener):
         else:
             source_port = None
 
-        source_uftarget = Target({"component": source_id, "port": source_port})
+        # source_uftarget = Target(component_id=source_id, port=source_port)
+        source_uftarget = Target(component_id=source_id, port=source_port)
 
         sink_target = ctx.uftarget()[1]
         sink_id = sink_target.ID().getText()
@@ -269,9 +269,9 @@ class MINTCompiler(mintListener):
         else:
             sink_port = None
 
-        sink_uftarget = Target({"component": sink_id, "port": sink_port})
+        sink_uftarget = Target(component_id=sink_id, port=sink_port)
 
-        self._cleanup_CHANNEL_params()
+        self._cleanup_channel_params()
 
         # Create a connection between the different components in the device
         if not (self._current_layer is not None and self._current_layer.ID is not None):
@@ -299,7 +299,7 @@ class MINTCompiler(mintListener):
         else:
             source_port = None
 
-        source_uftarget = Target({"component": source_id, "port": source_port})
+        source_uftarget = Target(component_id=source_id, port=source_port)
 
         sink_uftargets = []
 
@@ -310,7 +310,7 @@ class MINTCompiler(mintListener):
             else:
                 sink_port = None
 
-            sink_uftargets.append(Target({"component": sink_id, "port": sink_port}))
+            sink_uftargets.append(Target(component_id=sink_id, port=sink_port))
         if not (self._current_layer is not None and self._current_layer.ID is not None):
             raise AssertionError
         self.current_device.create_mint_connection(
@@ -342,7 +342,7 @@ class MINTCompiler(mintListener):
 
         # Loop for each of the components that need to be created with this param
         for ufname in ctx.ufnames().ufname():
-            if self._current_layer.ID is None:
+            if self._current_layer is None:
                 raise AssertionError
             self.current_device.create_mint_component(
                 ufname.getText(),
@@ -424,16 +424,16 @@ class MINTCompiler(mintListener):
             self._current_layer.ID,
         )
 
-    def _cleanup_BANK_params(self):
-        if "spacing" in self.current_params.keys():
+    def _cleanup_bank_params(self):
+        if "spacing" in self.current_params:
             del self.current_params["spacing"]
 
-    def _cleanup_GRID_params(self):
-        if "horizontalSpacing" in self.current_params.keys():
+    def _cleanup_grid_params(self):
+        if "horizontalSpacing" in self.current_params:
             del self.current_params["horizontalSpacing"]
-        if "verticalSpacing" in self.current_params.keys():
+        if "verticalSpacing" in self.current_params:
             del self.current_params["verticalSpacing"]
 
-    def _cleanup_CHANNEL_params(self):
-        if "length" in self.current_params.keys():
+    def _cleanup_channel_params(self):
+        if "length" in self.current_params:
             del self.current_params["length"]

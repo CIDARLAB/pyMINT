@@ -1,20 +1,13 @@
-from typing import Union
-
-from parchmint.layer import Layer
-
-from pymint.mintcomponent import MINTComponent
-from pymint.mintlayer import MINTLayer
+from parchmint import Layer, Component
 
 
-class MINTTerminal(MINTComponent):
+class MINTTerminal(Component):
     """Class for representing the MINT terminal, its modelled as a
     Parchmint Component while giving helpful methods to model the design
 
     """
 
-    def __init__(
-        self, name: str, port_number: int, layer: Union[MINTLayer, Layer]
-    ) -> None:
+    def __init__(self, name: str, port_number: int, layer: Layer) -> None:
         super(MINTTerminal, self).__init__(name, "TERMINAL", {}, [layer])
         self.__port_number = port_number
 

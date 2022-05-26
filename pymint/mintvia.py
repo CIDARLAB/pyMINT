@@ -1,18 +1,16 @@
+from msilib.schema import Component
 from typing import List, Union
 
 from parchmint.layer import Layer
 
-from pymint.mintcomponent import MINTComponent
-from pymint.mintlayer import MINTLayer
 
-
-class MINTVia(MINTComponent):
+class MINTVia(Component):
     """Class to represent MINT Vias that are modelled as a Parchmint component.
     The class has helpful methods for adding and modifying the vias
 
     """
 
-    def __init__(self, name: str, layers: List[Union[MINTLayer, Layer]]) -> None:
+    def __init__(self, name: str, layers: List[Layer]) -> None:
         """Creates a new instance of a Via
 
         Args:

@@ -106,7 +106,7 @@ def to_via_MINT(via: MINTVia) -> str:
     Returns:
         str: returns the via MINT string fragment
     """
-    return "VIA {} {};".format(via.component.name, to_params_MINT(via.component.params))
+    return "VIA {} {};".format(via.ID, to_params_MINT(via.params))
 
 
 def to_terminal_MINT(terminal: MINTTerminal) -> str:
