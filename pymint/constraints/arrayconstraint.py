@@ -15,8 +15,8 @@ class ArrayConstraint(LayoutConstraint):
         components: List[Component],
         xdim: int = 1,
         ydim: int = 1,
-        horizontal_spacing: float = None,
-        vertical_spacing: float = None,
+        horizontal_spacing: float = 0,
+        vertical_spacing: float = 0,
     ) -> None:
         """Creates an instance of the array Constraints
 

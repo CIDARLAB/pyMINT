@@ -12,17 +12,17 @@ class PositionConstraint(LayoutConstraint):
     def __init__(
         self,
         component: Component,
-        xpos: Optional[int],
-        ypos: Optional[int],
-        zpos: Optional[int],
+        xpos: float,
+        ypos: float,
+        zpos: float,
     ) -> None:
         """Returns the position constrinant
 
         Args:
             component (Component): component covered by the constraint
-            xpos (Optional[int]): x position value
-            ypos (Optional[int]): y position value
-            zpos (Optional[int]): z position value
+            ypos (float): y position value
+            zpos (float): z position value
+            xpos (float): x position value
         """
         super().__init__(OperationType.EXPLICIT_OPERATION)
         self.add_component(component)
@@ -47,11 +47,11 @@ class PositionConstraint(LayoutConstraint):
         return ret
 
     @property
-    def xpos(self) -> Optional[int]:
+    def xpos(self) -> float:
         """Returns the x position of the component
 
         Returns:
-            Optional[int]: x coordinate of the component if set else returns None
+            float: x coordinate of the component if set else returns None
         """
         if self._params.exists("xpos"):
             return self._params.get_param("xpos")
@@ -68,11 +68,11 @@ class PositionConstraint(LayoutConstraint):
         self._params.set_param("xpos", value)
 
     @property
-    def ypos(self) -> Optional[int]:
+    def ypos(self) -> float:
         """Returns the y position of the component
 
         Returns:
-            Optional[int]: y coordinate of the component if set else returns None
+            float: y coordinate of the component if set else returns None
         """
         if self._params.exists("ypos"):
             return self._params.get_param("ypos")
@@ -89,11 +89,11 @@ class PositionConstraint(LayoutConstraint):
         self._params.set_param("ypos", value)
 
     @property
-    def zpos(self) -> Optional[int]:
+    def zpos(self) -> float:
         """Returns the z position of the component
 
         Returns:
-            Optional[int]: z coordinate of the component if set else returns None
+            float: z coordinate of the component if set else returns None
         """
         if self._params.exists("zpos"):
             return self._params.get_param("zpos")

@@ -63,7 +63,7 @@ class OrthogonalConstraint(LayoutConstraint):
 
     @staticmethod
     def traverse_node_component_neighbours(
-        component: Component, device: MINTDevice
+        component: Component, mint_device: MINTDevice
     ) -> List[Component]:
         """Traverses the node networks to find the components covered by the constraint
 
@@ -74,9 +74,8 @@ class OrthogonalConstraint(LayoutConstraint):
         Returns:
             List[Component]: list of components covered by the constraint
         """
-        current_device = device
-        G = device.G.copy().to_undirected()
-        print(G)
+        current_device = mint_device
+        G = mint_device.device.graph.to_undirected()
         nodes = []
         nodes.append(component)
 

@@ -9,8 +9,10 @@ from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
 from pymint.constraints.arrayconstraint import ArrayConstraint
 from pymint.constraints.mirrorconstraint import MirrorConstraint
-from pymint.constraints.orientationconstraint import (ComponentOrientation,
-                                                      OrientationConstraint)
+from pymint.constraints.orientationconstraint import (
+    ComponentOrientation,
+    OrientationConstraint,
+)
 from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
 from pymint.constraints.positionconstraint import PositionConstraint
 
@@ -32,14 +34,14 @@ class ConstraintListener(mintListener):
         self._mirror_constraint_driving_components = []
 
         # Temporary store for position constraints
-        self._xpos = None
-        self._ypos = None
-        self._zpos = None
+        self._xpos: float = 0
+        self._ypos: float = 0
+        self._zpos: float = 0
 
         # Temporary store for array constraints
-        self._vertical_spacing = None
-        self._horizontal_spacing = None
-        self._spacing = None
+        self._vertical_spacing: float = 0
+        self._horizontal_spacing: float = 0
+        self._spacing: float = 0
 
         # Temporary store for relative orientatino constraints
         self._orientation = None
@@ -52,9 +54,9 @@ class ConstraintListener(mintListener):
     def enterPositionConstraintStat(
         self, ctx: mintParser.PositionConstraintStatContext
     ):
-        self._xpos = None
-        self._ypos = None
-        self._zpos = None
+        self._xpos = 0
+        self._ypos = 0
+        self._zpos = 0
 
     def enterSetCoordinate(self, ctx: mintParser.SetCoordinateContext):
         coordinate_label = ctx.coordinate
@@ -173,9 +175,8 @@ class ConstraintListener(mintListener):
                     break
             else:
                 print(
-                    'Could not find component or connection with the ID "{}" in device'.format(
-                        element_name
-                    )
+                    'Could not find component or connection with the ID "{}" in device'
+                    .format(element_name)
                 )
                 raise Exception(
                     f"Component {element_name} not found while processing constraint"
@@ -208,9 +209,8 @@ class ConstraintListener(mintListener):
         for component in self._constrained_components:
             if component is None:
                 raise Exception(
-                    "Could not apply Orthogonal Constraint, {} component not found !".format(
-                        ctx.getText()
-                    )
+                    "Could not apply Orthogonal Constraint, {} component not found !"
+                    .format(ctx.getText())
                 )
 
             if self._checkIfComponentConstranied(component):
