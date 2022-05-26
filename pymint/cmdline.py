@@ -49,7 +49,7 @@ def convert_to_parchmint(
 
         # Generate a graph view of the device
         if generate_graph_view:
-            printgraph(current_device.G, current_device.name)
+            printgraph(current_device.device.graph, current_device.name)
     else:
         raise Exception("Unsupported file extension: {}".format(extension))
 

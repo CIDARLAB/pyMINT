@@ -106,7 +106,7 @@ def to_via_MINT(via: MINTVia) -> str:
     Returns:
         str: returns the via MINT string fragment
     """
-    return "VIA {} {};".format(via.ID, to_params_MINT(via.params))
+    return "VIA {} {};".format(via.component.ID, to_params_MINT(via.component.params))
 
 
 def to_terminal_MINT(terminal: MINTTerminal) -> str:
@@ -118,4 +118,4 @@ def to_terminal_MINT(terminal: MINTTerminal) -> str:
     Returns:
         str: returns the via TERMINAL string fragment
     """
-    return "TERMINAL {} {};".format(terminal.name, terminal.port_number)
+    return "TERMINAL {} {};".format(terminal.component.name, terminal.port_number)

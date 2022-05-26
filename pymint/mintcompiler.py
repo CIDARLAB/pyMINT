@@ -99,8 +99,8 @@ class MINTCompiler(mintListener):
         self.current_params = {}
 
     def enterIntParam(self, ctx: mintParser.IntParamContext):
-        value = ctx.value().getText()
-        key = ctx.param_element().getText()
+        value = ctx.value().getText()  # type: ignore
+        key = ctx.param_element().getText()  # type: ignore
         self.current_params[key] = int(value)
 
     def enterBoolParam(self, ctx: mintParser.BoolParamContext):
@@ -112,15 +112,15 @@ class MINTCompiler(mintListener):
         self.current_params[key] = value
 
     def enterLengthParam(self, ctx: mintParser.LengthParamContext):
-        value = float(ctx.value().getText())
+        value = float(ctx.value().getText())  # type: ignore
         self.current_params["length"] = value
 
     def enterSpacingParam(self, ctx: mintParser.SpacingParamContext):
-        value = float(ctx.value().getText())
+        value = float(ctx.value().getText())  # type: ignore
         self.current_params["spacing"] = value
 
     def enterWidthParam(self, ctx: mintParser.WidthParamContext):
-        value = ctx.value().getText()
+        value = ctx.value().getText()  # type: ignore
         if ctx.key is None:
             raise AssertionError
         key = ctx.key.text
@@ -150,7 +150,7 @@ class MINTCompiler(mintListener):
             raise Exception("Could not find the technology for the pimitive")
 
         # Loop for each of the components that need to be created with this param
-        for ufname in ctx.ufnames().ufname():
+        for ufname in ctx.ufnames().ufname():  # type: ignore
             if self._current_layer is None:
                 raise Exception("Current layer is set to None")
             if not (
@@ -172,7 +172,7 @@ class MINTCompiler(mintListener):
         # Clean up the constraint specific params
         self._cleanup_bank_params()
 
-        for ufname in ctx.ufnames().ufname():
+        for ufname in ctx.ufnames().ufname():  # type: ignore
             component_name = ufname.getText()
             if self._current_layer is None:
                 raise AssertionError
@@ -194,7 +194,7 @@ class MINTCompiler(mintListener):
             raise AssertionError
         dim = int(ctx.dim.text)
 
-        name = ctx.ufname().getText()
+        name = ctx.ufname().getText()  # type: ignore
 
         for i in range(1, dim + 1):
             component_name = name + "_" + str(i)
@@ -220,7 +220,7 @@ class MINTCompiler(mintListener):
 
         self._cleanup_grid_params()
 
-        for ufname in ctx.ufnames().ufname():
+        for ufname in ctx.ufnames().ufname():  # type: ignore
             component_name = ufname.getText()
             if self._current_layer is None:
                 raise AssertionError
@@ -240,9 +240,9 @@ class MINTCompiler(mintListener):
         entity = self.current_entity
         if entity is None:
             entity = "CHANNEL"
-        connection_name = ctx.ufname().getText()
+        connection_name = ctx.ufname().getText()  # type: ignore
 
-        source_target = ctx.uftarget()[0]
+        source_target = ctx.uftarget()[0]  # type: ignore
         source_id = source_target.ID().getText()
         if self.current_device.component_exists(source_id) is False:
             raise Exception(
@@ -258,7 +258,7 @@ class MINTCompiler(mintListener):
         # source_uftarget = Target(component_id=source_id, port=source_port)
         source_uftarget = Target(component_id=source_id, port=source_port)
 
-        sink_target = ctx.uftarget()[1]
+        sink_target = ctx.uftarget()[1]  # type: ignore
         sink_id = sink_target.ID().getText()
         if self.current_device.component_exists(sink_id) is False:
             raise Exception(
@@ -292,12 +292,12 @@ class MINTCompiler(mintListener):
         if entity is None:
             entity = "NET"
 
-        connection_name = ctx.ufname().getText()
+        connection_name = ctx.ufname().getText()  # type: ignore
 
         source_target = ctx.uftarget()
-        source_id = source_target.ID().getText()
-        if source_target.INT():
-            source_port = source_target.INT().getText()
+        source_id = source_target.ID().getText()  # type: ignore
+        if source_target.INT():  # type: ignore
+            source_port = source_target.INT().getText()  # type: ignore
         else:
             source_port = None
 
@@ -305,7 +305,7 @@ class MINTCompiler(mintListener):
 
         sink_uftargets = []
 
-        for sink_target in ctx.uftargets().uftarget():
+        for sink_target in ctx.uftargets().uftarget():  # type: ignore
             sink_id = sink_target.ID().getText()
             if sink_target.INT():
                 sink_port = sink_target.INT().getText()
@@ -343,7 +343,7 @@ class MINTCompiler(mintListener):
             self.current_params["out"] = out_value
 
         # Loop for each of the components that need to be created with this param
-        for ufname in ctx.ufnames().ufname():
+        for ufname in ctx.ufnames().ufname():  # type: ignore
             if self._current_layer is None:
                 raise AssertionError
             self.current_device.create_mint_component(
@@ -363,7 +363,7 @@ class MINTCompiler(mintListener):
         # Loop for each of the components that need to be created with this param
         if not (self._current_layer is not None and self._current_layer.ID is not None):
             raise AssertionError
-        for ufname in ctx.ufnames().ufname():
+        for ufname in ctx.ufnames().ufname():  # type: ignore
             self.current_device.create_mint_component(
                 ufname.getText(),
                 entity,
@@ -381,7 +381,7 @@ class MINTCompiler(mintListener):
         if entity is None:
             logging.error("Could not find entitry information for valve")
             raise Exception("Could not find entitry information for valve")
-        valve_name = ctx.ufname()[0].getText()
+        valve_name = ctx.ufname()[0].getText()  # type: ignore
         if not (self._current_layer is not None and self._current_layer.ID is not None):
             raise AssertionError
         valve_component = self.current_device.create_mint_component(
@@ -390,7 +390,7 @@ class MINTCompiler(mintListener):
             self.current_params,
             [self._current_layer.ID],
         )
-        connection_name = ctx.ufname()[1].getText()
+        connection_name = ctx.ufname()[1].getText()  # type: ignore
         valve_connection = self.current_device.get_connection(connection_name)
         if valve_connection is None:
             raise Exception(

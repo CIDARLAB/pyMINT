@@ -60,7 +60,7 @@ class ConstraintListener(mintListener):
 
     def enterSetCoordinate(self, ctx: mintParser.SetCoordinateContext):
         coordinate_label = ctx.coordinate
-        coordinate_value = int(ctx.INT().getText())
+        coordinate_value = int(ctx.INT().getText())  # type: ignore
 
         if coordinate_label == "X":
             self._xpos = coordinate_value
@@ -80,13 +80,13 @@ class ConstraintListener(mintListener):
     def enterHorizontalSpacingParam(
         self, ctx: mintParser.HorizontalSpacingParamContext
     ):
-        self._horizontal_spacing = float(ctx.value().getText())
+        self._horizontal_spacing = float(ctx.value().getText())  # type: ignore
 
     def enterVerticalSpacingParam(self, ctx: mintParser.VerticalSpacingParamContext):
-        self._vertical_spacing = float(ctx.value().getText())
+        self._vertical_spacing = float(ctx.value().getText())  # type: ignore
 
     def enterSpacingParam(self, ctx: mintParser.SpacingParamContext):
-        self._spacing = float(ctx.value().getText())
+        self._spacing = float(ctx.value().getText())  # type: ignore
 
     def exitGridStat(self, ctx: mintParser.GridStatContext):
         xdim = 1
@@ -117,8 +117,8 @@ class ConstraintListener(mintListener):
 
     def exitBankStat(self, ctx: mintParser.BankStatContext):
         dim = 1
-        if ctx.dim is not None:
-            dim = int(ctx.dim.text)
+        if ctx.dim is not None:  # type: ignore
+            dim = int(ctx.dim.text)  # type: ignore
         else:
             logging.warning("No dimension found for BANK stat, setting dimension to 1")
         # We need to add all the parameters here
@@ -163,7 +163,8 @@ class ConstraintListener(mintListener):
             component_names = [
                 component.ID for component in self.current_device.components
             ]
-            # Check if theres a regex match against all the connection id's in component_name
+            # Check if theres a regex match against all the connection id's in
+            # component_name
             matches = map(
                 lambda x: re.match(f"{element_name}_\\d+(_\\d+)?", x), component_names
             )
@@ -225,8 +226,8 @@ class ConstraintListener(mintListener):
     def exitSpanStat(self, ctx: mintParser.SpanStatContext):
         for component in self._constrained_components:
             # Generate mirror constraints based on the in and out dimensins of span
-            in_size = int(ctx.indim.text)
-            out_size = int(ctx.outdim.text)
+            in_size = int(ctx.indim.text)  # type: ignore
+            out_size = int(ctx.outdim.text)  # type: ignore
 
             if in_size > 1:
                 self._mirror_constraint_driving_components.append(component)

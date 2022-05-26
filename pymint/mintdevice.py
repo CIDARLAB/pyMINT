@@ -11,9 +11,13 @@ from pymint.mintlayer import MINTLayerType
 from pymint.mintprotocol import MINTProtocol
 from pymint.mintterminal import MINTTerminal
 from pymint.mintvia import MINTVia
-from pymint.mintwriter import (to_component_MINT, to_connection_MINT,
-                               to_layer_MINT, to_target_MINT, to_terminal_MINT,
-                               to_valve_MINT, to_via_MINT)
+from pymint.mintwriter import (
+    to_component_MINT,
+    to_connection_MINT,
+    to_layer_MINT,
+    to_valve_MINT,
+    to_via_MINT,
+)
 
 
 class MINTDevice(Device, MINTProtocol):
@@ -156,7 +160,8 @@ class MINTDevice(Device, MINTProtocol):
             params (Dict): dictionary of the paraeters
             layer_ids (List[str]): list of layer ids
             connection (Connection): connection to attach the valve to
-            valve_type (ValveType, optional): valve type of the valve . Defaults to ValveType.NORMALLY_OPEN.
+            valve_type (ValveType, optional): valve type of the valve .
+            Defaults to ValveType.NORMALLY_OPEN.
 
         Raises:
             Exception: [description]
@@ -250,7 +255,7 @@ class MINTDevice(Device, MINTProtocol):
         layer = self.get_layer(layer_id)
         ret = MINTTerminal(name, pin_number, layer)
         self._terminals.append(ret)
-        self.components.append(ret)
+        self.device.components.append(ret.component)
         return ret
 
     def add_via(self, name: str, layers: List[Layer]) -> MINTVia:
@@ -266,7 +271,7 @@ class MINTDevice(Device, MINTProtocol):
         """
         ret = MINTVia(name, layers)
         self._vias.append(ret)
-        self.components.append(ret)
+        self.device.components.append(ret.component)
         return ret
 
     @staticmethod
