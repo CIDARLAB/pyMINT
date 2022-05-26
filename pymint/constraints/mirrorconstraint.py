@@ -1,9 +1,11 @@
-from typing import List, Optional, Tuple, Dict
+import queue
+from typing import Dict, List, Tuple
 
-from pymint.constraints.layoutconstraint import LayoutConstraint
-from parchmint import Component
+import networkx as nx
 
-from pymint import MINTDevice
+from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
+from pymint.mintcomponent import MINTComponent
+from pymint.mintdevice import MINTDevice
 
 
 class DistanceDictionaries:
@@ -323,14 +325,14 @@ class MirrorConstraint(LayoutConstraint):
 
     def __init__(
         self,
-        source_component: Component,
+        source_component: MINTComponent,
         mirror_count=None,
-        mirror_groups: List[List[Component]] = [],
+        mirror_groups: List[List[MINTComponent]] = [],
     ):
         """Create a new instance of the mirror constraint
 
         Args:
-            source_component (Component): source for the mirror component to search
+            source_component (MINTComponent): source for the mirror component to search
             for mirror groups
             mirror_count ([type], optional): number of mirror groups. Defaults to None.
         """
@@ -344,11 +346,11 @@ class MirrorConstraint(LayoutConstraint):
         for group in mirror_groups:
             self.add_group(group)
 
-    def add_group(self, components: List[Component]) -> None:
+    def add_group(self, components: List[MINTComponent]) -> None:
         """Adds the passed componets to a new group
 
         Args:
-            components (List[Component]): List of components that need to be in a
+            components (List[MINTComponent]): List of components that need to be in a
             mirror group
         """
         # self.__mirror_groups.append(components)
@@ -375,11 +377,11 @@ class MirrorConstraint(LayoutConstraint):
         self._relationship_map["mirror_count"] = value
 
     @property
-    def mirror_source(self) -> Component:
+    def mirror_source(self) -> MINTComponent:
         """Returns the mirror source component
 
         Returns:
-            Component: mirror source
+            MINTComponent: mirror source
         """
         return self._relationship_map["source"]
 
@@ -394,16 +396,16 @@ class MirrorConstraint(LayoutConstraint):
         self._relationship_map["source"] = value
 
     @property
-    def mirror_groups(self) -> List[List[Component]]:
+    def mirror_groups(self) -> List[List[MINTComponent]]:
         """Returns the mirror groups
 
         Returns:
-            List[List[Component]]: Mirror groups covered by the constraint
+            List[List[MINTComponent]]: Mirror groups covered by the constraint
         """
         return self._relationship_map["mirror_groups"]
 
     @mirror_groups.setter
-    def mirror_groups(self, value: List[List[Component]]):
+    def mirror_groups(self, value: List[List[MINTComponent]]):
         """Sets the mirror groups
 
         Args:
@@ -528,7 +530,7 @@ class MirrorConstraint(LayoutConstraint):
 
     @staticmethod
     def generate_constraints(
-        mirror_driving_components: List[Component], device: MINTDevice
+        mirror_driving_components: List[MINTComponent], device: MINTDevice
     ) -> None:
         """Generate the mirror constraints for the device
 

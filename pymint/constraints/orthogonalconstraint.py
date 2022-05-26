@@ -75,7 +75,11 @@ class OrthogonalConstraint(LayoutConstraint):
             List[Component]: list of components covered by the constraint
         """
         current_device = mint_device
+<<<<<<< HEAD
         G = mint_device.device.graph.to_undirected()
+=======
+        graph = mint_device.device.graph
+>>>>>>> Updated the codebase
         nodes = []
         nodes.append(component)
 
@@ -87,7 +91,7 @@ class OrthogonalConstraint(LayoutConstraint):
             Args:
                 root_node (str): node from which we need to do the traversal
             """
-            neighbors = list(nx.neighbors(G, root_node))
+            neighbors = list(nx.neighbors(graph, root_node))
             for neighbor in neighbors:
                 component = current_device.get_component(neighbor)
                 if component in nodes:

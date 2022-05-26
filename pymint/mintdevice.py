@@ -41,9 +41,9 @@ class MINTDevice(Device, MINTProtocol):
 
         self._device = Device() if device_ref is None else device_ref
 
-        self._layout_constraints = []
-        self._terminals = []
-        self._vias = []
+        self._layout_constraints: List[LayoutConstraint] = []
+        self._terminals: List[MINTTerminal] = []
+        self._vias: List[MINTVia] = []
 
     @property
     def device(self) -> Device:
@@ -203,14 +203,21 @@ class MINTDevice(Device, MINTProtocol):
 
         # Generate a valve list for the device
         valve_list = self.valves
+        via_list = [via.component for via in self._vias]
         full_layer_text = ""
+
+        # Generate Via Text
+        via_text = "\n".join([to_via_MINT(via) for via in self._vias])
+
         # Loop Over all the layers
         for layer in self.layers:
             componenttext = "\n".join(
                 [
                     to_component_MINT(item)
                     for item in self.components
-                    if item.layers[0] == layer and item not in valve_list
+                    if item.layers[0] == layer
+                    and item not in valve_list
+                    and item not in via_list
                 ]
             )
 
@@ -238,7 +245,7 @@ class MINTDevice(Device, MINTProtocol):
                 + "\n\n",
             )
 
-        full = "DEVICE {}\n\n{}".format(self.name, full_layer_text)
+        full = "DEVICE {}\n\n{}\n\n{}".format(self.name, via_text, full_layer_text)
         return full
 
     def add_terminal(self, name: str, pin_number: int, layer_id: str) -> MINTTerminal:

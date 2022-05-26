@@ -214,7 +214,7 @@ class ConstraintListener(mintListener):
                     .format(ctx.getText())
                 )
 
-            if self._checkIfComponentConstranied(component):
+            if self._check_if_component_constranied(component):
                 continue
 
             self._orthogonal_origin_candidates.append(component)
@@ -236,6 +236,7 @@ class ConstraintListener(mintListener):
                 self._mirror_constraint_driving_components.append(component)
 
     def exitLayerBlock(self, ctx: mintParser.LayerBlockContext):
+        # TODO: Fix how the mirror constraints are created
         MirrorConstraint.generate_constraints(
             self._mirror_constraint_driving_components, self.current_device
         )
@@ -247,7 +248,7 @@ class ConstraintListener(mintListener):
 
     # ------------ Helpers ----------
 
-    def _checkIfComponentConstranied(self, component: Component) -> bool:
+    def _check_if_component_constranied(self, component: Component) -> bool:
         found_flag = False
         for constraint in self.current_device.get_constraints():
             if isinstance(constraint, OrthogonalConstraint):

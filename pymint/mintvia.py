@@ -9,7 +9,7 @@ class MINTVia:
 
     """
 
-    def __init__(self, name: str, layers: List[Layer], width=float) -> None:
+    def __init__(self, name: str, layers: List[Layer], width: float = 0) -> None:
         """Creates a new instance of a Via
 
         Args:
