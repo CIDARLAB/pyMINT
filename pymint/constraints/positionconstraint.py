@@ -1,9 +1,14 @@
 from typing import Optional, Union
 
+<<<<<<< HEAD
 from parchmint.component import Component
 
 from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
 from pymint.mintcomponent import MINTComponent
+=======
+from pymint.constraints.constraint import LayoutConstraint
+from parchmint import Component
+>>>>>>> Updated Dependencies
 
 
 class PositionConstraint(LayoutConstraint):
@@ -11,7 +16,7 @@ class PositionConstraint(LayoutConstraint):
 
     def __init__(
         self,
-        component: MINTComponent,
+        component: Component,
         xpos: Optional[int],
         ypos: Optional[int],
         zpos: Optional[int],
@@ -19,7 +24,7 @@ class PositionConstraint(LayoutConstraint):
         """Returns the position constrinant
 
         Args:
-            component (MINTComponent): component covered by the constraint
+            component (Component): component covered by the constraint
             xpos (Optional[int]): x position value
             ypos (Optional[int]): y position value
             zpos (Optional[int]): z position value
@@ -31,14 +36,18 @@ class PositionConstraint(LayoutConstraint):
         self.zpos = zpos
         self._type = "POSITION_CONSTRAINT"
 
+<<<<<<< HEAD
     def get_component(self) -> Union[MINTComponent, Component]:
+=======
+    def get_component(self) -> Component:
+>>>>>>> Updated Dependencies
         """Returns the component constrained by the component
 
         Raises:
             Exception: if the component is not covered by the constraint
 
         Returns:
-            MINTComponent: returns the component covered by the constraint
+            Component: returns the component covered by the constraint
         """
         ret = self._components[0]
         if ret is None:

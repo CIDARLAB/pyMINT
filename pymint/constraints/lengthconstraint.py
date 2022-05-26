@@ -1,9 +1,7 @@
 from typing import List, Union
 
-from parchmint.connection import Connection
-
 from pymint.constraints.layoutconstraint import LayoutConstraint
-from pymint.mintconnection import MINTConnection
+from parchmint import Connection
 
 
 class LengthConstraint(LayoutConstraint):
@@ -12,11 +10,11 @@ class LengthConstraint(LayoutConstraint):
 
     """
 
-    def __init__(self, connection: MINTConnection, length: float) -> None:
+    def __init__(self, connection: Connection, length: float) -> None:
         """Creates a length constraint
 
         Args:
-            component (MINTComponent): component covered by the constraint
+            component (Component): component covered by the constraint
             length (float): length of the connection that needs to be fixed
         """
         super().__init__()
@@ -26,11 +24,11 @@ class LengthConstraint(LayoutConstraint):
         self.length = length
 
     @property
-    def connections(self) -> List[Union[MINTConnection, Connection]]:
+    def connections(self) -> List[Connection]:
         """Returns the component covered by the constraint
 
         Returns:
-            MINTComponent: constrained component
+            Component: constrained component
         """
         return self._connections
 

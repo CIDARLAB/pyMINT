@@ -1,5 +1,5 @@
 from parchmint import Component
-from pymint.constraints.constraint import LayoutConstraint
+from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
 
 
 class RotationConstraint(LayoutConstraint):
@@ -8,11 +8,11 @@ class RotationConstraint(LayoutConstraint):
 
     """
 
-    def __init__(self, component: MINTComponent, rotation: float) -> None:
+    def __init__(self, component: Component, rotation: float) -> None:
         """Creates a Rotation constraint
 
         Args:
-            component (MINTComponent): Component to be covered by the constraint
+            component (Component): Component to be covered by the constraint
             rotation (float): rotation fixed by the constraint
         """
         super().__init__(OperationType.EXPLICIT_OPERATION)
@@ -21,11 +21,11 @@ class RotationConstraint(LayoutConstraint):
         self._type = "ROTATION_CONSTRAINT"
 
     @property
-    def component(self) -> Union[MINTComponent, Component]:
+    def component(self) -> Component:
         """Returns the component covered by the constraint
 
         Returns:
-            MINTComponent: constrianed component
+            Component: constrianed component
         """
         return self._components[0]
 

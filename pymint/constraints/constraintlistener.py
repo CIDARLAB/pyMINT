@@ -12,8 +12,9 @@ from pymint.constraints.orientationconstraint import (
 )
 from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
 from pymint.constraints.positionconstraint import PositionConstraint
-from pymint.mintcomponent import MINTComponent
-from pymint.mintdevice import MINTDevice
+from parchmint import Component
+from pymint import MINTDevice
+import re
 
 
 class ConstraintListener(mintListener):
@@ -174,9 +175,8 @@ class ConstraintListener(mintListener):
                     break
             else:
                 print(
-                    'Could not find component or connection with the ID "{}" in device'.format(
-                        element_name
-                    )
+                    'Could not find component or connection with the ID "{}" in device'
+                    .format(element_name)
                 )
                 raise Exception(
                     f"Component {element_name} not found while processing constraint"
@@ -209,9 +209,8 @@ class ConstraintListener(mintListener):
         for component in self._constrained_components:
             if component is None:
                 raise Exception(
-                    "Could not apply Orthogonal Constraint, {} component not found !".format(
-                        ctx.getText()
-                    )
+                    "Could not apply Orthogonal Constraint, {} component not found !"
+                    .format(ctx.getText())
                 )
 
             if self._checkIfComponentConstranied(component):
@@ -247,7 +246,7 @@ class ConstraintListener(mintListener):
 
     # ------------ Helpers ----------
 
-    def _checkIfComponentConstranied(self, component: MINTComponent) -> bool:
+    def _checkIfComponentConstranied(self, component: Component) -> bool:
         found_flag = False
         for constraint in self.current_device.get_constraints():
             if isinstance(constraint, OrthogonalConstraint):
