@@ -19,7 +19,7 @@ class MINTCompiler(mintListener):
         self.flow_layer_count = 0
         self.control_layer_count = 0
         self.integration_layer_count = 0
-        self.current_entity: Optional[str]
+        self.current_entity: Optional[str] = None
         self.current_params = {}
         self._current_layer: Optional[MINTLayer] = None
 
@@ -254,7 +254,7 @@ class MINTCompiler(mintListener):
         else:
             source_port = None
 
-        source_uftarget = MINTTarget(source_id, source_port)
+        source_uftarget = Target({"component": source_id, "port": source_port})
 
         sink_target = ctx.uftarget()[1]
         sink_id = sink_target.ID().getText()
@@ -269,7 +269,7 @@ class MINTCompiler(mintListener):
         else:
             sink_port = None
 
-        sink_uftarget = MINTTarget(sink_id, sink_port)
+        sink_uftarget = Target({"component": sink_id, "port": sink_port})
 
         self._cleanup_CHANNEL_params()
 
@@ -299,7 +299,7 @@ class MINTCompiler(mintListener):
         else:
             source_port = None
 
-        source_uftarget = MINTTarget(source_id, source_port)
+        source_uftarget = Target({"component": source_id, "port": source_port})
 
         sink_uftargets = []
 
@@ -310,7 +310,7 @@ class MINTCompiler(mintListener):
             else:
                 sink_port = None
 
-            sink_uftargets.append(MINTTarget(sink_id, sink_port))
+            sink_uftargets.append(Target({"component": sink_id, "port": sink_port}))
         if not (self._current_layer is not None and self._current_layer.ID is not None):
             raise AssertionError
         self.current_device.create_mint_connection(

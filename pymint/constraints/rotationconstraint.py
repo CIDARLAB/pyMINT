@@ -1,9 +1,5 @@
-from typing import Union
-
-from parchmint.component import Component
-
-from pymint import MINTComponent
-from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
+from parchmint import Component
+from pymint.constraints.constraint import LayoutConstraint
 
 
 class RotationConstraint(LayoutConstraint):

@@ -1,10 +1,11 @@
+from typing import Dict
 import pytest
 from parchmint import Layer
 from parchmint.device import Device
 
 
 @pytest.fixture
-def params_dict():
+def params_dict() -> Dict:
     ret = {
         "channelWidth": 1000,
         "rotation": 25,
@@ -14,19 +15,19 @@ def params_dict():
 
 
 @pytest.fixture
-def layer(layer_dict):
+def layer(layer_dict) -> Layer:
     return Layer(layer_dict)
 
 
 @pytest.fixture
-def device(layer):
+def device(layer) -> Device:
     device = Device()
     device.add_layer(layer)
     return device
 
 
 @pytest.fixture
-def layer_dict(params_dict):
+def layer_dict(params_dict) -> Dict:
     ret = {
         "name": "flow_1",
         "id": "FLOW_1",
@@ -40,7 +41,7 @@ def layer_dict(params_dict):
 @pytest.fixture
 def device_dict(
     component_dict, connection_dict, feature_dict, layer_dict, valve1_dict, valve2_dict
-):
+) -> Dict:
     ret = {
         "name": "dev1",
         "params": {

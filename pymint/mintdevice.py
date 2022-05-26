@@ -4,6 +4,8 @@ import sys
 from typing import Dict, List, Optional, Union
 from parchmint.component import Component
 from parchmint.connection import Connection
+
+from parchmint import Component, Connection, Layer, Target, Params
 from parchmint.device import Device, ValveType
 
 from pymint.constraints.layoutconstraint import LayoutConstraint
@@ -67,9 +69,11 @@ class MINTDevice(Device, MINTProtocol):
         # Retrieve the correct layer:
         layers = []
         for layer_id in layer_ids:
-            layers.append(super().get_layer(layer_id))
-        component = MINTComponent(name, technology, params, layers)
-        super().add_component(component)
+            layers.append(self._device.get_layer(layer_id))
+        component = Component(
+            name=name, ID=name, layers=layers, params=Params(params), entity=technology
+        )
+        self._device.add_component(component)
         return component
 
     def create_mint_connection(
@@ -102,8 +106,16 @@ class MINTDevice(Device, MINTProtocol):
             raise Exception("Cannot create new MINT connection with invalid layer")
         if layer is None:
             raise Exception("Layer is None")
-        connection = MINTConnection(name, technology, params, source, sinks, layer)
-        self.add_connection(connection)
+        connection = Connection(
+            name=name,
+            ID=name,
+            entity=technology,
+            source=source,
+            sinks=sinks,
+            params=Params(params),
+            layer=layer,
+        )
+        self._device.add_connection(connection)
         return connection
 
     def create_mint_layer(
@@ -121,8 +133,12 @@ class MINTDevice(Device, MINTProtocol):
             MINTLayer: [description]
         """
         name = "{}_{}".format(str(MINTLayerType.FLOW), name_postfix)
-        layer = MINTLayer(id, name, group, layer_type)
-        super().add_layer(layer)
+        layer = Layer()
+        layer.ID = name
+        layer.name = name
+        layer.group = group
+        layer.type = str(layer_type)
+        self._device.add_layer(layer)
         return layer
 
     def create_valve(
