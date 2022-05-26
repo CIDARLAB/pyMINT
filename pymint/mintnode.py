@@ -1,9 +1,7 @@
-from typing import Union
-
-from parchmint.layer import Layer
+from parchmint import Component, Layer, Port
 
 
-class MINTNode(Component):
+class MINTNode:
     """NODE object that is considered a waypoint in the design
     however this is modelled as a component in Parchmint v1.
 
@@ -19,13 +17,21 @@ class MINTNode(Component):
             name (str): name of the node
             layer (str, optional): [description].
         """
-        super(MINTNode, self).__init__(name, "NODE", {}, [layer])
+        self._component = Component(
+            name=name,
+            ID=name,
+            layers=[layer],
+            ports_list=[Port(label="1", layer="FLOW", x=0, y=0)],
+            xspan=0,
+            yspan=0,
+            entity="NODE",
+        )
 
-    def to_MINT(self) -> str:
-        """Returns the MINT for the NODE
+    @property
+    def component(self) -> Component:
+        """Returns the component object
 
         Returns:
-            str: [description]
+            Component: component object
         """
-        ret = "NODE {};".format(self.name)
-        return ret
+        return self._component

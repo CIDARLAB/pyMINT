@@ -1,8 +1,13 @@
 from typing import List, Optional, Tuple, Dict
 
+<<<<<<< HEAD
 from pymint.constraints.layoutconstraint import LayoutConstraint
+=======
+>>>>>>> Ran isort and cleaned up stuff
 from parchmint import Component
+
 from pymint import MINTDevice
+from pymint.constraints.constraint import LayoutConstraint
 
 
 class DistanceDictionaries:

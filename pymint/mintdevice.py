@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import sys
 from typing import Dict, List, Optional
-from parchmint import Component, Connection, Layer, Target, Params
+
+from parchmint import Component, Connection, Layer, Params, Target
 from parchmint.device import Device, ValveType
 
 from pymint.constraints.constraint import LayoutConstraint
@@ -10,7 +11,9 @@ from pymint.mintlayer import MINTLayerType
 from pymint.mintprotocol import MINTProtocol
 from pymint.mintterminal import MINTTerminal
 from pymint.mintvia import MINTVia
-from pymint.mintwriter import to_valve_MINT, to_layer_MINT, to_component_MINT, to_connection_MINT, to_target_MINT, to_terminal_MINT, to_via_MINT    
+from pymint.mintwriter import (to_component_MINT, to_connection_MINT,
+                               to_layer_MINT, to_target_MINT, to_terminal_MINT,
+                               to_valve_MINT, to_via_MINT)
 
 
 class MINTDevice(Device, MINTProtocol):
@@ -217,14 +220,17 @@ class MINTDevice(Device, MINTProtocol):
                 )
 
             connectiontext = "\n".join(
-                [to_connection_MINT(item) for item in self.connections if item.layer == layer]
+                [
+                    to_connection_MINT(item)
+                    for item in self.connections
+                    if item.layer == layer
+                ]
             )
 
-            full_layer_text += (
-                to_layer_MINT(layer,
-                    "{}\n\n{}\n\n{}".format(componenttext, valvetext, connectiontext
-                )
-                + "\n\n"
+            full_layer_text += to_layer_MINT(
+                layer,
+                "{}\n\n{}\n\n{}".format(componenttext, valvetext, connectiontext)
+                + "\n\n",
             )
 
         full = "DEVICE {}\n\n{}".format(self.name, full_layer_text)

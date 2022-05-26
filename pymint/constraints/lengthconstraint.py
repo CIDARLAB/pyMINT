@@ -1,5 +1,3 @@
-from typing import List, Union
-
 from pymint.constraints.layoutconstraint import LayoutConstraint
 from parchmint import Connection
 

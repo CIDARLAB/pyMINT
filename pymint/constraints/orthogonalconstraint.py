@@ -1,10 +1,10 @@
 from typing import List
 
 import networkx as nx
-
-from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
 from parchmint import Component
+
 from pymint import MINTDevice
+from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
 
 
 class OrthogonalConstraint(LayoutConstraint):

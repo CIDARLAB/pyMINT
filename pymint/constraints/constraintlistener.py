@@ -2,19 +2,17 @@ import logging
 import re
 from typing import List
 
+from parchmint import Component
+
+from pymint import MINTDevice
 from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
 from pymint.constraints.arrayconstraint import ArrayConstraint
 from pymint.constraints.mirrorconstraint import MirrorConstraint
-from pymint.constraints.orientationconstraint import (
-    ComponentOrientation,
-    OrientationConstraint,
-)
+from pymint.constraints.orientationconstraint import (ComponentOrientation,
+                                                      OrientationConstraint)
 from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
 from pymint.constraints.positionconstraint import PositionConstraint
-from parchmint import Component
-from pymint import MINTDevice
-import re
 
 
 class ConstraintListener(mintListener):
@@ -175,8 +173,9 @@ class ConstraintListener(mintListener):
                     break
             else:
                 print(
-                    'Could not find component or connection with the ID "{}" in device'
-                    .format(element_name)
+                    'Could not find component or connection with the ID "{}" in device'.format(
+                        element_name
+                    )
                 )
                 raise Exception(
                     f"Component {element_name} not found while processing constraint"
@@ -209,8 +208,9 @@ class ConstraintListener(mintListener):
         for component in self._constrained_components:
             if component is None:
                 raise Exception(
-                    "Could not apply Orthogonal Constraint, {} component not found !"
-                    .format(ctx.getText())
+                    "Could not apply Orthogonal Constraint, {} component not found !".format(
+                        ctx.getText()
+                    )
                 )
 
             if self._checkIfComponentConstranied(component):

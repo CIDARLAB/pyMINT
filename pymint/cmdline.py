@@ -1,14 +1,14 @@
 import json
 import os
 import pathlib
-from typing import List
-import pyfiglet
-import click
 from pathlib import Path
+from typing import List
+
+import click
 import networkx as nx
+import pyfiglet
 
 from pymint.mintdevice import MINTDevice
-
 
 OUTPUT_DIR = pathlib.Path(os.getcwd())
 

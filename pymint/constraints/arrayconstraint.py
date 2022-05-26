@@ -1,7 +1,8 @@
 from typing import List
 
-from pymint.constraints.constraint import LayoutConstraint
 from parchmint import Component
+
+from pymint.constraints.constraint import LayoutConstraint
 
 
 class ArrayConstraint(LayoutConstraint):
