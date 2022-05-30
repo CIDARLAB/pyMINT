@@ -6,7 +6,7 @@ from typing import Dict, List, Optional
 from parchmint import Component, Connection, Layer, Params, Target
 from parchmint.device import Device, ValveType
 
-from pymint.constraints.constraint import LayoutConstraint
+from pymint.constraints.layoutconstraint import LayoutConstraint
 from pymint.mintlayer import MINTLayerType
 from pymint.mintprotocol import MINTProtocol
 from pymint.mintterminal import MINTTerminal
