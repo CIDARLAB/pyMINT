@@ -84,7 +84,6 @@ def array_constraint_json():
         "components": ["c1", "c2", "c3", "c4"],
         "connections": [],
         "params": {
-            "is1D": True,
             "horizontalSpacing": 500,
             "verticalSpacing": 500,
             "xdim": 2,

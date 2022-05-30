@@ -1,6 +1,7 @@
+from parchmint import Component, Layer, Params
+
 from pymint.constraints.positionconstraint import PositionConstraint
 from pymint.mintlayer import MINTLayerType
-from parchmint import Layer, Component, Params
 
 
 def test_to_parchmint_v1_x(position_constraint_json):

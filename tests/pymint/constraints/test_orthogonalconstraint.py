@@ -1,5 +1,6 @@
-from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
 from parchmint import Component, Layer, Params
+
+from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
 from pymint.mintlayer import MINTLayerType
 
 

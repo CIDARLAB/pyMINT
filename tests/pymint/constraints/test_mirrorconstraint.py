@@ -1,5 +1,6 @@
-from pymint.constraints.mirrorconstraint import MirrorConstraint
 from parchmint import Component, Layer, Params
+
+from pymint.constraints.mirrorconstraint import MirrorConstraint
 from pymint.mintlayer import MINTLayerType
 
 

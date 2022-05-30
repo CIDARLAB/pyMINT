@@ -1,5 +1,6 @@
+from parchmint import Connection, Layer, Params, Target
+
 from pymint.constraints.lengthconstraint import LengthConstraint
-from parchmint import Layer, Connection, Params, Target
 from pymint.mintlayer import MINTLayerType
 
 

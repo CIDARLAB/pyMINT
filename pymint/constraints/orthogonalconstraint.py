@@ -75,7 +75,7 @@ class OrthogonalConstraint(LayoutConstraint):
             List[Component]: list of components covered by the constraint
         """
         current_device = mint_device
-        graph = mint_device.device.graph
+        graph = mint_device.device.graph.copy().to_undirected()
         nodes = []
         nodes.append(component)
 

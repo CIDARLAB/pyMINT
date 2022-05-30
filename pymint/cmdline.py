@@ -59,11 +59,17 @@ def printgraph(G, filename: str) -> None:
     print("output:", str(tt.absolute()))
     nx.nx_agraph.to_agraph(G).write(str(tt.absolute()))
 
-    os.system("dot -Tpdf {} -o {}.pdf".format(str(tt.absolute()), pathlib.Path(OUTPUT_DIR).joinpath(tt.stem)))
+    os.system(
+        "dot -Tpdf {} -o {}.pdf".format(
+            str(tt.absolute()), pathlib.Path(OUTPUT_DIR).joinpath(tt.stem)
+        )
+    )
 
 
 @click.command()
-@click.option("--version", is_flag=True, callback=print_version, expose_value=False, is_eager=True)
+@click.option(
+    "--version", is_flag=True, callback=print_version, expose_value=False, is_eager=True
+)
 @click.argument(
     "input_files",
     nargs=-1,

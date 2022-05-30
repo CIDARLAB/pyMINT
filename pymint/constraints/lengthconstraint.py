@@ -1,6 +1,8 @@
 from typing import List
-from pymint.constraints.layoutconstraint import LayoutConstraint
+
 from parchmint import Connection
+
+from pymint.constraints.layoutconstraint import LayoutConstraint
 
 
 class LengthConstraint(LayoutConstraint):

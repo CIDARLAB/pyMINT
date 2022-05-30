@@ -50,7 +50,7 @@ jobs:
       - name: Run isort
         run: poetry run isort . --check-only
       - name: Run pylint
-        run: poetry run pylint --rcfile=pylintrc `find parchmint -type f -name '*.py'`
+        run: poetry run pylint --rcfile=.pylintrc `find pymint -type f -name '*.py'`
       # - name: Run flake8
       #   run: poetry run flake8 .
       # - name: Run bandit
