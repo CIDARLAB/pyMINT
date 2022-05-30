@@ -46,9 +46,7 @@ def layer_dict(params_dict) -> Dict:
 
 
 @pytest.fixture
-def device_dict(
-    component_dict, connection_dict, feature_dict, layer_dict, valve1_dict, valve2_dict
-) -> Dict:
+def device_dict(component_dict, connection_dict, feature_dict, layer_dict, valve1_dict, valve2_dict) -> Dict:
     ret = {
         "name": "dev1",
         "params": {
@@ -84,7 +82,6 @@ def array_constraint_json():
         "components": ["c1", "c2", "c3", "c4"],
         "connections": [],
         "params": {
-            "is1D": True,
             "horizontalSpacing": 500,
             "verticalSpacing": 500,
             "xdim": 2,

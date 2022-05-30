@@ -353,7 +353,6 @@
     ],
     "features": [],
     "version": "1.2",
-    "valveMap": {},
-    "valveTypeMap": {},
+    "valves": [],
     "layoutConstraints": []
 }
