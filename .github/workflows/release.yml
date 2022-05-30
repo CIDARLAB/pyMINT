@@ -1,36 +1,42 @@
 name: Release
-
 on:
-  push:
-    tags:
-      - "*.*.*"
+  release:
+    types:
+      - created
 
 jobs:
-  Release:
+  docs:
+    needs: [test]
     runs-on: ubuntu-latest
-
     steps:
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: 1.1.1
-          virtualenvs-create: false
-
-      - name: Get tag
-        id: tag
-        run: |
-          echo ::set-output name=tag::${GITHUB_REF#refs/tags/}
-      - name: Checkout Code
       - uses: actions/checkout@v2
+      - uses: ammaraskar/sphinx-action@master
         with:
-          ref: ${{ steps.get_tag_name.outputs.tag }}
-      - name: Publish to PyPI
+          docs-folder: "docs/"
+      - uses: actions/upload-artifact@v1
+        with:
+          name: DocumentationHTML
+          path: docs/_build/html/
+  publish:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.8]
+        poetry-version: [1.1.1]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run image
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: Publish
         env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: |
-          source $HOME/.poetry/env
-          poetry run poetry publish
+          poetry config pypi-token.pypi $PYPI_TOKEN
+          poetry publish --build
