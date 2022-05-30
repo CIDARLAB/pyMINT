@@ -1,4 +1,5 @@
 import logging
+import re
 from typing import List
 
 from pymint.antlrgen.mintListener import mintListener
@@ -13,7 +14,6 @@ from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
 from pymint.constraints.positionconstraint import PositionConstraint
 from pymint.mintcomponent import MINTComponent
 from pymint.mintdevice import MINTDevice
-import re
 
 
 class ConstraintListener(mintListener):
@@ -30,7 +30,7 @@ class ConstraintListener(mintListener):
         self._constrained_components = []
 
         # Temporary storage for mirrored components source
-        self._mirror_constraints = []
+        self._mirror_constraint_driving_components = []
 
         # Temporary store for position constraints
         self._xpos = None
@@ -47,6 +47,8 @@ class ConstraintListener(mintListener):
 
         # Global Relative Orientation Constraints
         self._global_relative_operations: List[OrientationConstraint] = []
+
+        self._orthogonal_origin_candidates = []
 
     def enterPositionConstraintStat(
         self, ctx: mintParser.PositionConstraintStatContext
@@ -125,6 +127,15 @@ class ConstraintListener(mintListener):
 
         self.current_device.add_constraint(constraint)
 
+    def exitBankDeclStat(self, ctx: mintParser.BankDeclStatContext):
+        contraint = ArrayConstraint(
+            self._constrained_components,
+            len(self._constrained_components),
+            horizontal_spacing=self._spacing,
+        )
+
+        self.current_device.add_constraint(contraint)
+
     def enterOrientation(self, ctx: mintParser.OrientationContext):
         if ctx.getText() == "H":
             self._orientation = ComponentOrientation.HORIZONTAL
@@ -163,8 +174,9 @@ class ConstraintListener(mintListener):
                     break
             else:
                 print(
-                    'Could not find component or connection with the ID "{}" in device'
-                    .format(element_name)
+                    'Could not find component or connection with the ID "{}" in device'.format(
+                        element_name
+                    )
                 )
                 raise Exception(
                     f"Component {element_name} not found while processing constraint"
@@ -197,22 +209,15 @@ class ConstraintListener(mintListener):
         for component in self._constrained_components:
             if component is None:
                 raise Exception(
-                    "Could not apply Orthogonal Constraint, {} component not found !"
-                    .format(ctx.getText())
+                    "Could not apply Orthogonal Constraint, {} component not found !".format(
+                        ctx.getText()
+                    )
                 )
 
             if self._checkIfComponentConstranied(component):
                 continue
 
-            # TODO: check if component exists in any of the of existing constraints
-            components = OrthogonalConstraint.traverse_node_component_neighbours(
-                component, self.current_device
-            )
-            constraint = OrthogonalConstraint(components)
-            self.current_device.add_constraint(constraint)
-
-        # TODO: Add all the components onto the list and create the constraint
-        pass
+            self._orthogonal_origin_candidates.append(component)
 
     def exitChannelStat(self, ctx: mintParser.ChannelStatContext):
         # TODO - If length constraints exists, create them here
@@ -224,23 +229,21 @@ class ConstraintListener(mintListener):
             in_size = int(ctx.indim.text)
             out_size = int(ctx.outdim.text)
 
-            if in_size != 1:
-                constraint = MirrorConstraint(component, in_size)
-                self._mirror_constraints.append(constraint)
+            if in_size > 1:
+                self._mirror_constraint_driving_components.append(component)
 
-            if out_size != 1:
-                constraint = MirrorConstraint(component, out_size)
-                self._mirror_constraints.append(constraint)
+            if out_size > 1:
+                self._mirror_constraint_driving_components.append(component)
 
     def exitLayerBlock(self, ctx: mintParser.LayerBlockContext):
-        for constraint in self._mirror_constraints:
-            if not isinstance(constraint, MirrorConstraint):
-                raise AssertionError
-            try:
-                constraint.find_mirror_candidates(self.current_device)
-                self.current_device.add_constraint(constraint)
-            except Exception as e:
-                print(e)
+        MirrorConstraint.generate_constraints(
+            self._mirror_constraint_driving_components, self.current_device
+        )
+
+    def exitNetlist(self, ctx: mintParser.NetlistContext):
+        OrthogonalConstraint.generate_constraints(
+            self._orthogonal_origin_candidates, self.current_device
+        )
 
     # ------------ Helpers ----------
 

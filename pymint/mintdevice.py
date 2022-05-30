@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import sys
 from typing import List, Union
+
 from parchmint.component import Component
 from parchmint.connection import Connection
-
 from parchmint.device import Device, ValveType
 
-from pymint.constraints.constraint import LayoutConstraint
+from pymint.constraints.layoutconstraint import LayoutConstraint
 from pymint.mintcomponent import MINTComponent
 from pymint.mintconnection import MINTConnection
 from pymint.mintlayer import MINTLayer, MINTLayerType
@@ -102,10 +102,10 @@ class MINTDevice(Device):
         """[summary]
 
         Args:
-            id (str): [description]
-            name_postfix (str): [description]
-            group ([type]): [description]
-            layer_type (MINTLayerType): [description]
+            id (str): id of the mint layer
+            name_postfix (str): postfix to add to the layer name
+            group ([type]): group the layer belongs to
+            layer_type (MINTLayerType): layer type of the layer
 
         Returns:
             MINTLayer: [description]
@@ -242,22 +242,6 @@ class MINTDevice(Device):
         self.components.append(ret)
         return ret
 
-    def to_parchmint_v1(self) -> dict:
-        """Returns the Parchmint Version 1.0 in the form of a dictionary
-
-        Returns:
-            dict: dictionary representing the json datastructure
-        """
-        ret = {}
-        ret["name"] = self.name
-        ret["components"] = [c.to_parchmint_v1() for c in self.components]
-        ret["connections"] = [c.to_parchmint_v1() for c in self.connections]
-        ret["params"] = self.params.to_parchmint_v1()
-        ret["layers"] = [layer.to_parchmint_v1() for layer in self.layers]
-        ret["version"] = 1
-
-        return ret
-
     @staticmethod
     def to_valve_MINT(
         component: Union[MINTComponent, Component],
@@ -277,6 +261,14 @@ class MINTDevice(Device):
         return "{} {} on {} {};".format(
             component.entity, component.ID, connection.ID, component.params.to_MINT()
         )
+
+    def to_parchmint_json(self) -> dict:
+        parchmint_json = self.to_parchmint_v1_x()
+        # Generate json from all the layout constraints
+        parchmint_json["layoutConstraints"] = [
+            constraint.to_parchmint_v1_x() for constraint in self._layout_constraints
+        ]
+        return parchmint_json
 
     @staticmethod
     def from_mint_file(filepath: str, skip_constraints: bool = False) -> MINTDevice:

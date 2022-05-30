@@ -1,5 +1,4 @@
 import pytest
-
 from parchmint import Layer
 from parchmint.device import Device
 
@@ -65,5 +64,111 @@ def device_dict(
             "valve2": "NORMALLY_CLOSED",
         },
         "version": "1.2",
+    }
+    return ret
+
+
+@pytest.fixture
+def array_constraint_json():
+    ret = {
+        "type": "ARRAY_CONSTRAINT",
+        "operation_type": "ALIGNMENT_OPERATION",
+        "components": ["c1", "c2", "c3", "c4"],
+        "connections": [],
+        "params": {
+            "is1D": True,
+            "horizontalSpacing": 500,
+            "verticalSpacing": 500,
+            "xdim": 2,
+            "ydim": 1,
+        },
+        "relationships": {},
+    }
+    return ret
+
+
+@pytest.fixture
+def length_constraint_json():
+    ret = {
+        "type": "LENGTH_CONSTRAINT",
+        "operation_type": "CUTSOM_OPERATION",
+        "components": [],
+        "connections": ["mcon1"],
+        "params": {"length": 5000},
+        "relationships": {},
+    }
+    return ret
+
+
+@pytest.fixture
+def mirror_constraint_json():
+    ret = {
+        "type": "MIRROR_CONSTRAINT",
+        "operation_type": "SYMMETRY_OPERATION",
+        "components": ["c1", "c2", "c3", "c4"],
+        "connections": [],
+        "params": {},
+        "relationships": {
+            "source": "source",
+            "mirror_count": 2,
+            "mirror_groups": [["c1", "c2"], ["c3", "c4"]],
+        },
+    }
+    return ret
+
+
+@pytest.fixture
+def orientation_constraint_json():
+    ret = {
+        "type": "ORIENTATION_CONSTRAINT",
+        "operation_type": "RELATIVE_OPERATIONS",
+        "components": ["c1", "c2", "c3", "c4"],
+        "connections": [],
+        "params": {},
+        "relationships": {
+            "c1": "HORIZONTAL",
+            "c2": "VERTICAL",
+            "c3": "HORIZONTAL",
+            "c4": "VERTICAL",
+        },
+    }
+    return ret
+
+
+@pytest.fixture
+def position_constraint_json():
+    ret = {
+        "type": "POSITION_CONSTRAINT",
+        "operation_type": "EXPLICIT_OPERATION",
+        "components": ["source"],
+        "connections": [],
+        "params": {"xpos": 500, "ypos": 500, "zpos": 500},
+        "relationships": {},
+    }
+    return ret
+
+
+@pytest.fixture
+def rotation_constraint_json():
+    ret = {
+        "type": "ROTATION_CONSTRAINT",
+        "operation_type": "EXPLICIT_OPERATION",
+        "components": ["source"],
+        "connections": [],
+        "params": {"rotation": 90},
+        "relationships": {},
+    }
+    return ret
+
+
+@pytest.fixture
+def orthogonal_constraint_json():
+    ret = {
+        "type": "ORTHOGONAL_CONSTRAINT",
+        "operation_type": "ALIGNMENT_OPERATION",
+        "components": ["source", "c1", "c2", "c3", "c4"],
+        "connections": [],
+        "params": {},
+        "relationships": {},
     }
     return ret

@@ -4,7 +4,19 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
+
+        {
+            "name": "Debug - MINT Customfile",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/pymint/cmdline.py",
+            "args": [
+                "--outpath",
+                "./out/",
+                "${file}"
+            ],
+            "console": "integratedTerminal"
+        },
 
         {
             "name": "Python: Current File",

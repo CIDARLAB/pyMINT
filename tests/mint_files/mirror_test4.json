@@ -1,0 +1,359 @@
+{
+    "name": "mirror_test4",
+    "components": [
+        {
+            "name": "p_in1",
+            "id": "p_in1",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "p_out1",
+            "id": "p_out1",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "p_out2",
+            "id": "p_out2",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "p_out3",
+            "id": "p_out3",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "p_out4",
+            "id": "p_out4",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "t1",
+            "id": "t1",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "in": 1,
+                "out": 4,
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "TREE",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "lct1",
+            "id": "lct1",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "LONG CELL TRAP",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "lct2",
+            "id": "lct2",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "LONG CELL TRAP",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "lct3",
+            "id": "lct3",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "LONG CELL TRAP",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "m1",
+            "id": "m1",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "MIXER",
+            "x-span": -1,
+            "y-span": -1
+        }
+    ],
+    "connections": [
+        {
+            "sinks": [
+                {
+                    "component": "t1",
+                    "port": "1"
+                }
+            ],
+            "name": "c_in1",
+            "id": "c_in1",
+            "source": {
+                "component": "p_in1",
+                "port": null
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "lct1",
+                    "port": null
+                }
+            ],
+            "name": "c_lct1",
+            "id": "c_lct1",
+            "source": {
+                "component": "t1",
+                "port": "2"
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "lct2",
+                    "port": null
+                }
+            ],
+            "name": "c_lct2",
+            "id": "c_lct2",
+            "source": {
+                "component": "t1",
+                "port": "3"
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "lct3",
+                    "port": null
+                }
+            ],
+            "name": "c_lct3",
+            "id": "c_lct3",
+            "source": {
+                "component": "t1",
+                "port": "4"
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "m1",
+                    "port": null
+                }
+            ],
+            "name": "c_m1",
+            "id": "c_m1",
+            "source": {
+                "component": "t1",
+                "port": "5"
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "p_out1",
+                    "port": null
+                }
+            ],
+            "name": "c_out1",
+            "id": "c_out1",
+            "source": {
+                "component": "lct1",
+                "port": null
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "p_out2",
+                    "port": null
+                }
+            ],
+            "name": "c_out2",
+            "id": "c_out2",
+            "source": {
+                "component": "lct2",
+                "port": null
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "p_out3",
+                    "port": null
+                }
+            ],
+            "name": "c_out3",
+            "id": "c_out3",
+            "source": {
+                "component": "lct3",
+                "port": null
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "p_out4",
+                    "port": null
+                }
+            ],
+            "name": "c_out4",
+            "id": "c_out4",
+            "source": {
+                "component": "m1",
+                "port": null
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        }
+    ],
+    "params": {
+        "x-span": null,
+        "y-span": null
+    },
+    "layers": [
+        {
+            "name": "FLOW_0",
+            "id": "0",
+            "type": "FLOW",
+            "params": {},
+            "group": "0"
+        }
+    ],
+    "features": [],
+    "version": "1.2",
+    "valveMap": {},
+    "valveTypeMap": {},
+    "layoutConstraints": []
+}

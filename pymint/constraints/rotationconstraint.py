@@ -1,5 +1,9 @@
+from typing import Union
+
+from parchmint.component import Component
+
 from pymint import MINTComponent
-from pymint.constraints.constraint import LayoutConstraint
+from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
 
 
 class RotationConstraint(LayoutConstraint):
@@ -15,12 +19,13 @@ class RotationConstraint(LayoutConstraint):
             component (MINTComponent): Component to be covered by the constraint
             rotation (float): rotation fixed by the constraint
         """
-        super().__init__()
+        super().__init__(OperationType.EXPLICIT_OPERATION)
         self._components.append(component)
-        self.__rotation = rotation
+        self.rotation = rotation
+        self._type = "ROTATION_CONSTRAINT"
 
     @property
-    def component(self) -> MINTComponent:
+    def component(self) -> Union[MINTComponent, Component]:
         """Returns the component covered by the constraint
 
         Returns:
@@ -35,4 +40,16 @@ class RotationConstraint(LayoutConstraint):
         Returns:
             float: rotation value
         """
-        return self.__rotation
+        if self._params.exists("rotation"):
+            return self._params.get_param("rotation")
+        else:
+            raise KeyError("rotation not set in the constraint")
+
+    @rotation.setter
+    def rotation(self, rotation: float) -> None:
+        """Sets the rotation fixed by the constraint
+
+        Args:
+            rotation (float): rotation value
+        """
+        self._params.set_param("rotation", rotation)
