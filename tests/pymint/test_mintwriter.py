@@ -1,9 +1,14 @@
 from parchmint import Component, Connection, Layer, Params, Target
-
 from pymint.mintterminal import MINTTerminal
 from pymint.mintvia import MINTVia
-from pymint.mintwriter import (to_component_MINT, to_connection_MINT,
-                               to_target_MINT, to_terminal_MINT, to_via_MINT)
+from pymint.mintwriter import (
+    to_component_MINT,
+    to_connection_MINT,
+    to_target_MINT,
+    to_terminal_MINT,
+    to_via_MINT,
+)
+from tests.conftest import generate_lisp_tree
 
 
 def test_to_component_MINT(params_dict, layer):
@@ -34,9 +39,19 @@ def test_to_connection_MINT(params_dict, layer):
     params_string = ""
     for param in params_dict:
         params_string += param + "=" + str(params_dict[param]) + " "
-    assert to_connection_MINT(connection) == "TEST ch1 from c1 1 to c2 1 {};".format(
-        params_string
-    )
+
+    tree1 = generate_lisp_tree(to_connection_MINT(connection))
+
+    tree2 = generate_lisp_tree("TEST ch1 from c1 1 to c2 1 {};".format(params_string))
+
+    print(tree1)
+    print(tree2)
+
+    assert tree1 == tree2
+
+    # assert to_connection_MINT(connection) == "TEST ch1 from c1 1 to c2 1 {};".format(
+    #     params_string
+    # )
 
 
 def test_to_target_MINT(params_dict, layer):

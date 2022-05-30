@@ -1,7 +1,12 @@
 from typing import Dict
+import io
 import pytest
 from parchmint import Layer
 from parchmint.device import Device
+from pymint.antlrgen.mintLexer import mintLexer
+from antlr4 import InputStream, CommonTokenStream
+from pymint.antlrgen.mintParser import mintParser
+from pymint.mintErrorListener import MINTErrorListener
 
 
 @pytest.fixture
@@ -173,3 +178,41 @@ def orthogonal_constraint_json():
         "relationships": {},
     }
     return ret
+
+
+def generate_lisp_tree(source_code: str) -> str:
+    """Generates a lisp style tree from a MINT source code string
+
+    Args:
+        source_code (str): Source code that you want to parse
+
+    Raises:
+        Exception: Incase errors are thrown or the mint syntax is invalid
+
+    Returns:
+        str: Lisp style tree
+    """
+
+    istream = InputStream(source_code)
+
+    lexer = mintLexer(istream)
+
+    stream = CommonTokenStream(lexer)
+
+    parser = mintParser(stream)
+
+    syntax_errors = parser.getNumberOfSyntaxErrors()
+    if syntax_errors > 0:
+        raise Exception("Could not parse the MINT SYNTAX")
+    # Connect the Error Listener
+    parse_output = io.StringIO()
+    parse_output.write("MINT SYNTAX ERRORS:\n")
+
+    error_listener = MINTErrorListener(parse_output)
+    parser.addErrorListener(error_listener)
+
+    tree = parser.netlist()
+
+    lisp_string = tree.toStringTree(recog=parser)
+
+    return " ".join(lisp_string.split())
