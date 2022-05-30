@@ -1,19 +1,21 @@
+from parchmint import Connection, Layer, Params, Target
+
 from pymint.constraints.lengthconstraint import LengthConstraint
-from pymint.mintconnection import MINTConnection
-from pymint.mintlayer import MINTLayer, MINTLayerType
-from pymint.minttarget import MINTTarget
+from pymint.mintlayer import MINTLayerType
 
 
 def test_to_parchmint_v1_x(length_constraint_json):
-    mlayer = MINTLayer("f", "f", "0", MINTLayerType.FLOW)
+    mlayer = Layer(
+        layer_id="f", name="f", group="0", layer_type=str(MINTLayerType.FLOW)
+    )
 
-    mcon1 = MINTConnection(
-        "mcon1",
-        "TEST_CHANNEL",
-        {"test-key": "test-value"},
-        MINTTarget("mc1", "0"),
-        [MINTTarget("mc2", "0")],
-        mlayer,
+    mcon1 = Connection(
+        ID="mcon1",
+        entity="CHANNEL",
+        params=Params({"test-key": "test-value"}),
+        source=Target("mc1", "0"),
+        sinks=[Target("mc2", "0")],
+        layer=mlayer,
     )
 
     length_constriant = LengthConstraint(mcon1, 5000)

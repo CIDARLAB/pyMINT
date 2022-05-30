@@ -1,9 +1,6 @@
-from typing import Optional, Union
-
 from parchmint.component import Component
 
 from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
-from pymint.mintcomponent import MINTComponent
 
 
 class PositionConstraint(LayoutConstraint):
@@ -11,18 +8,18 @@ class PositionConstraint(LayoutConstraint):
 
     def __init__(
         self,
-        component: MINTComponent,
-        xpos: Optional[int],
-        ypos: Optional[int],
-        zpos: Optional[int],
+        component: Component,
+        xpos: float,
+        ypos: float,
+        zpos: float,
     ) -> None:
         """Returns the position constrinant
 
         Args:
-            component (MINTComponent): component covered by the constraint
-            xpos (Optional[int]): x position value
-            ypos (Optional[int]): y position value
-            zpos (Optional[int]): z position value
+            component (Component): component covered by the constraint
+            ypos (float): y position value
+            zpos (float): z position value
+            xpos (float): x position value
         """
         super().__init__(OperationType.EXPLICIT_OPERATION)
         self.add_component(component)
@@ -31,14 +28,14 @@ class PositionConstraint(LayoutConstraint):
         self.zpos = zpos
         self._type = "POSITION_CONSTRAINT"
 
-    def get_component(self) -> Union[MINTComponent, Component]:
+    def get_component(self) -> Component:
         """Returns the component constrained by the component
 
         Raises:
             Exception: if the component is not covered by the constraint
 
         Returns:
-            MINTComponent: returns the component covered by the constraint
+            Component: returns the component covered by the constraint
         """
         ret = self._components[0]
         if ret is None:
@@ -47,11 +44,11 @@ class PositionConstraint(LayoutConstraint):
         return ret
 
     @property
-    def xpos(self) -> Optional[int]:
+    def xpos(self) -> float:
         """Returns the x position of the component
 
         Returns:
-            Optional[int]: x coordinate of the component if set else returns None
+            float: x coordinate of the component if set else returns None
         """
         if self._params.exists("xpos"):
             return self._params.get_param("xpos")
@@ -59,20 +56,20 @@ class PositionConstraint(LayoutConstraint):
             raise KeyError("xpos not set in the constraint")
 
     @xpos.setter
-    def xpos(self, value: Optional[int]) -> None:
+    def xpos(self, value: float) -> None:
         """Sets the x position of the component
 
         Args:
-            value (Optional[int]): x coordinate of the component
+            value (float): x coordinate of the component
         """
         self._params.set_param("xpos", value)
 
     @property
-    def ypos(self) -> Optional[int]:
+    def ypos(self) -> float:
         """Returns the y position of the component
 
         Returns:
-            Optional[int]: y coordinate of the component if set else returns None
+            float: y coordinate of the component if set else returns None
         """
         if self._params.exists("ypos"):
             return self._params.get_param("ypos")
@@ -80,20 +77,20 @@ class PositionConstraint(LayoutConstraint):
             raise KeyError("ypos not set in the constraint")
 
     @ypos.setter
-    def ypos(self, value: Optional[int]) -> None:
+    def ypos(self, value: float) -> None:
         """Sets the y position of the component
 
         Args:
-            value (Optional[int]): y coordinate of the component
+            value (float): y coordinate of the component
         """
         self._params.set_param("ypos", value)
 
     @property
-    def zpos(self) -> Optional[int]:
+    def zpos(self) -> float:
         """Returns the z position of the component
 
         Returns:
-            Optional[int]: z coordinate of the component if set else returns None
+            float: z coordinate of the component if set else returns None
         """
         if self._params.exists("zpos"):
             return self._params.get_param("zpos")
@@ -101,10 +98,10 @@ class PositionConstraint(LayoutConstraint):
             raise KeyError("zpos not set in the constraint")
 
     @zpos.setter
-    def zpos(self, value: Optional[int]) -> None:
+    def zpos(self, value: float) -> None:
         """Sets the z position of the component
 
         Args:
-            value (Optional[int]): z coordinate of the component
+            value (float): z coordinate of the component
         """
         self._params.set_param("zpos", value)

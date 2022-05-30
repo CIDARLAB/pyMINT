@@ -1,21 +1,21 @@
-from typing import Union
-
-from parchmint.layer import Layer
-
-from pymint.mintcomponent import MINTComponent
-from pymint.mintlayer import MINTLayer
+from parchmint import Component, Layer, Port
 
 
-class MINTTerminal(MINTComponent):
+class MINTTerminal:
     """Class for representing the MINT terminal, its modelled as a
     Parchmint Component while giving helpful methods to model the design
 
     """
 
-    def __init__(
-        self, name: str, port_number: int, layer: Union[MINTLayer, Layer]
-    ) -> None:
-        super(MINTTerminal, self).__init__(name, "TERMINAL", {}, [layer])
+    def __init__(self, name: str, port_number: int, layer: Layer) -> None:
+        # super(MINTTerminal, self).__init__(name, "TERMINAL", {}, [layer])
+        self._component = Component(
+            ID=name,
+            name=name,
+            layers=[layer],
+            ports_list=[Port(label="1", layer="FLOW", x=0, y=0)],
+            entity="TERMINAL",
+        )
         self.__port_number = port_number
 
     @property
@@ -27,5 +27,11 @@ class MINTTerminal(MINTComponent):
         """
         return self.__port_number
 
-    def to_MINT(self) -> str:
-        return "TERMINAL {} {}".format(self.name, self.__port_number)
+    @property
+    def component(self) -> Component:
+        """Returns the component object
+
+        Returns:
+            Component: component object
+        """
+        return self._component

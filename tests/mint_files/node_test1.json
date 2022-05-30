@@ -1,1 +1,232 @@
-{"name": "node_test1", "components": [{"name": "n1", "id": "n1", "layers": ["0"], "params": {"position": [-1, -1]}, "ports": [], "entity": "NODE", "x-span": -1, "y-span": -1}, {"name": "n2", "id": "n2", "layers": ["0"], "params": {"position": [-1, -1]}, "ports": [], "entity": "NODE", "x-span": -1, "y-span": -1}, {"name": "n3", "id": "n3", "layers": ["0"], "params": {"position": [-1, -1]}, "ports": [], "entity": "NODE", "x-span": -1, "y-span": -1}, {"name": "p1", "id": "p1", "layers": ["0"], "params": {"position": [-1, -1]}, "ports": [], "entity": "PORT", "x-span": -1, "y-span": -1}, {"name": "p2", "id": "p2", "layers": ["0"], "params": {"position": [-1, -1]}, "ports": [], "entity": "PORT", "x-span": -1, "y-span": -1}, {"name": "p3", "id": "p3", "layers": ["0"], "params": {"position": [-1, -1]}, "ports": [], "entity": "PORT", "x-span": -1, "y-span": -1}], "connections": [{"sinks": [{"component": "n1", "port": null}], "name": "c1", "id": "c1", "source": {"component": "p1", "port": null}, "params": {}, "layer": "0", "paths": [], "entity": "CHANNEL"}, {"sinks": [{"component": "n2", "port": null}], "name": "c2", "id": "c2", "source": {"component": "n1", "port": null}, "params": {}, "layer": "0", "paths": [], "entity": "CHANNEL"}, {"sinks": [{"component": "n3", "port": null}], "name": "c3", "id": "c3", "source": {"component": "n2", "port": null}, "params": {}, "layer": "0", "paths": [], "entity": "CHANNEL"}, {"sinks": [{"component": "p3", "port": null}], "name": "c4", "id": "c4", "source": {"component": "n3", "port": null}, "params": {}, "layer": "0", "paths": [], "entity": "CHANNEL"}, {"sinks": [{"component": "p2", "port": null}], "name": "c5", "id": "c5", "source": {"component": "n2", "port": null}, "params": {}, "layer": "0", "paths": [], "entity": "CHANNEL"}], "params": {"x-span": null, "y-span": null}, "layers": [{"name": "FLOW_0", "id": "0", "type": "FLOW", "params": {}, "group": "0"}], "features": [], "version": "1.2", "valveMap": {}, "valveTypeMap": {}, "layoutConstraints": [{"type": "ORTHOGONAL_CONSTRAINT", "operation_type": "ALIGNMENT_OPERATION", "components": ["n1", "n2", "n3", "p3", "p2", "p1"], "connections": [], "params": {}, "relationships": {}}]}
+{
+    "name": "node_test1",
+    "components": [
+        {
+            "name": "n1",
+            "id": "n1",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "NODE",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "n2",
+            "id": "n2",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "NODE",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "n3",
+            "id": "n3",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "NODE",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "p1",
+            "id": "p1",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "p2",
+            "id": "p2",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "p3",
+            "id": "p3",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        }
+    ],
+    "connections": [
+        {
+            "sinks": [
+                {
+                    "component": "n1",
+                    "port": null
+                }
+            ],
+            "name": "c1",
+            "id": "c1",
+            "source": {
+                "component": "p1",
+                "port": null
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "n2",
+                    "port": null
+                }
+            ],
+            "name": "c2",
+            "id": "c2",
+            "source": {
+                "component": "n1",
+                "port": null
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "n3",
+                    "port": null
+                }
+            ],
+            "name": "c3",
+            "id": "c3",
+            "source": {
+                "component": "n2",
+                "port": null
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "p3",
+                    "port": null
+                }
+            ],
+            "name": "c4",
+            "id": "c4",
+            "source": {
+                "component": "n3",
+                "port": null
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "p2",
+                    "port": null
+                }
+            ],
+            "name": "c5",
+            "id": "c5",
+            "source": {
+                "component": "n2",
+                "port": null
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        }
+    ],
+    "params": {
+        "x-span": 0,
+        "y-span": 0
+    },
+    "layers": [
+        {
+            "name": "FLOW_0",
+            "id": "0",
+            "type": "FLOW",
+            "params": {},
+            "group": "0"
+        }
+    ],
+    "features": [],
+    "version": "1.2",
+    "valves": [],
+    "layoutConstraints": [
+        {
+            "type": "ORTHOGONAL_CONSTRAINT",
+            "operation_type": "ALIGNMENT_OPERATION",
+            "components": [
+                "n1",
+                "n2",
+                "n3",
+                "p3",
+                "p2",
+                "p1"
+            ],
+            "connections": [],
+            "params": {},
+            "relationships": {}
+        }
+    ]
+}

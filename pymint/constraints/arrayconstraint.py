@@ -1,7 +1,8 @@
 from typing import List
 
+from parchmint import Component
+
 from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
-from pymint.mintcomponent import MINTComponent
 
 
 class ArrayConstraint(LayoutConstraint):
@@ -11,16 +12,16 @@ class ArrayConstraint(LayoutConstraint):
 
     def __init__(
         self,
-        components: List[MINTComponent],
+        components: List[Component],
         xdim: int = 1,
         ydim: int = 1,
-        horizontal_spacing: float = None,
-        vertical_spacing: float = None,
+        horizontal_spacing: float = 0,
+        vertical_spacing: float = 0,
     ) -> None:
         """Creates an instance of the array Constraints
 
         Args:
-            components (List[MINTComponent]): List of components that need be covered
+            components (List[Component]): List of components that need be covered
             by the constraint
             xdim (int, optional): X dimension of the array. Defaults to 1.
             ydim (int, optional): Y dimension of the array. Defaults to 1.
@@ -32,7 +33,6 @@ class ArrayConstraint(LayoutConstraint):
         super().__init__(OperationType.ALIGNMENT_OPERATION)
         self._type = "ARRAY_CONSTRAINT"
         self._components.extend(components)
-        self.is1D = False
         self.horizontal_spacing = horizontal_spacing
         self.vertical_spacing = vertical_spacing
 
@@ -42,7 +42,6 @@ class ArrayConstraint(LayoutConstraint):
             self.xdim = xdim
 
         if ydim is None or ydim == 1:
-            self.is1D = True
             self.ydim = 1
         else:
             self.ydim = ydim
@@ -94,22 +93,6 @@ class ArrayConstraint(LayoutConstraint):
             value (float): The vertical spacing
         """
         self._params.set_param("verticalSpacing", value)
-
-    @property
-    def is1D(self) -> bool:
-        """Returns true if 1D (BANK)
-
-        Returns:
-            bool: true if BANK
-        """
-        if self._params.exists("is1D"):
-            return self._params.get_param("is1D")
-        else:
-            raise KeyError("is1D not set in the constraint")
-
-    @is1D.setter
-    def is1D(self, value: bool) -> None:
-        self._params.set_param("is1D", value)
 
     @property
     def xdim(self) -> int:

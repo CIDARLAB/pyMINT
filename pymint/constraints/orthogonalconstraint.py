@@ -1,10 +1,10 @@
 from typing import List
 
 import networkx as nx
+from parchmint import Component
 
+from pymint import MINTDevice
 from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
-from pymint.mintcomponent import MINTComponent
-from pymint.mintdevice import MINTDevice
 
 
 class OrthogonalConstraint(LayoutConstraint):
@@ -13,11 +13,11 @@ class OrthogonalConstraint(LayoutConstraint):
 
     """
 
-    def __init__(self, components: List[MINTComponent]) -> None:
+    def __init__(self, components: List[Component]) -> None:
         """Creates an orthogonal constraint
 
         Args:
-            components (List[MINTComponent]): components covered by the constraint
+            components (List[Component]): components covered by the constraint
         """
         super().__init__(OperationType.ALIGNMENT_OPERATION)
         self._components.extend(components)
@@ -25,7 +25,7 @@ class OrthogonalConstraint(LayoutConstraint):
 
     @staticmethod
     def generate_constraints(
-        orthogonal_driving_components: List[MINTComponent],
+        orthogonal_driving_components: List[Component],
         device: MINTDevice,
     ) -> None:
         """Generates the orthogonal constraints for the device
@@ -63,20 +63,19 @@ class OrthogonalConstraint(LayoutConstraint):
 
     @staticmethod
     def traverse_node_component_neighbours(
-        component: MINTComponent, device: MINTDevice
-    ) -> List[MINTComponent]:
+        component: Component, mint_device: MINTDevice
+    ) -> List[Component]:
         """Traverses the node networks to find the components covered by the constraint
 
         Args:
-            component (MINTComponent): starting component
+            component (Component): starting component
             device (MINTDevice): current device
 
         Returns:
-            List[MINTComponent]: list of components covered by the constraint
+            List[Component]: list of components covered by the constraint
         """
-        current_device = device
-        G = device.G.copy().to_undirected()
-        print(G)
+        current_device = mint_device
+        graph = mint_device.device.graph.copy().to_undirected()
         nodes = []
         nodes.append(component)
 
@@ -88,9 +87,9 @@ class OrthogonalConstraint(LayoutConstraint):
             Args:
                 root_node (str): node from which we need to do the traversal
             """
-            neighbors = list(nx.neighbors(G, root_node))
+            neighbors = list(nx.neighbors(graph, root_node))
             for neighbor in neighbors:
-                component = current_device.get_component(neighbor)
+                component = current_device.device.get_component(neighbor)
                 if component in nodes:
                     continue
                 if component.entity == "NODE":

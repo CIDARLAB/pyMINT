@@ -1,11 +1,17 @@
+from parchmint import Component, Layer, Params
+
 from pymint.constraints.rotationconstraint import RotationConstraint
-from pymint.mintcomponent import MINTComponent
-from pymint.mintlayer import MINTLayer, MINTLayerType
+from pymint.mintlayer import MINTLayerType
 
 
 def test_to_parchmint_v1_x(rotation_constraint_json):
-    mlayer = MINTLayer("f", "f", "0", MINTLayerType.FLOW)
+    mlayer = Layer("f", "f", "0", str(MINTLayerType.FLOW))
 
-    mc_source = MINTComponent("source", "TEST", {"test-key": "test-value"}, [mlayer])
+    mc_source = Component(
+        ID="source",
+        entity="TEST",
+        params=Params({"test-key": "test-value"}),
+        layers=[mlayer],
+    )
     rotation_constraint = RotationConstraint(mc_source, 90)
     assert rotation_constraint.to_parchmint_v1_x() == rotation_constraint_json

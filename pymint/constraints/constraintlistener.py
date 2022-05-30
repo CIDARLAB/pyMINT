@@ -2,6 +2,9 @@ import logging
 import re
 from typing import List
 
+from parchmint import Component
+
+from pymint import MINTDevice
 from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
 from pymint.constraints.arrayconstraint import ArrayConstraint
@@ -12,8 +15,6 @@ from pymint.constraints.orientationconstraint import (
 )
 from pymint.constraints.orthogonalconstraint import OrthogonalConstraint
 from pymint.constraints.positionconstraint import PositionConstraint
-from pymint.mintcomponent import MINTComponent
-from pymint.mintdevice import MINTDevice
 
 
 class ConstraintListener(mintListener):
@@ -33,14 +34,14 @@ class ConstraintListener(mintListener):
         self._mirror_constraint_driving_components = []
 
         # Temporary store for position constraints
-        self._xpos = None
-        self._ypos = None
-        self._zpos = None
+        self._xpos: float = 0
+        self._ypos: float = 0
+        self._zpos: float = 0
 
         # Temporary store for array constraints
-        self._vertical_spacing = None
-        self._horizontal_spacing = None
-        self._spacing = None
+        self._vertical_spacing: float = 0
+        self._horizontal_spacing: float = 0
+        self._spacing: float = 0
 
         # Temporary store for relative orientatino constraints
         self._orientation = None
@@ -53,13 +54,13 @@ class ConstraintListener(mintListener):
     def enterPositionConstraintStat(
         self, ctx: mintParser.PositionConstraintStatContext
     ):
-        self._xpos = None
-        self._ypos = None
-        self._zpos = None
+        self._xpos = 0
+        self._ypos = 0
+        self._zpos = 0
 
     def enterSetCoordinate(self, ctx: mintParser.SetCoordinateContext):
         coordinate_label = ctx.coordinate
-        coordinate_value = int(ctx.INT().getText())
+        coordinate_value = int(ctx.INT().getText())  # type: ignore
 
         if coordinate_label == "X":
             self._xpos = coordinate_value
@@ -79,13 +80,13 @@ class ConstraintListener(mintListener):
     def enterHorizontalSpacingParam(
         self, ctx: mintParser.HorizontalSpacingParamContext
     ):
-        self._horizontal_spacing = float(ctx.value().getText())
+        self._horizontal_spacing = float(ctx.value().getText())  # type: ignore
 
     def enterVerticalSpacingParam(self, ctx: mintParser.VerticalSpacingParamContext):
-        self._vertical_spacing = float(ctx.value().getText())
+        self._vertical_spacing = float(ctx.value().getText())  # type: ignore
 
     def enterSpacingParam(self, ctx: mintParser.SpacingParamContext):
-        self._spacing = float(ctx.value().getText())
+        self._spacing = float(ctx.value().getText())  # type: ignore
 
     def exitGridStat(self, ctx: mintParser.GridStatContext):
         xdim = 1
@@ -116,8 +117,8 @@ class ConstraintListener(mintListener):
 
     def exitBankStat(self, ctx: mintParser.BankStatContext):
         dim = 1
-        if ctx.dim is not None:
-            dim = int(ctx.dim.text)
+        if ctx.dim is not None:  # type: ignore
+            dim = int(ctx.dim.text)  # type: ignore
         else:
             logging.warning("No dimension found for BANK stat, setting dimension to 1")
         # We need to add all the parameters here
@@ -149,10 +150,10 @@ class ConstraintListener(mintListener):
         element_name = ctx.getText()
         component = None
         connection = None
-        if self.current_device.component_exists(element_name):
-            component = self.current_device.get_component(element_name)
-        elif self.current_device.connection_exists(element_name):
-            connection = self.current_device.get_connection(element_name)
+        if self.current_device.device.component_exists(element_name):
+            component = self.current_device.device.get_component(element_name)
+        elif self.current_device.device.connection_exists(element_name):
+            connection = self.current_device.device.get_connection(element_name)
         if component is not None:
             self._constrained_components.append(component)
         elif connection is not None:
@@ -160,16 +161,17 @@ class ConstraintListener(mintListener):
         else:
             # Check if theres a regex match against all the component names/id's
             component_names = [
-                component.ID for component in self.current_device.components
+                component.ID for component in self.current_device.device.components
             ]
-            # Check if theres a regex match against all the connection id's in component_name
+            # Check if theres a regex match against all the connection id's in
+            # component_name
             matches = map(
                 lambda x: re.match(f"{element_name}_\\d+(_\\d+)?", x), component_names
             )
             for match in matches:
                 if match is not None:
                     self._constrained_components.append(
-                        self.current_device.get_component(match.group(0))
+                        self.current_device.device.get_component(match.group(0))
                     )
                     break
             else:
@@ -214,7 +216,7 @@ class ConstraintListener(mintListener):
                     )
                 )
 
-            if self._checkIfComponentConstranied(component):
+            if self._check_if_component_constranied(component):
                 continue
 
             self._orthogonal_origin_candidates.append(component)
@@ -226,8 +228,8 @@ class ConstraintListener(mintListener):
     def exitSpanStat(self, ctx: mintParser.SpanStatContext):
         for component in self._constrained_components:
             # Generate mirror constraints based on the in and out dimensins of span
-            in_size = int(ctx.indim.text)
-            out_size = int(ctx.outdim.text)
+            in_size = int(ctx.indim.text)  # type: ignore
+            out_size = int(ctx.outdim.text)  # type: ignore
 
             if in_size > 1:
                 self._mirror_constraint_driving_components.append(component)
@@ -236,6 +238,7 @@ class ConstraintListener(mintListener):
                 self._mirror_constraint_driving_components.append(component)
 
     def exitLayerBlock(self, ctx: mintParser.LayerBlockContext):
+        # TODO: Fix how the mirror constraints are created
         MirrorConstraint.generate_constraints(
             self._mirror_constraint_driving_components, self.current_device
         )
@@ -247,7 +250,7 @@ class ConstraintListener(mintListener):
 
     # ------------ Helpers ----------
 
-    def _checkIfComponentConstranied(self, component: MINTComponent) -> bool:
+    def _check_if_component_constranied(self, component: Component) -> bool:
         found_flag = False
         for constraint in self.current_device.get_constraints():
             if isinstance(constraint, OrthogonalConstraint):

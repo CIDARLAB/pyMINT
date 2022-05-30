@@ -1,10 +1,9 @@
-import queue
 from typing import Dict, List, Tuple
 
 import networkx as nx
+from parchmint import Component, Device
 
 from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
-from pymint.mintcomponent import MINTComponent
 from pymint.mintdevice import MINTDevice
 
 
@@ -32,9 +31,7 @@ class DistanceDictionaries:
 
     """
 
-    def __init__(
-        self, groups_size: int, device: MINTDevice, undirected_netlist
-    ) -> None:
+    def __init__(self, groups_size: int, device: Device, undirected_netlist) -> None:
 
         # Initialize the dictionaries (the base data structure) with as many
         # dictionaries as we have groups
@@ -325,14 +322,14 @@ class MirrorConstraint(LayoutConstraint):
 
     def __init__(
         self,
-        source_component: MINTComponent,
+        source_component: Component,
         mirror_count=None,
-        mirror_groups: List[List[MINTComponent]] = [],
+        mirror_groups: List[List[Component]] = [],
     ):
         """Create a new instance of the mirror constraint
 
         Args:
-            source_component (MINTComponent): source for the mirror component to search
+            source_component (Component): source for the mirror component to search
             for mirror groups
             mirror_count ([type], optional): number of mirror groups. Defaults to None.
         """
@@ -346,11 +343,11 @@ class MirrorConstraint(LayoutConstraint):
         for group in mirror_groups:
             self.add_group(group)
 
-    def add_group(self, components: List[MINTComponent]) -> None:
+    def add_group(self, components: List[Component]) -> None:
         """Adds the passed componets to a new group
 
         Args:
-            components (List[MINTComponent]): List of components that need to be in a
+            components (List[Component]): List of components that need to be in a
             mirror group
         """
         # self.__mirror_groups.append(components)
@@ -377,46 +374,46 @@ class MirrorConstraint(LayoutConstraint):
         self._relationship_map["mirror_count"] = value
 
     @property
-    def mirror_source(self) -> MINTComponent:
+    def mirror_source(self) -> Component:
         """Returns the mirror source component
 
         Returns:
-            MINTComponent: mirror source
+            Component: mirror source
         """
         return self._relationship_map["source"]
 
     @mirror_source.setter
-    def mirror_source(self, value: MINTComponent):
+    def mirror_source(self, value: Component):
         """Sets the mirror source component
 
 
         Args:
-            value (MINTComponent): Mirror source component
+            value (Component): Mirror source component
         """
         self._relationship_map["source"] = value
 
     @property
-    def mirror_groups(self) -> List[List[MINTComponent]]:
+    def mirror_groups(self) -> List[List[Component]]:
         """Returns the mirror groups
 
         Returns:
-            List[List[MINTComponent]]: Mirror groups covered by the constraint
+            List[List[Component]]: Mirror groups covered by the constraint
         """
         return self._relationship_map["mirror_groups"]
 
     @mirror_groups.setter
-    def mirror_groups(self, value: List[List[MINTComponent]]):
+    def mirror_groups(self, value: List[List[Component]]):
         """Sets the mirror groups
 
         Args:
-            value (List[List[MINTComponent]]): List of lists of components
+            value (List[List[Component]]): List of lists of components
         """
         self._relationship_map["mirror_groups"] = value
 
     @staticmethod
     def find_mirror_groups(
-        driving_component: MINTComponent, device: MINTDevice, mirror_count: int
-    ) -> List[List[MINTComponent]]:
+        driving_component: Component, device: Device, mirror_count: int
+    ) -> List[List[Component]]:
         def find_component_references(groups: List[List[str]]):
             return [[device.get_component(cid) for cid in group] for group in groups]
 
@@ -426,14 +423,14 @@ class MirrorConstraint(LayoutConstraint):
                 driving_component.ID
             )
         )
-        undirected_netlist = device.G.copy().to_undirected()
+        undirected_netlist = device.graph.copy().to_undirected()
         # Remove the driving component from the undirected netlist, this way we don't go backwards in the traversals
         undirected_netlist.remove_node(driving_component.ID)
 
         # Find out if the incoming or the out going edges are the ones we want to
         # traverse by comparing against the number of mirror groups we need to generate
-        outgoing_edges = list(device.G.out_edges(driving_component.ID))
-        incoming_edges = list(device.G.in_edges(driving_component.ID))
+        outgoing_edges = list(device.graph.out_edges(driving_component.ID))
+        incoming_edges = list(device.graph.in_edges(driving_component.ID))
 
         level_one_components = []
         if len(outgoing_edges) == mirror_count:
@@ -530,12 +527,12 @@ class MirrorConstraint(LayoutConstraint):
 
     @staticmethod
     def generate_constraints(
-        mirror_driving_components: List[MINTComponent], device: MINTDevice
+        mirror_driving_components: List[Component], mint_device: MINTDevice
     ) -> None:
         """Generate the mirror constraints for the device
 
         Args:
-            mirror_driving_components (List[MINTComponent]): components that are driving the mirror constraint
+            mirror_driving_components (List[Component]): components that are driving the mirror constraint
             device (MINTDevice): device to generate the constraint for
         """
         for mirror_driving_component in mirror_driving_components:
@@ -545,7 +542,7 @@ class MirrorConstraint(LayoutConstraint):
             if in_mirror_count > 1:
                 # Find groups for in_mirror_count
                 mirror_groups = MirrorConstraint.find_mirror_groups(
-                    mirror_driving_component, device, in_mirror_count
+                    mirror_driving_component, mint_device.device, in_mirror_count
                 )
 
                 print("In Mirror Groups")
@@ -560,12 +557,12 @@ class MirrorConstraint(LayoutConstraint):
                         mirror_groups=mirror_groups,
                     )
 
-                    device.add_constraint(mirror_constraint)
+                    mint_device.add_constraint(mirror_constraint)
 
             if out_mirror_count > 1:
                 # Find groups for out_mirror_count
                 mirror_groups = MirrorConstraint.find_mirror_groups(
-                    mirror_driving_component, device, out_mirror_count
+                    mirror_driving_component, mint_device.device, out_mirror_count
                 )
                 print("Out Mirror Groups")
                 print(mirror_groups)
@@ -579,4 +576,4 @@ class MirrorConstraint(LayoutConstraint):
                         mirror_groups=mirror_groups,
                     )
 
-                    device.add_constraint(mirror_constraint)
+                    mint_device.add_constraint(mirror_constraint)

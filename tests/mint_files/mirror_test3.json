@@ -393,8 +393,8 @@
         }
     ],
     "params": {
-        "x-span": -1,
-        "y-span": -1
+        "x-span": 0,
+        "y-span": 0
     },
     "layers": [
         {
@@ -407,8 +407,7 @@
     ],
     "features": [],
     "version": "1.2",
-    "valveMap": {},
-    "valveTypeMap": {},
+    "valves": [],
     "layoutConstraints": [
         {
             "type": "MIRROR_CONSTRAINT",
