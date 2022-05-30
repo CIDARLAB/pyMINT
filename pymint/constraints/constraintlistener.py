@@ -176,8 +176,9 @@ class ConstraintListener(mintListener):
                     break
             else:
                 print(
-                    'Could not find component or connection with the ID "{}" in device'
-                    .format(element_name)
+                    'Could not find component or connection with the ID "{}" in device'.format(
+                        element_name
+                    )
                 )
                 raise Exception(
                     f"Component {element_name} not found while processing constraint"
@@ -210,8 +211,9 @@ class ConstraintListener(mintListener):
         for component in self._constrained_components:
             if component is None:
                 raise Exception(
-                    "Could not apply Orthogonal Constraint, {} component not found !"
-                    .format(ctx.getText())
+                    "Could not apply Orthogonal Constraint, {} component not found !".format(
+                        ctx.getText()
+                    )
                 )
 
             if self._check_if_component_constranied(component):

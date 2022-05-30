@@ -1,10 +1,12 @@
-from typing import Dict
 import io
+from typing import Dict
+
 import pytest
+from antlr4 import CommonTokenStream, InputStream
 from parchmint import Layer
 from parchmint.device import Device
+
 from pymint.antlrgen.mintLexer import mintLexer
-from antlr4 import InputStream, CommonTokenStream
 from pymint.antlrgen.mintParser import mintParser
 from pymint.mintErrorListener import MINTErrorListener
 
