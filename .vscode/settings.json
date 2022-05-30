@@ -9,7 +9,7 @@
         "--rcfile=pylintrc"
     ],
     "python.formatting.blackArgs": [
-        "--line-length=88",
+        "--line-length=120",
         "--experimental-string-processing"
     ],
     "python.testing.pytestArgs": [

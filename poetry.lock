@@ -72,7 +72,7 @@ pytz = ">=2015.7"
 name = "black"
 version = "22.3.0"
 description = "The uncompromising code formatter."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6.2"
 
@@ -281,7 +281,7 @@ dmypy = ["psutil (>=4.0)"]
 name = "mypy-extensions"
 version = "0.4.3"
 description = "Experimental type system extensions for programs checked with the mypy typechecker."
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 
@@ -321,7 +321,7 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
 name = "parchmint"
-version = "0.3.1"
+version = "0.3.2"
 description = "Parchmint is data interchange standard for representing microfluidic designs. Check out https://parchmint.org for more information."
 category = "main"
 optional = false
@@ -338,7 +338,7 @@ tabulate = ">=0.8.9,<0.9.0"
 name = "pathspec"
 version = "0.9.0"
 description = "Utility library for gitignore style pattern matching of file paths."
-category = "main"
+category = "dev"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 
@@ -346,7 +346,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 name = "platformdirs"
 version = "2.5.2"
 description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 
@@ -691,7 +691,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 
@@ -707,7 +707,7 @@ python-versions = "*"
 name = "typing-extensions"
 version = "4.2.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 
@@ -738,7 +738,7 @@ docs = []
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "e00e55eb7250dfbc907faed74aa300654f2346e67c9ff6e26cdd5693633f5413"
+content-hash = "a6460d52ca3af33b9fed9ddd95cb288a961310ab104c62a78fd9afc72a760cf8"
 
 [metadata.files]
 alabaster = [
@@ -987,8 +987,8 @@ packaging = [
     {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
 ]
 parchmint = [
-    {file = "parchmint-0.3.1-py3-none-any.whl", hash = "sha256:f7cfaf9d7c608714ae4934d590d13253948f640480cc49ed0b4e40cb8dd5b5da"},
-    {file = "parchmint-0.3.1.tar.gz", hash = "sha256:1683e71e52c8fd9108c830c2c36454350079729c86ece1cc690987abf8b71515"},
+    {file = "parchmint-0.3.2-py3-none-any.whl", hash = "sha256:59e3e058ff19643d407b22feda10ba20ecc439b0a5bff7ba966867efd42dad54"},
+    {file = "parchmint-0.3.2.tar.gz", hash = "sha256:3da25650a11fd8397ca189823521141dc478ebae484e7459480d78e68a3b4918"},
 ]
 pathspec = [
     {file = "pathspec-0.9.0-py2.py3-none-any.whl", hash = "sha256:7d15c4ddb0b5c802d161efc417ec1a2558ea2653c2e8ad9c19098201dc1c993a"},

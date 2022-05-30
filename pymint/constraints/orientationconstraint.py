@@ -43,9 +43,7 @@ class OrientationConstraint(LayoutConstraint):
         """Creates an instance of the orientation constraint"""
         super().__init__()
 
-    def add_component_orientation_pair(
-        self, component: Component, orientation: ComponentOrientation
-    ) -> None:
+    def add_component_orientation_pair(self, component: Component, orientation: ComponentOrientation) -> None:
         """Adds a component onto the constraint
 
         Args:

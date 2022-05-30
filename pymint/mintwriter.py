@@ -33,9 +33,7 @@ def to_component_MINT(component: Component) -> str:
     Returns:
         str: MINT string fragment
     """
-    return "{} {} {};".format(
-        component.entity, component.ID, to_params_MINT(component.params)
-    )
+    return "{} {} {};".format(component.entity, component.ID, to_params_MINT(component.params))
 
 
 def to_valve_MINT(component: Component, connection: Connection) -> str:
@@ -50,9 +48,7 @@ def to_valve_MINT(component: Component, connection: Connection) -> str:
     Returns:
         str: MINT string fragment
     """
-    return "{} {} on {} {};".format(
-        component.entity, component.ID, connection.ID, to_params_MINT(component.params)
-    )
+    return "{} {} on {} {};".format(component.entity, component.ID, connection.ID, to_params_MINT(component.params))
 
 
 def to_connection_MINT(connection: Connection) -> str:
@@ -93,7 +89,7 @@ def to_layer_MINT(layer: Layer, content: str) -> str:
     Returns:
         str: Returns the MINT string fragment
     """
-    ret = "LAYER {} \n\n{} \n\nEND LAYER".format(layer.type, content)
+    ret = "LAYER {} \n\n{} \n\nEND LAYER".format(layer.layer_type, content)
     return ret
 
 

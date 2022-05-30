@@ -1,12 +1,9 @@
 from enum import Enum
-from typing import Dict, List, Union
+from typing import List, Union
 
 from parchmint.component import Component
 from parchmint.connection import Connection
-
-from pymint.mintcomponent import MINTComponent
-from pymint.mintconnection import MINTConnection
-from pymint.mintparams import MINTParams
+from parchmint import Params
 
 
 class OperationType(Enum):
@@ -27,15 +24,13 @@ class LayoutConstraint:
 
     """
 
-    def __init__(
-        self, operation_type: OperationType = OperationType.CUTSOM_OPERATION
-    ) -> None:
+    def __init__(self, operation_type: OperationType = OperationType.CUTSOM_OPERATION) -> None:
         """Creates a new instance of the LayoutConstraint"""
-        self._components: List[Union[MINTComponent, Component]] = []
-        self._connections: List[Union[MINTConnection, Connection]] = []
+        self._components: List[Union[Component, Component]] = []
+        self._connections: List[Union[Connection, Connection]] = []
         self._type: str = ""
         self._operation_type: OperationType = operation_type
-        self._params: MINTParams = MINTParams({})
+        self._params: Params = Params({})
 
         self._relationship_map = {}
 
@@ -43,54 +38,54 @@ class LayoutConstraint:
     def type(self) -> str:
         return self._type
 
-    def add_component(self, component: MINTComponent):
+    def add_component(self, component: Component):
         """Adds a component to be covered by the layout constraint
 
         Args:
-            component (MINTComponent): Component to be constrained
+            component (Component): Component to be constrained
         """
         self._components.append(component)
 
-    def add_connection(self, connection: MINTConnection):
+    def add_connection(self, connection: Connection):
         """Adds a connection to be covered by the layout constraint
 
         Args:
-            connection (MINTConnection): Connection to be constrained
+            connection (Connection): Connection to be constrained
         """
         self._connections.append(connection)
 
-    def get_components(self) -> List[Union[MINTComponent, Component]]:
+    def get_components(self) -> List[Union[Component, Component]]:
         """Returns components covered by the constraint
 
         Returns:
-            List[MINTComponent]: Constrained components
+            List[Component]: Constrained components
         """
         return self._components
 
-    def get_connections(self) -> List[Union[MINTConnection, Connection]]:
+    def get_connections(self) -> List[Union[Connection, Connection]]:
         """Returns the connections covered byt he constraint
 
         Returns:
-            List[MINTConnection]: Constrained connections
+            List[Connection]: Constrained connections
         """
         return self._connections
 
-    def contains_component(self, component: MINTComponent) -> bool:
+    def contains_component(self, component: Component) -> bool:
         """Checks if the constraint covers the component
 
         Args:
-            component (MINTComponent): component to check
+            component (Component): component to check
 
         Returns:
             bool: true if component is present
         """
         return component in self._components
 
-    def contains_connection(self, connection: MINTConnection) -> bool:
+    def contains_connection(self, connection: Connection) -> bool:
         """Checks if the constraint covers the connection
 
         Args:
-            connection (MINTConnection): connection to check
+            connection (Connection): connection to check
 
         Returns:
             bool: true if connection is present
@@ -99,7 +94,7 @@ class LayoutConstraint:
 
     def convert_objects_to_json_dict(self):
         def convert_entry(entry):
-            if isinstance(entry, MINTComponent) or isinstance(entry, MINTConnection):
+            if isinstance(entry, Component) or isinstance(entry, Connection):
                 ret = entry.ID
             elif isinstance(entry, str) or isinstance(entry, int):
                 ret = entry
@@ -110,11 +105,7 @@ class LayoutConstraint:
             elif isinstance(entry, Enum):
                 ret = str(entry)
             else:
-                raise Exception(
-                    "Unsupported type for key in relationship map: {}".format(
-                        type(entry)
-                    )
-                )
+                raise Exception("Unsupported type for key in relationship map: {}".format(type(entry)))
             return ret
 
         ret = {}

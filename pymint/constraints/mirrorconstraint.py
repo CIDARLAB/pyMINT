@@ -1,10 +1,9 @@
-import queue
 from typing import Dict, List, Tuple
 
 import networkx as nx
 
 from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
-from pymint.mintcomponent import MINTComponent
+from parchmint import Component
 from pymint.mintdevice import MINTDevice
 
 
@@ -32,9 +31,7 @@ class DistanceDictionaries:
 
     """
 
-    def __init__(
-        self, groups_size: int, device: MINTDevice, undirected_netlist
-    ) -> None:
+    def __init__(self, groups_size: int, device: MINTDevice, undirected_netlist) -> None:
 
         # Initialize the dictionaries (the base data structure) with as many
         # dictionaries as we have groups
@@ -54,9 +51,7 @@ class DistanceDictionaries:
         # the dictionary
         for node_to_add in range(1, len(dfs_nodes)):
             node_to_add = dfs_nodes[node_to_add]
-            shortest_path = nx.shortest_path(
-                self.netlist, source=source, target=node_to_add
-            )
+            shortest_path = nx.shortest_path(self.netlist, source=source, target=node_to_add)
             self.set_group_node(group_index, node_to_add, len(shortest_path) - 1)
 
     def set_source(self, group_index: int, node: str):
@@ -111,15 +106,11 @@ class DistanceDictionaries:
                             continue
 
                         # Check if node is in other group
-                        exists, other_distance = self.find_node_in_group(
-                            other_group_index, node_to_evaluate
-                        )
+                        exists, other_distance = self.find_node_in_group(other_group_index, node_to_evaluate)
 
                         if exists is True:
                             if other_distance < distance_key:
-                                self.remove_node_from_group(
-                                    group_index, node_to_evaluate
-                                )
+                                self.remove_node_from_group(group_index, node_to_evaluate)
 
     def trim_uneven_distaces(self) -> None:
         # First delete all the empty key lists
@@ -165,21 +156,12 @@ class DistanceDictionaries:
             for distance in group_dictionary.keys():
                 level_one_nodes = group_dictionary[distance]
                 if len(level_one_nodes) < 0:
-                    raise Exception(
-                        "No nodes found at distance {}, group index {}".format(
-                            distance, group_index
-                        )
-                    )
+                    raise Exception("No nodes found at distance {}, group index {}".format(distance, group_index))
                 # Get shortest path
-                shortest_path = nx.shortest_path(
-                    self.netlist, source=source, target=level_one_nodes[0]
-                )
+                shortest_path = nx.shortest_path(self.netlist, source=source, target=level_one_nodes[0])
                 # If any of the noes in the shortest_path are not in the group, remove the node
                 for node in shortest_path:
-                    if (
-                        self.is_node_in_group(node=node, group_index=group_index)
-                        is False
-                    ):
+                    if self.is_node_in_group(node=node, group_index=group_index) is False:
                         self.remove_node_from_group(group_index, node)
 
         # Level 1 fixes
@@ -214,9 +196,7 @@ class DistanceDictionaries:
                     max_level_nodes = group_dictionary[max_key]
                     found_node_in_paths = False
                     for max_level_node in max_level_nodes:
-                        shortest_path = nx.shortest_path(
-                            self.netlist, source=source, target=max_level_node
-                        )
+                        shortest_path = nx.shortest_path(self.netlist, source=source, target=max_level_node)
                         if node in shortest_path:
                             found_node_in_paths = True
                             break
@@ -235,20 +215,10 @@ class DistanceDictionaries:
         found_flag = False
         limit = 0
         for distance_key in ref_group.keys():
-            ref_component_type_set = set(
-                [
-                    self.device.get_component(cid).entity
-                    for cid in ref_group[distance_key]
-                ]
-            )
+            ref_component_type_set = set([self.device.get_component(cid).entity for cid in ref_group[distance_key]])
             for group_index in range(1, len(self.dictionaries)):
                 group_to_test = self.dictionaries[group_index]
-                type_set_to_test = set(
-                    [
-                        self.device.get_component(cid).entity
-                        for cid in group_to_test[distance_key]
-                    ]
-                )
+                type_set_to_test = set([self.device.get_component(cid).entity for cid in group_to_test[distance_key]])
                 if len(set.intersection(ref_component_type_set, type_set_to_test)) == 0:
                     found_flag = True
                     limit = distance_key
@@ -270,9 +240,7 @@ class DistanceDictionaries:
         ref_group_types = {}
         for distance_key in ref_group.keys():
             nodes = ref_group[distance_key]
-            ref_group_types[distance_key] = [
-                self.device.get_component(cid).entity for cid in nodes
-            ]
+            ref_group_types[distance_key] = [self.device.get_component(cid).entity for cid in nodes]
 
         for test_group_index in range(1, len(self.dictionaries)):
             test_group = self.dictionaries[test_group_index]
@@ -286,12 +254,8 @@ class DistanceDictionaries:
                     ref_types_list.remove(self.device.get_component(test_node).entity)
                     if len(ref_types_list) == 0:
                         # Remove all the remaining nodes and break from the loop
-                        for node_to_remove_index in range(
-                            node_index + 1, len(test_nodes)
-                        ):
-                            self.remove_node_from_group(
-                                test_group_index, test_nodes[node_to_remove_index]
-                            )
+                        for node_to_remove_index in range(node_index + 1, len(test_nodes)):
+                            self.remove_node_from_group(test_group_index, test_nodes[node_to_remove_index])
                         break
 
     def is_node_in_group(self, group_index: int, node: str) -> bool:
@@ -325,14 +289,14 @@ class MirrorConstraint(LayoutConstraint):
 
     def __init__(
         self,
-        source_component: MINTComponent,
+        source_component: Component,
         mirror_count=None,
-        mirror_groups: List[List[MINTComponent]] = [],
+        mirror_groups: List[List[Component]] = [],
     ):
         """Create a new instance of the mirror constraint
 
         Args:
-            source_component (MINTComponent): source for the mirror component to search
+            source_component (Component): source for the mirror component to search
             for mirror groups
             mirror_count ([type], optional): number of mirror groups. Defaults to None.
         """
@@ -346,11 +310,11 @@ class MirrorConstraint(LayoutConstraint):
         for group in mirror_groups:
             self.add_group(group)
 
-    def add_group(self, components: List[MINTComponent]) -> None:
+    def add_group(self, components: List[Component]) -> None:
         """Adds the passed componets to a new group
 
         Args:
-            components (List[MINTComponent]): List of components that need to be in a
+            components (List[Component]): List of components that need to be in a
             mirror group
         """
         # self.__mirror_groups.append(components)
@@ -377,63 +341,59 @@ class MirrorConstraint(LayoutConstraint):
         self._relationship_map["mirror_count"] = value
 
     @property
-    def mirror_source(self) -> MINTComponent:
+    def mirror_source(self) -> Component:
         """Returns the mirror source component
 
         Returns:
-            MINTComponent: mirror source
+            Component: mirror source
         """
         return self._relationship_map["source"]
 
     @mirror_source.setter
-    def mirror_source(self, value: MINTComponent):
+    def mirror_source(self, value: Component):
         """Sets the mirror source component
 
 
         Args:
-            value (MINTComponent): Mirror source component
+            value (Component): Mirror source component
         """
         self._relationship_map["source"] = value
 
     @property
-    def mirror_groups(self) -> List[List[MINTComponent]]:
+    def mirror_groups(self) -> List[List[Component]]:
         """Returns the mirror groups
 
         Returns:
-            List[List[MINTComponent]]: Mirror groups covered by the constraint
+            List[List[Component]]: Mirror groups covered by the constraint
         """
         return self._relationship_map["mirror_groups"]
 
     @mirror_groups.setter
-    def mirror_groups(self, value: List[List[MINTComponent]]):
+    def mirror_groups(self, value: List[List[Component]]):
         """Sets the mirror groups
 
         Args:
-            value (List[List[MINTComponent]]): List of lists of components
+            value (List[List[Component]]): List of lists of components
         """
         self._relationship_map["mirror_groups"] = value
 
     @staticmethod
     def find_mirror_groups(
-        driving_component: MINTComponent, device: MINTDevice, mirror_count: int
-    ) -> List[List[MINTComponent]]:
+        driving_component: Component, device: MINTDevice, mirror_count: int
+    ) -> List[List[Component]]:
         def find_component_references(groups: List[List[str]]):
             return [[device.get_component(cid) for cid in group] for group in groups]
 
         groups = []
-        print(
-            "Finding mirror groups for driving component: {}".format(
-                driving_component.ID
-            )
-        )
-        undirected_netlist = device.G.copy().to_undirected()
+        print("Finding mirror groups for driving component: {}".format(driving_component.ID))
+        undirected_netlist = device.graph.copy().to_undirected()
         # Remove the driving component from the undirected netlist, this way we don't go backwards in the traversals
         undirected_netlist.remove_node(driving_component.ID)
 
         # Find out if the incoming or the out going edges are the ones we want to
         # traverse by comparing against the number of mirror groups we need to generate
-        outgoing_edges = list(device.G.out_edges(driving_component.ID))
-        incoming_edges = list(device.G.in_edges(driving_component.ID))
+        outgoing_edges = list(device.graph.out_edges(driving_component.ID))
+        incoming_edges = list(device.graph.in_edges(driving_component.ID))
 
         level_one_components = []
         if len(outgoing_edges) == mirror_count:
@@ -447,9 +407,7 @@ class MirrorConstraint(LayoutConstraint):
             level_one_components = [edge[0] for edge in incoming_edges]
         else:
             print(
-                "Could not find {} mirror groups for driving component: {}".format(
-                    mirror_count, driving_component.ID
-                )
+                "Could not find {} mirror groups for driving component: {}".format(mirror_count, driving_component.ID)
             )
             return find_component_references(groups)
 
@@ -475,9 +433,7 @@ class MirrorConstraint(LayoutConstraint):
             groups = [[component] for component in level_one_components]
         else:
             print(
-                "Could not find {} mirror groups for driving component: {}".format(
-                    mirror_count, driving_component.ID
-                )
+                "Could not find {} mirror groups for driving component: {}".format(mirror_count, driving_component.ID)
             )
             return find_component_references(groups)
 
@@ -529,13 +485,11 @@ class MirrorConstraint(LayoutConstraint):
         return find_component_references(ret)
 
     @staticmethod
-    def generate_constraints(
-        mirror_driving_components: List[MINTComponent], device: MINTDevice
-    ) -> None:
+    def generate_constraints(mirror_driving_components: List[Component], device: MINTDevice) -> None:
         """Generate the mirror constraints for the device
 
         Args:
-            mirror_driving_components (List[MINTComponent]): components that are driving the mirror constraint
+            mirror_driving_components (List[Component]): components that are driving the mirror constraint
             device (MINTDevice): device to generate the constraint for
         """
         for mirror_driving_component in mirror_driving_components:
@@ -544,9 +498,7 @@ class MirrorConstraint(LayoutConstraint):
 
             if in_mirror_count > 1:
                 # Find groups for in_mirror_count
-                mirror_groups = MirrorConstraint.find_mirror_groups(
-                    mirror_driving_component, device, in_mirror_count
-                )
+                mirror_groups = MirrorConstraint.find_mirror_groups(mirror_driving_component, device, in_mirror_count)
 
                 print("In Mirror Groups")
                 print(mirror_groups)
@@ -564,9 +516,7 @@ class MirrorConstraint(LayoutConstraint):
 
             if out_mirror_count > 1:
                 # Find groups for out_mirror_count
-                mirror_groups = MirrorConstraint.find_mirror_groups(
-                    mirror_driving_component, device, out_mirror_count
-                )
+                mirror_groups = MirrorConstraint.find_mirror_groups(mirror_driving_component, device, out_mirror_count)
                 print("Out Mirror Groups")
                 print(mirror_groups)
 

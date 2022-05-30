@@ -2,7 +2,7 @@ from typing import List
 
 from parchmint import Component
 
-from pymint.constraints.constraint import LayoutConstraint
+from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
 
 
 class ArrayConstraint(LayoutConstraint):
