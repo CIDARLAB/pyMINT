@@ -46,7 +46,9 @@ def layer_dict(params_dict) -> Dict:
 
 
 @pytest.fixture
-def device_dict(component_dict, connection_dict, feature_dict, layer_dict, valve1_dict, valve2_dict) -> Dict:
+def device_dict(
+    component_dict, connection_dict, feature_dict, layer_dict, valve1_dict, valve2_dict
+) -> Dict:
     ret = {
         "name": "dev1",
         "params": {

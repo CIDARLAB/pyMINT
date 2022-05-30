@@ -1,8 +1,9 @@
+from parchmint import Component, Layer, Params
+
 from pymint.constraints.orientationconstraint import (
     ComponentOrientation,
     OrientationConstraint,
 )
-from parchmint import Component, Layer, Params
 from pymint.mintlayer import MINTLayerType
 
 

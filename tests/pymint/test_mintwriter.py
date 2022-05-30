@@ -1,6 +1,6 @@
 from parchmint import Component, Connection, Layer, Params, Target
-from pymint.mintlayer import MINTLayerType
 
+from pymint.mintlayer import MINTLayerType
 from pymint.mintterminal import MINTTerminal
 from pymint.mintvia import MINTVia
 from pymint.mintwriter import (
@@ -18,7 +18,9 @@ def test_to_component_MINT(params_dict, layer):
     """
     Test that the Component class can be converted to a MINT
     """
-    component = Component(name="c1", ID="c1", entity="TEST", params=Params(params_dict), layers=[layer])
+    component = Component(
+        name="c1", ID="c1", entity="TEST", params=Params(params_dict), layers=[layer]
+    )
     params_string = ""
     for param in params_dict:
         params_string += param + "=" + str(params_dict[param]) + " "
@@ -77,9 +79,9 @@ def test_to_layer_MINT(params_dict, layer):
     Test that the Layer class can be converted to a MINT
     """
     layer = Layer(layer_id="WHATEVER", layer_type=str(MINTLayerType.FLOW))
-    assert generate_lisp_tree(to_layer_MINT(layer, "TEST CONTENT")) == generate_lisp_tree(
-        r"LAYER FLOW TEST CONTENT END LAYER"
-    )
+    assert generate_lisp_tree(
+        to_layer_MINT(layer, "TEST CONTENT")
+    ) == generate_lisp_tree(r"LAYER FLOW TEST CONTENT END LAYER")
 
 
 def test_to_via_MINT(params_dict, layer):
@@ -89,7 +91,9 @@ def test_to_via_MINT(params_dict, layer):
 
     via = MINTVia("via1", [layer], 100)
 
-    assert generate_lisp_tree(to_via_MINT(via)) == generate_lisp_tree("VIA via1 width=100;")
+    assert generate_lisp_tree(to_via_MINT(via)) == generate_lisp_tree(
+        "VIA via1 width=100;"
+    )
 
 
 def test_to_terminal_MINT(layer):

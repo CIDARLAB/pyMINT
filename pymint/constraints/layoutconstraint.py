@@ -1,9 +1,9 @@
 from enum import Enum
 from typing import List, Union
 
+from parchmint import Params
 from parchmint.component import Component
 from parchmint.connection import Connection
-from parchmint import Params
 
 
 class OperationType(Enum):

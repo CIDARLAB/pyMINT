@@ -1,4 +1,5 @@
 from parchmint import Component, Layer, Params
+
 from pymint.constraints.arrayconstraint import ArrayConstraint
 from pymint.mintlayer import MINTLayerType
 
