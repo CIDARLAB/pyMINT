@@ -3,7 +3,8 @@ from typing import Dict, List, Tuple
 import networkx as nx
 
 from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
-from parchmint import Component
+from parchmint import Component, Device
+
 from pymint.mintdevice import MINTDevice
 
 
@@ -31,7 +32,7 @@ class DistanceDictionaries:
 
     """
 
-    def __init__(self, groups_size: int, device: MINTDevice, undirected_netlist) -> None:
+    def __init__(self, groups_size: int, device: Device, undirected_netlist) -> None:
 
         # Initialize the dictionaries (the base data structure) with as many
         # dictionaries as we have groups
@@ -378,9 +379,7 @@ class MirrorConstraint(LayoutConstraint):
         self._relationship_map["mirror_groups"] = value
 
     @staticmethod
-    def find_mirror_groups(
-        driving_component: Component, device: MINTDevice, mirror_count: int
-    ) -> List[List[Component]]:
+    def find_mirror_groups(driving_component: Component, device: Device, mirror_count: int) -> List[List[Component]]:
         def find_component_references(groups: List[List[str]]):
             return [[device.get_component(cid) for cid in group] for group in groups]
 
@@ -485,7 +484,7 @@ class MirrorConstraint(LayoutConstraint):
         return find_component_references(ret)
 
     @staticmethod
-    def generate_constraints(mirror_driving_components: List[Component], device: MINTDevice) -> None:
+    def generate_constraints(mirror_driving_components: List[Component], mint_device: MINTDevice) -> None:
         """Generate the mirror constraints for the device
 
         Args:
@@ -498,7 +497,9 @@ class MirrorConstraint(LayoutConstraint):
 
             if in_mirror_count > 1:
                 # Find groups for in_mirror_count
-                mirror_groups = MirrorConstraint.find_mirror_groups(mirror_driving_component, device, in_mirror_count)
+                mirror_groups = MirrorConstraint.find_mirror_groups(
+                    mirror_driving_component, mint_device.device, in_mirror_count
+                )
 
                 print("In Mirror Groups")
                 print(mirror_groups)
@@ -512,11 +513,13 @@ class MirrorConstraint(LayoutConstraint):
                         mirror_groups=mirror_groups,
                     )
 
-                    device.add_constraint(mirror_constraint)
+                    mint_device.add_constraint(mirror_constraint)
 
             if out_mirror_count > 1:
                 # Find groups for out_mirror_count
-                mirror_groups = MirrorConstraint.find_mirror_groups(mirror_driving_component, device, out_mirror_count)
+                mirror_groups = MirrorConstraint.find_mirror_groups(
+                    mirror_driving_component, mint_device.device, out_mirror_count
+                )
                 print("Out Mirror Groups")
                 print(mirror_groups)
 
@@ -529,4 +532,4 @@ class MirrorConstraint(LayoutConstraint):
                         mirror_groups=mirror_groups,
                     )
 
-                    device.add_constraint(mirror_constraint)
+                    mint_device.add_constraint(mirror_constraint)

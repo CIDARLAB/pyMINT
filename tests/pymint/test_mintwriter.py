@@ -89,7 +89,7 @@ def test_to_via_MINT(params_dict, layer):
 
     via = MINTVia("via1", [layer], 100)
 
-    assert to_via_MINT(via) == "VIA via1 width=100;"
+    assert generate_lisp_tree(to_via_MINT(via)) == generate_lisp_tree("VIA via1 width=100;")
 
 
 def test_to_terminal_MINT(layer):

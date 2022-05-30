@@ -33,13 +33,11 @@ class MINTCompiler(mintListener):
 
     def enterHeader(self, ctx: mintParser.HeaderContext):
         if self.current_device is None:
-            raise Exception(
-                "Error Initializing the device. Could not find the current device"
-            )
+            raise Exception("Error Initializing the device. Could not find the current device")
 
         if ctx.device_name is None:
             raise Exception("Could not find Device Name")
-        self.current_device.name = ctx.device_name.text
+        self.current_device.device.name = ctx.device_name.text
 
     def exitLayerBlock(self, ctx: mintParser.LayerBlockContext):
         # Increement teh layer block
@@ -47,9 +45,7 @@ class MINTCompiler(mintListener):
 
     def enterFlowBlock(self, ctx: mintParser.FlowBlockContext):
         if self.current_device is None:
-            raise Exception(
-                "Error Initializing the device. Could not find the current device"
-            )
+            raise Exception("Error Initializing the device. Could not find the current device")
         layer = self.current_device.create_mint_layer(
             str(self.current_layer_id),
             str(self.flow_layer_count),
@@ -62,9 +58,7 @@ class MINTCompiler(mintListener):
 
     def enterControlBlock(self, ctx: mintParser.ControlBlockContext):
         if self.current_device is None:
-            raise Exception(
-                "Error Initializing the device. Could not find the current device"
-            )
+            raise Exception("Error Initializing the device. Could not find the current device")
 
         layer = self.current_device.create_mint_layer(
             str(self.current_layer_id),
@@ -78,9 +72,7 @@ class MINTCompiler(mintListener):
 
     def enterIntegrationBlock(self, ctx: mintParser.IntegrationBlockContext):
         if self.current_device is None:
-            raise Exception(
-                "Error Initializing the device. Could not find the current device"
-            )
+            raise Exception("Error Initializing the device. Could not find the current device")
 
         layer = self.current_device.create_mint_layer(
             str(self.current_layer_id),
@@ -141,9 +133,7 @@ class MINTCompiler(mintListener):
 
     def exitPrimitiveStat(self, ctx: mintParser.PrimitiveStatContext):
         if self.current_device is None:
-            raise Exception(
-                "Error Initializing the device. Could not find the current device"
-            )
+            raise Exception("Error Initializing the device. Could not find the current device")
 
         entity = self.current_entity
         if entity is None:
@@ -153,9 +143,7 @@ class MINTCompiler(mintListener):
         for ufname in ctx.ufnames().ufname():  # type: ignore
             if self._current_layer is None:
                 raise Exception("Current layer is set to None")
-            if not (
-                self._current_layer is not None and self._current_layer.ID is not None
-            ):
+            if not (self._current_layer is not None and self._current_layer.ID is not None):
                 raise AssertionError
             self.current_device.create_mint_component(
                 ufname.getText(),
@@ -200,9 +188,7 @@ class MINTCompiler(mintListener):
             component_name = name + "_" + str(i)
             if self._current_layer is None:
                 raise Exception("Current Layer not Set")
-            if not (
-                self._current_layer is not None and self._current_layer.ID is not None
-            ):
+            if not (self._current_layer is not None and self._current_layer.ID is not None):
                 raise AssertionError
             self.current_device.create_mint_component(
                 component_name, entity, self.current_params, [self._current_layer.ID]
@@ -210,9 +196,7 @@ class MINTCompiler(mintListener):
 
     def exitGridDeclStat(self, ctx: mintParser.GridDeclStatContext):
         if self.current_device is None:
-            raise Exception(
-                "Error Initializing the device. Could not find the current device"
-            )
+            raise Exception("Error Initializing the device. Could not find the current device")
 
         entity = self.current_entity
         if entity is None:
@@ -233,9 +217,7 @@ class MINTCompiler(mintListener):
 
     def exitChannelStat(self, ctx: mintParser.ChannelStatContext):
         if self.current_device is None:
-            raise Exception(
-                "Error Initializing the device. Could not find the current device"
-            )
+            raise Exception("Error Initializing the device. Could not find the current device")
 
         entity = self.current_entity
         if entity is None:
@@ -244,10 +226,10 @@ class MINTCompiler(mintListener):
 
         source_target = ctx.uftarget()[0]  # type: ignore
         source_id = source_target.ID().getText()
-        if self.current_device.component_exists(source_id) is False:
+        if self.current_device.device.component_exists(source_id) is False:
             raise Exception(
                 "Error ! - Could not find the component '{}' in device '{}'".format(
-                    source_id, self.current_device.name
+                    source_id, self.current_device.device.name
                 )
             )
         if source_target.INT():
@@ -260,10 +242,10 @@ class MINTCompiler(mintListener):
 
         sink_target = ctx.uftarget()[1]  # type: ignore
         sink_id = sink_target.ID().getText()
-        if self.current_device.component_exists(sink_id) is False:
+        if self.current_device.device.component_exists(sink_id) is False:
             raise Exception(
                 "Error ! - Could not find the component '{}' in device '{}'".format(
-                    sink_id, self.current_device.name
+                    sink_id, self.current_device.device.name
                 )
             )
         if sink_target.INT():
@@ -326,9 +308,7 @@ class MINTCompiler(mintListener):
 
     def exitSpanStat(self, ctx: mintParser.SpanStatContext):
         if self.current_device is None:
-            raise Exception(
-                "Error Initializing the device. Could not find the current device"
-            )
+            raise Exception("Error Initializing the device. Could not find the current device")
 
         entity = self.current_entity
         if entity is None:
@@ -356,9 +336,7 @@ class MINTCompiler(mintListener):
     def exitNodeStat(self, ctx: mintParser.NodeStatContext):
         entity = "NODE"
         if self.current_device is None:
-            raise Exception(
-                "Error Initializing the device. Could not find the current device"
-            )
+            raise Exception("Error Initializing the device. Could not find the current device")
 
         # Loop for each of the components that need to be created with this param
         if not (self._current_layer is not None and self._current_layer.ID is not None):
@@ -373,9 +351,7 @@ class MINTCompiler(mintListener):
 
     def exitValveStat(self, ctx: mintParser.ValveStatContext):
         if self.current_device is None:
-            raise Exception(
-                "Error Initializing the device. Could not find the current device"
-            )
+            raise Exception("Error Initializing the device. Could not find the current device")
 
         entity = self.current_entity
         if entity is None:
@@ -391,30 +367,26 @@ class MINTCompiler(mintListener):
             [self._current_layer.ID],
         )
         connection_name = ctx.ufname()[1].getText()  # type: ignore
-        valve_connection = self.current_device.get_connection(connection_name)
+        valve_connection = self.current_device.device.get_connection(connection_name)
         if valve_connection is None:
             raise Exception(
                 "Error: Could not find connection '{}' in device '{}'".format(
-                    connection_name, self.current_device.name
+                    connection_name, self.current_device.device.name
                 )
             )
 
-        self.current_device.map_valve(valve_component, valve_connection)
+        self.current_device.device.map_valve(valve_component, valve_connection)
 
     def enterViaStat(self, ctx: mintParser.ViaStatContext):
         if self.current_device is None:
-            raise Exception(
-                "Error Initializing the device. Could not find the current device"
-            )
+            raise Exception("Error Initializing the device. Could not find the current device")
 
         for ufname in ctx.ufnames().ufname():
             self.current_device.add_via(ufname.getText(), [])
 
     def enterTerminalStat(self, ctx: mintParser.TerminalStatContext):
         if self.current_device is None:
-            raise Exception(
-                "Error Initializing the device. Could not find the current device"
-            )
+            raise Exception("Error Initializing the device. Could not find the current device")
 
         terminal_name = ctx.ufname().getText()
         pin_number = int(ctx.INT.getText())

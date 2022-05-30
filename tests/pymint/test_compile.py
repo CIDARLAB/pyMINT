@@ -24,7 +24,7 @@ def test_bank_test1():
     mint_file = "tests/mint_files/bank_test1.mint"
     mint_device = MINTDevice.from_mint_file(mint_file)
     # Convert it to Parchmint
-    parchmint_device = mint_device.to_parchmint_v1_2()
+    parchmint_device = mint_device.to_parchmint()
     # Write the Parchmint to a file
     with open(mint_file.replace(".mint", ".json"), "r") as data_file:
         text = data_file.read()
@@ -36,7 +36,7 @@ def test_node_test1():
     mint_file = "tests/mint_files/node_test1.mint"
     mint_device = MINTDevice.from_mint_file(mint_file)
     # Convert it to Parchmint
-    parchmint_device = mint_device.to_parchmint_v1_2()
+    parchmint_device = mint_device.to_parchmint()
     # Write the Parchmint to a file
     with open(mint_file.replace(".mint", ".json"), "r") as data_file:
         text = data_file.read()
@@ -48,7 +48,7 @@ def test_node_test2():
     mint_file = "tests/mint_files/node_test2.mint"
     mint_device = MINTDevice.from_mint_file(mint_file)
     # Convert it to Parchmint
-    parchmint_device = mint_device.to_parchmint_v1_2()
+    parchmint_device = mint_device.to_parchmint()
     # Write the Parchmint to a file
     with open(mint_file.replace(".mint", ".json"), "r") as data_file:
         text = data_file.read()
@@ -60,7 +60,7 @@ def test_mirror_test1():
     mint_file = "tests/mint_files/mirror_test1.mint"
     mint_device = MINTDevice.from_mint_file(mint_file)
     # Convert it to Parchmint
-    parchmint_device = mint_device.to_parchmint_v1_2()
+    parchmint_device = mint_device.to_parchmint()
     # Write the Parchmint to a file
     with open(mint_file.replace(".mint", ".json"), "r") as data_file:
         text = data_file.read()
@@ -72,7 +72,7 @@ def test_mirror_test2():
     mint_file = "tests/mint_files/mirror_test2.mint"
     mint_device = MINTDevice.from_mint_file(mint_file)
     # Convert it to Parchmint
-    parchmint_device = mint_device.to_parchmint_v1_2()
+    parchmint_device = mint_device.to_parchmint()
     # Write the Parchmint to a file
     with open(mint_file.replace(".mint", ".json"), "r") as data_file:
         text = data_file.read()
@@ -84,7 +84,7 @@ def test_mirror_test3():
     mint_file = "tests/mint_files/mirror_test3.mint"
     mint_device = MINTDevice.from_mint_file(mint_file)
     # Convert it to Parchmint
-    parchmint_device = mint_device.to_parchmint_v1_2()
+    parchmint_device = mint_device.to_parchmint()
     # Write the Parchmint to a file
     with open(mint_file.replace(".mint", ".json"), "r") as data_file:
         text = data_file.read()
@@ -96,7 +96,7 @@ def test_mirror_test4():
     mint_file = "tests/mint_files/mirror_test4.mint"
     mint_device = MINTDevice.from_mint_file(mint_file)
     # Convert it to Parchmint
-    parchmint_device = mint_device.to_parchmint_v1_2()
+    parchmint_device = mint_device.to_parchmint()
     # Write the Parchmint to a file
     with open(mint_file.replace(".mint", ".json"), "r") as data_file:
         text = data_file.read()
@@ -112,7 +112,7 @@ def test_mirror_test4():
 #         # Load the mint file
 #         mint_device = MINTDevice.from_mint_file(mint_file)
 #         # Convert it to Parchmint
-#         parchmint_device = mint_device.to_parchmint_v1_2()
+#         parchmint_device = mint_device.to_parchmint()
 #         # Write the Parchmint to a file
 #         with open(mint_file.replace(".mint", ".json"), "r") as data_file:
 #             text = data_file.read()

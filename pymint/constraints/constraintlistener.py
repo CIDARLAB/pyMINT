@@ -51,9 +51,7 @@ class ConstraintListener(mintListener):
 
         self._orthogonal_origin_candidates = []
 
-    def enterPositionConstraintStat(
-        self, ctx: mintParser.PositionConstraintStatContext
-    ):
+    def enterPositionConstraintStat(self, ctx: mintParser.PositionConstraintStatContext):
         self._xpos = 0
         self._ypos = 0
         self._zpos = 0
@@ -72,14 +70,10 @@ class ConstraintListener(mintListener):
             raise Exception("Invalid coordinate label !")
 
     def exitPositionConstraintStat(self, ctx: mintParser.PositionConstraintStatContext):
-        constraint = PositionConstraint(
-            self._constrained_components[0], self._xpos, self._ypos, self._zpos
-        )
+        constraint = PositionConstraint(self._constrained_components[0], self._xpos, self._ypos, self._zpos)
         self.current_device.add_constraint(constraint)
 
-    def enterHorizontalSpacingParam(
-        self, ctx: mintParser.HorizontalSpacingParamContext
-    ):
+    def enterHorizontalSpacingParam(self, ctx: mintParser.HorizontalSpacingParamContext):
         self._horizontal_spacing = float(ctx.value().getText())  # type: ignore
 
     def enterVerticalSpacingParam(self, ctx: mintParser.VerticalSpacingParamContext):
@@ -95,15 +89,11 @@ class ConstraintListener(mintListener):
         if ctx.xdim is not None:
             xdim = int(ctx.xdim.text)
         else:
-            logging.warning(
-                "No X Dimension found for GRID stat, setting dimension to 1"
-            )
+            logging.warning("No X Dimension found for GRID stat, setting dimension to 1")
         if ctx.ydim is not None:
             ydim = int(ctx.ydim.text)
         else:
-            logging.warning(
-                "No Y Dimension found for GRID stat, setting dimension to 1"
-            )
+            logging.warning("No Y Dimension found for GRID stat, setting dimension to 1")
         # We need to add all the parameters here
         constraint = ArrayConstraint(
             self._constrained_components,
@@ -122,9 +112,7 @@ class ConstraintListener(mintListener):
         else:
             logging.warning("No dimension found for BANK stat, setting dimension to 1")
         # We need to add all the parameters here
-        constraint = ArrayConstraint(
-            self._constrained_components, dim, horizontal_spacing=self._spacing
-        )
+        constraint = ArrayConstraint(self._constrained_components, dim, horizontal_spacing=self._spacing)
 
         self.current_device.add_constraint(constraint)
 
@@ -150,39 +138,27 @@ class ConstraintListener(mintListener):
         element_name = ctx.getText()
         component = None
         connection = None
-        if self.current_device.component_exists(element_name):
-            component = self.current_device.get_component(element_name)
-        elif self.current_device.connection_exists(element_name):
-            connection = self.current_device.get_connection(element_name)
+        if self.current_device.device.component_exists(element_name):
+            component = self.current_device.device.get_component(element_name)
+        elif self.current_device.device.connection_exists(element_name):
+            connection = self.current_device.device.get_connection(element_name)
         if component is not None:
             self._constrained_components.append(component)
         elif connection is not None:
             self._constrained_components.append(connection)
         else:
             # Check if theres a regex match against all the component names/id's
-            component_names = [
-                component.ID for component in self.current_device.components
-            ]
+            component_names = [component.ID for component in self.current_device.device.components]
             # Check if theres a regex match against all the connection id's in
             # component_name
-            matches = map(
-                lambda x: re.match(f"{element_name}_\\d+(_\\d+)?", x), component_names
-            )
+            matches = map(lambda x: re.match(f"{element_name}_\\d+(_\\d+)?", x), component_names)
             for match in matches:
                 if match is not None:
-                    self._constrained_components.append(
-                        self.current_device.get_component(match.group(0))
-                    )
+                    self._constrained_components.append(self.current_device.device.get_component(match.group(0)))
                     break
             else:
-                print(
-                    'Could not find component or connection with the ID "{}" in device'.format(
-                        element_name
-                    )
-                )
-                raise Exception(
-                    f"Component {element_name} not found while processing constraint"
-                )
+                print('Could not find component or connection with the ID "{}" in device'.format(element_name))
+                raise Exception(f"Component {element_name} not found while processing constraint")
 
     def enterLayerBlock(self, ctx: mintParser.LayerBlockContext):
         # Create a new relative orientation constraint for the whole layer
@@ -210,11 +186,7 @@ class ConstraintListener(mintListener):
         # periphery
         for component in self._constrained_components:
             if component is None:
-                raise Exception(
-                    "Could not apply Orthogonal Constraint, {} component not found !".format(
-                        ctx.getText()
-                    )
-                )
+                raise Exception("Could not apply Orthogonal Constraint, {} component not found !".format(ctx.getText()))
 
             if self._check_if_component_constranied(component):
                 continue
@@ -239,14 +211,10 @@ class ConstraintListener(mintListener):
 
     def exitLayerBlock(self, ctx: mintParser.LayerBlockContext):
         # TODO: Fix how the mirror constraints are created
-        MirrorConstraint.generate_constraints(
-            self._mirror_constraint_driving_components, self.current_device
-        )
+        MirrorConstraint.generate_constraints(self._mirror_constraint_driving_components, self.current_device)
 
     def exitNetlist(self, ctx: mintParser.NetlistContext):
-        OrthogonalConstraint.generate_constraints(
-            self._orthogonal_origin_candidates, self.current_device
-        )
+        OrthogonalConstraint.generate_constraints(self._orthogonal_origin_candidates, self.current_device)
 
     # ------------ Helpers ----------
 

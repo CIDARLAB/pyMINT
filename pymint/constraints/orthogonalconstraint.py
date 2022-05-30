@@ -62,7 +62,9 @@ class OrthogonalConstraint(LayoutConstraint):
             device.add_constraint(constraint)
 
     @staticmethod
-    def traverse_node_component_neighbours(component: Component, mint_device: MINTDevice) -> List[Component]:
+    def traverse_node_component_neighbours(
+        component: Component, mint_device: MINTDevice
+    ) -> List[Component]:
         """Traverses the node networks to find the components covered by the constraint
 
         Args:
@@ -87,7 +89,7 @@ class OrthogonalConstraint(LayoutConstraint):
             """
             neighbors = list(nx.neighbors(graph, root_node))
             for neighbor in neighbors:
-                component = current_device.get_component(neighbor)
+                component = current_device.device.get_component(neighbor)
                 if component in nodes:
                     continue
                 if component.entity == "NODE":

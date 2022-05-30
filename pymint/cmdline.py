@@ -38,7 +38,7 @@ def convert_to_parchmint(
         current_device = MINTDevice.from_mint_file(str(input_file), skip_constraints)
 
         # Save the device parchmint v1_2 to a file
-        parchmint_text = current_device.to_parchmint_v1_2()
+        parchmint_text = current_device.to_parchmint()
 
         # Create new file in outpath with the same name as the current device
         outpath.mkdir(parents=True, exist_ok=True)
@@ -49,7 +49,7 @@ def convert_to_parchmint(
 
         # Generate a graph view of the device
         if generate_graph_view:
-            printgraph(current_device.device.graph, current_device.name)
+            printgraph(current_device.device.graph, current_device.device.name)
     else:
         raise Exception("Unsupported file extension: {}".format(extension))
 
@@ -59,17 +59,11 @@ def printgraph(G, filename: str) -> None:
     print("output:", str(tt.absolute()))
     nx.nx_agraph.to_agraph(G).write(str(tt.absolute()))
 
-    os.system(
-        "dot -Tpdf {} -o {}.pdf".format(
-            str(tt.absolute()), pathlib.Path(OUTPUT_DIR).joinpath(tt.stem)
-        )
-    )
+    os.system("dot -Tpdf {} -o {}.pdf".format(str(tt.absolute()), pathlib.Path(OUTPUT_DIR).joinpath(tt.stem)))
 
 
 @click.command()
-@click.option(
-    "--version", is_flag=True, callback=print_version, expose_value=False, is_eager=True
-)
+@click.option("--version", is_flag=True, callback=print_version, expose_value=False, is_eager=True)
 @click.argument(
     "input_files",
     nargs=-1,

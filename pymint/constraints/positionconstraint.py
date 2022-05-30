@@ -1,6 +1,3 @@
-from typing import Optional
-
-
 from parchmint.component import Component
 
 from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
@@ -59,11 +56,11 @@ class PositionConstraint(LayoutConstraint):
             raise KeyError("xpos not set in the constraint")
 
     @xpos.setter
-    def xpos(self, value: Optional[int]) -> None:
+    def xpos(self, value: float) -> None:
         """Sets the x position of the component
 
         Args:
-            value (Optional[int]): x coordinate of the component
+            value (float): x coordinate of the component
         """
         self._params.set_param("xpos", value)
 
@@ -80,11 +77,11 @@ class PositionConstraint(LayoutConstraint):
             raise KeyError("ypos not set in the constraint")
 
     @ypos.setter
-    def ypos(self, value: Optional[int]) -> None:
+    def ypos(self, value: float) -> None:
         """Sets the y position of the component
 
         Args:
-            value (Optional[int]): y coordinate of the component
+            value (float): y coordinate of the component
         """
         self._params.set_param("ypos", value)
 
@@ -101,10 +98,10 @@ class PositionConstraint(LayoutConstraint):
             raise KeyError("zpos not set in the constraint")
 
     @zpos.setter
-    def zpos(self, value: Optional[int]) -> None:
+    def zpos(self, value: float) -> None:
         """Sets the z position of the component
 
         Args:
-            value (Optional[int]): z coordinate of the component
+            value (float): z coordinate of the component
         """
         self._params.set_param("zpos", value)

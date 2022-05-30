@@ -20,7 +20,7 @@ from pymint.mintwriter import (
 )
 
 
-class MINTDevice(Device, MINTProtocol):
+class MINTDevice(MINTProtocol):
     """Device class abstracting parchmint Device object adding additional
     methods for generating MINT
 
@@ -37,10 +37,10 @@ class MINTDevice(Device, MINTProtocol):
             name (str): name of the device
             json (str, optional): JSON string. Defaults to None.
         """
-        super(MINTDevice, self).__init__(name)
+        super().__init__()
 
         self._device = Device() if device_ref is None else device_ref
-
+        self._device.name = name
         self._layout_constraints: List[LayoutConstraint] = []
         self._terminals: List[MINTTerminal] = []
         self._vias: List[MINTVia] = []
@@ -54,9 +54,7 @@ class MINTDevice(Device, MINTProtocol):
         """
         return self._device
 
-    def create_mint_component(
-        self, name: str, technology: str, params: Dict, layer_ids: List[str]
-    ) -> Component:
+    def create_mint_component(self, name: str, technology: str, params: Dict, layer_ids: List[str]) -> Component:
         """Creates a new component and adds it to the device
 
         Args:
@@ -72,9 +70,7 @@ class MINTDevice(Device, MINTProtocol):
         layers = []
         for layer_id in layer_ids:
             layers.append(self._device.get_layer(layer_id))
-        component = Component(
-            name=name, ID=name, layers=layers, params=Params(params), entity=technology
-        )
+        component = Component(name=name, ID=name, layers=layers, params=Params(params), entity=technology)
         self._device.add_component(component)
         return component
 
@@ -103,7 +99,7 @@ class MINTDevice(Device, MINTProtocol):
         Returns:
             Connection: Returns the newly created connection
         """
-        layer = self.get_layer(layer_id)
+        layer = self.device.get_layer(layer_id)
         if layer is None:
             raise Exception("Cannot create new MINT connection with invalid layer")
         if layer is None:
@@ -120,9 +116,7 @@ class MINTDevice(Device, MINTProtocol):
         self._device.add_connection(connection)
         return connection
 
-    def create_mint_layer(
-        self, ID: str, name_postfix: str, group, layer_type: MINTLayerType
-    ) -> Layer:
+    def create_mint_layer(self, ID: str, name_postfix: str, group, layer_type: MINTLayerType) -> Layer:
         """[summary]
 
         Args:
@@ -139,7 +133,7 @@ class MINTDevice(Device, MINTProtocol):
         layer.ID = ID
         layer.name = name
         layer.group = group
-        layer.type = str(layer_type)
+        layer.layer_type = str(layer_type)
         self._device.add_layer(layer)
         return layer
 
@@ -170,9 +164,9 @@ class MINTDevice(Device, MINTProtocol):
             Component: [description]
         """
         valve = self.create_mint_component(name, technology, params, layer_ids)
-        if connection not in self.connections:
+        if connection not in self.device.connections:
             raise Exception("Connection {} not found".format(connection.ID))
-        self.map_valve(valve, connection, valve_type)
+        self.device.map_valve(valve, connection, valve_type)
         return valve
 
     def get_constraints(self) -> List[LayoutConstraint]:
@@ -202,7 +196,7 @@ class MINTDevice(Device, MINTProtocol):
         # layout constraints
 
         # Generate a valve list for the device
-        valve_list = self.valves
+        valve_list = self.device.valves
         via_list = [via.component for via in self._vias]
         full_layer_text = ""
 
@@ -210,42 +204,35 @@ class MINTDevice(Device, MINTProtocol):
         via_text = "\n".join([to_via_MINT(via) for via in self._vias])
 
         # Loop Over all the layers
-        for layer in self.layers:
+        for layer in self.device.layers:
             componenttext = "\n".join(
                 [
                     to_component_MINT(item)
-                    for item in self.components
-                    if item.layers[0] == layer
-                    and item not in valve_list
-                    and item not in via_list
+                    for item in self.device.components
+                    if item.layers[0] == layer and item not in valve_list and item not in via_list
                 ]
             )
 
             valvetext = ""
-            if layer.type is str(MINTLayerType.CONTROL):
+            if layer.layer_type is str(MINTLayerType.CONTROL):
                 valvetext = "\n".join(
                     [
-                        to_valve_MINT(item, self.get_valve_connection(item))
+                        to_valve_MINT(item, self.device.get_valve_connection(item))
                         for item in valve_list
                         if layer in item.layers
                     ]
                 )
 
             connectiontext = "\n".join(
-                [
-                    to_connection_MINT(item)
-                    for item in self.connections
-                    if item.layer == layer
-                ]
+                [to_connection_MINT(item) for item in self.device.connections if item.layer == layer]
             )
 
             full_layer_text += to_layer_MINT(
                 layer,
-                "{}\n\n{}\n\n{}".format(componenttext, valvetext, connectiontext)
-                + "\n\n",
+                "{}\n\n{}\n\n{}".format(componenttext, valvetext, connectiontext) + "\n\n",
             )
 
-        full = "DEVICE {}\n\n{}\n\n{}".format(self.name, via_text, full_layer_text)
+        full = "DEVICE {}\n\n{}\n\n{}".format(self.device.name, via_text, full_layer_text)
         return full
 
     def add_terminal(self, name: str, pin_number: int, layer_id: str) -> MINTTerminal:
@@ -259,7 +246,7 @@ class MINTDevice(Device, MINTProtocol):
         Returns:
             MINTTerminal: The newly created terminal
         """
-        layer = self.get_layer(layer_id)
+        layer = self.device.get_layer(layer_id)
         ret = MINTTerminal(name, pin_number, layer)
         self._terminals.append(ret)
         self.device.components.append(ret.component)
@@ -279,6 +266,16 @@ class MINTDevice(Device, MINTProtocol):
         ret = MINTVia(name, layers)
         self._vias.append(ret)
         self.device.components.append(ret.component)
+        return ret
+
+    def to_parchmint(self):
+        """Returns the Parchmint string of the device
+
+        Returns:
+            str: Parchmint string
+        """
+        ret = self.device.to_parchmint_v1_2()
+        ret["layoutConstraints"] = [constraint.to_parchmint_v1_x() for constraint in self._layout_constraints]
         return ret
 
     @staticmethod

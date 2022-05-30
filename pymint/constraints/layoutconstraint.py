@@ -24,7 +24,9 @@ class LayoutConstraint:
 
     """
 
-    def __init__(self, operation_type: OperationType = OperationType.CUTSOM_OPERATION) -> None:
+    def __init__(
+        self, operation_type: OperationType = OperationType.CUTSOM_OPERATION
+    ) -> None:
         """Creates a new instance of the LayoutConstraint"""
         self._components: List[Union[Component, Component]] = []
         self._connections: List[Union[Connection, Connection]] = []
@@ -105,7 +107,11 @@ class LayoutConstraint:
             elif isinstance(entry, Enum):
                 ret = str(entry)
             else:
-                raise Exception("Unsupported type for key in relationship map: {}".format(type(entry)))
+                raise Exception(
+                    "Unsupported type for key in relationship map: {}".format(
+                        type(entry)
+                    )
+                )
             return ret
 
         ret = {}

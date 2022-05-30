@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Dict
 
-from pymint.constraints.layoutconstraint import LayoutConstraint
+from pymint.constraints.layoutconstraint import LayoutConstraint, OperationType
 from parchmint import Component
 
 
@@ -41,7 +41,8 @@ class OrientationConstraint(LayoutConstraint):
 
     def __init__(self) -> None:
         """Creates an instance of the orientation constraint"""
-        super().__init__()
+        super().__init__(OperationType.RELATIVE_OPERATIONS)
+        self._type = "ORIENTATION_CONSTRAINT"
 
     def add_component_orientation_pair(self, component: Component, orientation: ComponentOrientation) -> None:
         """Adds a component onto the constraint
