@@ -8,7 +8,9 @@ from pymint.mintlayer import MINTLayerType
 
 
 def test_to_parchmint_v1_x(orientation_constraint_json):
-    mlayer = Layer(layer_id="f", name="f", group="0", layer_type=str(MINTLayerType.FLOW))
+    mlayer = Layer(
+        layer_id="f", name="f", group="0", layer_type=str(MINTLayerType.FLOW)
+    )
     mc1 = Component(
         ID="c1",
         entity="TEST",
@@ -35,9 +37,17 @@ def test_to_parchmint_v1_x(orientation_constraint_json):
     )
 
     orientation_constraint = OrientationConstraint()
-    orientation_constraint.add_component_orientation_pair(mc1, ComponentOrientation.HORIZONTAL)
-    orientation_constraint.add_component_orientation_pair(mc2, ComponentOrientation.VERTICAL)
-    orientation_constraint.add_component_orientation_pair(mc3, ComponentOrientation.HORIZONTAL)
-    orientation_constraint.add_component_orientation_pair(mc4, ComponentOrientation.VERTICAL)
+    orientation_constraint.add_component_orientation_pair(
+        mc1, ComponentOrientation.HORIZONTAL
+    )
+    orientation_constraint.add_component_orientation_pair(
+        mc2, ComponentOrientation.VERTICAL
+    )
+    orientation_constraint.add_component_orientation_pair(
+        mc3, ComponentOrientation.HORIZONTAL
+    )
+    orientation_constraint.add_component_orientation_pair(
+        mc4, ComponentOrientation.VERTICAL
+    )
 
     assert orientation_constraint.to_parchmint_v1_x() == orientation_constraint_json

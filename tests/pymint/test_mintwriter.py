@@ -3,9 +3,14 @@ from parchmint import Component, Connection, Layer, Params, Target
 from pymint.mintlayer import MINTLayerType
 from pymint.mintterminal import MINTTerminal
 from pymint.mintvia import MINTVia
-from pymint.mintwriter import (to_component_MINT, to_connection_MINT,
-                               to_layer_MINT, to_target_MINT, to_terminal_MINT,
-                               to_via_MINT)
+from pymint.mintwriter import (
+    to_component_MINT,
+    to_connection_MINT,
+    to_layer_MINT,
+    to_target_MINT,
+    to_terminal_MINT,
+    to_via_MINT,
+)
 from tests.conftest import generate_lisp_tree
 
 

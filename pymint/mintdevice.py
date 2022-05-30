@@ -11,8 +11,13 @@ from pymint.mintlayer import MINTLayerType
 from pymint.mintprotocol import MINTProtocol
 from pymint.mintterminal import MINTTerminal
 from pymint.mintvia import MINTVia
-from pymint.mintwriter import (to_component_MINT, to_connection_MINT,
-                               to_layer_MINT, to_valve_MINT, to_via_MINT)
+from pymint.mintwriter import (
+    to_component_MINT,
+    to_connection_MINT,
+    to_layer_MINT,
+    to_valve_MINT,
+    to_via_MINT,
+)
 
 
 class MINTDevice(MINTProtocol):
