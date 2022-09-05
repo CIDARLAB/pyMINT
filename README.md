@@ -97,3 +97,11 @@ To install and work with ANTLR, one can follow the instructions at the [ANTLR Qu
 ```
 antlr4 -o ./pymint/antlrgen -listener -visitor -Dlanguage=Python3 -lib . ./mint.g4
 ```
+
+## Other Resources
+
+Visual Studio Code [extension](https://marketplace.visualstudio.com/items?itemName=rkrishnasanka.uf) - Currently supports syntax highlighting, etc.
+
+## License
+
+BSD 3-Clause 2022, CIDAR Lab
