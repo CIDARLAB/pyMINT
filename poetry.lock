@@ -598,17 +598,22 @@ description = "Parchmint is data interchange standard for representing microflui
 category = "main"
 optional = false
 python-versions = ">=3.8,<3.11"
-files = [
-    {file = "parchmint-0.3.3-py3-none-any.whl", hash = "sha256:a615c35c4813880815b3ef0950b5034aca7ecd39e35ddeb0ddb19c3f90b11dba"},
-    {file = "parchmint-0.3.3.tar.gz", hash = "sha256:c14eb8446f4483fbf1f2a85c6558df607f59f0a2c7e9b3c6f0edc917a88beb41"},
-]
+files = []
+develop = true
 
 [package.dependencies]
-argparse = ">=1.4.0,<2.0.0"
-jsonschema = ">=3.2.0,<4.0.0"
-networkx = ">=3.0,<4.0"
-numpy = ">=1.22.4,<2.0.0"
-tabulate = ">=0.8.9,<0.9.0"
+argparse = "^1.4.0"
+jsonschema = "^3.2.0"
+networkx = "^3.0"
+numpy = "^1.22.4"
+tabulate = "^0.8.9"
+
+[package.extras]
+docs = []
+
+[package.source]
+type = "directory"
+url = "../pyparchmint"
 
 [[package]]
 name = "pathspec"
@@ -1121,4 +1126,4 @@ docs = []
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.11"
-content-hash = "19d065105b6b6f4f3a38e7207013407146264f5e01dc4771a0ab9209e312bbde"
+content-hash = "c7dc4ad8f199ea8f13388e2f6f57dd699ab5c3cb18fe0d5bd6a72182eacd8569"
