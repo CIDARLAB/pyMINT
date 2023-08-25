@@ -93,7 +93,7 @@ def to_layer_MINT(layer: Layer, content: str) -> str:
     Returns:
         str: Returns the MINT string fragment
     """
-    ret = "LAYER {} \n\n{} \n\nEND LAYER".format(layer.layer_type, content)
+    ret = "LAYER {}\n\n{}\n\nEND LAYER\n\n".format(layer.layer_type, content)
     return ret
 
 
