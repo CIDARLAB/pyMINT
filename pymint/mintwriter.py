@@ -33,7 +33,9 @@ def to_component_MINT(component: Component) -> str:
     Returns:
         str: MINT string fragment
     """
-    return "{} {} {};".format(component.entity, component.ID, to_params_MINT(component.params))
+    return "{} {} {};".format(
+        component.entity, component.ID, to_params_MINT(component.params)
+    )
 
 
 def to_valve_MINT(component: Component, connection: Connection) -> str:
@@ -48,7 +50,9 @@ def to_valve_MINT(component: Component, connection: Connection) -> str:
     Returns:
         str: MINT string fragment
     """
-    return "{} {} on {} {};".format(component.entity, component.ID, connection.ID, to_params_MINT(component.params))
+    return "{} {} on {} {};".format(
+        component.entity, component.ID, connection.ID, to_params_MINT(component.params)
+    )
 
 
 def to_connection_MINT(connection: Connection) -> str:
