@@ -25,7 +25,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install graphviz deps
-        run: apt-get install -y graphviz-dev
+        run: sudo apt-get install -y graphviz-dev
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
