@@ -2,6 +2,7 @@ import logging
 from typing import Dict, Optional
 
 from parchmint import Layer, Target
+from parchmint.device import ValveType
 
 from pymint.antlrgen.mintListener import mintListener
 from pymint.antlrgen.mintParser import mintParser
@@ -384,12 +385,8 @@ class MINTCompiler(mintListener):
         valve_name = ctx.ufname()[0].getText()  # type: ignore
         if not (self._current_layer is not None and self._current_layer.ID is not None):
             raise AssertionError
-        valve_component = self.current_device.create_mint_component(
-            valve_name,
-            entity,
-            self.current_params,
-            [self._current_layer.ID],
-        )
+
+        # Get the connection information
         connection_name = ctx.ufname()[1].getText()  # type: ignore
         valve_connection = self.current_device.device.get_connection(connection_name)
         if valve_connection is None:
@@ -399,7 +396,14 @@ class MINTCompiler(mintListener):
                 )
             )
 
-        self.current_device.device.map_valve(valve_component, valve_connection)
+        self.current_device.create_valve(
+            name=valve_name,
+            technology=entity,
+            params=self.current_params,
+            layer_ids=[self._current_layer.ID],
+            connection=valve_connection,
+            valve_type=ValveType.NORMALLY_OPEN,
+        )
 
     def enterViaStat(self, ctx: mintParser.ViaStatContext):
         if self.current_device is None:
