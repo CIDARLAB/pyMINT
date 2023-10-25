@@ -130,7 +130,7 @@
     ],
     "features": [],
     "version": "1.2",
-    "valveMap": [
+    "valves": [
         {
             "componentid": "v1",
             "connectionid": "c1",
