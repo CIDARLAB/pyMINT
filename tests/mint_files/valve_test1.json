@@ -1,0 +1,141 @@
+{
+    "name": "valve_test1",
+    "components": [
+        {
+            "name": "p1",
+            "id": "p1",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "p2",
+            "id": "p2",
+            "layers": [
+                "0"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "cp1",
+            "id": "cp1",
+            "layers": [
+                "1"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "PORT",
+            "x-span": -1,
+            "y-span": -1
+        },
+        {
+            "name": "v1",
+            "id": "v1",
+            "layers": [
+                "1"
+            ],
+            "params": {
+                "position": [
+                    -1,
+                    -1
+                ]
+            },
+            "ports": [],
+            "entity": "VALVE",
+            "x-span": -1,
+            "y-span": -1
+        }
+    ],
+    "connections": [
+        {
+            "sinks": [
+                {
+                    "component": "p2",
+                    "port": null
+                }
+            ],
+            "name": "c1",
+            "id": "c1",
+            "source": {
+                "component": "p1",
+                "port": null
+            },
+            "params": {},
+            "layer": "0",
+            "paths": [],
+            "entity": "CHANNEL"
+        },
+        {
+            "sinks": [
+                {
+                    "component": "cp1",
+                    "port": null
+                }
+            ],
+            "name": "cc1",
+            "id": "cc1",
+            "source": {
+                "component": "v1",
+                "port": null
+            },
+            "params": {},
+            "layer": "1",
+            "paths": [],
+            "entity": "CHANNEL"
+        }
+    ],
+    "params": {
+        "x-span": 0,
+        "y-span": 0
+    },
+    "layers": [
+        {
+            "name": "FLOW_0",
+            "id": "0",
+            "type": "FLOW",
+            "params": {},
+            "group": "0"
+        },
+        {
+            "name": "FLOW_0",
+            "id": "1",
+            "type": "CONTROL",
+            "params": {},
+            "group": "0"
+        }
+    ],
+    "features": [],
+    "version": "1.2",
+    "valveMap": [
+        {
+            "componentid": "v1",
+            "connectionid": "c1",
+            "type": "NORMALLY_OPEN"
+        }
+    ],
+    "layoutConstraints": []
+}

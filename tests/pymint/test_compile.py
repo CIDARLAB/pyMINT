@@ -104,6 +104,31 @@ def test_mirror_test4():
         assert ordered(parchmint_device) == ordered(device_json)
 
 
+def test_grid2():
+    mint_file = "tests/mint_files/grid_03.mint"
+    mint_device = MINTDevice.from_mint_file(mint_file)
+    # Convert it to Parchmint
+    parchmint_device = mint_device.to_parchmint()
+    # Write the Parchmint to a file
+    with open(mint_file.replace(".mint", ".json"), "r") as data_file:
+        text = data_file.read()
+        device_json = json.loads(text)
+        assert ordered(parchmint_device) == ordered(device_json)
+
+
+def test_valve_test1():
+    mint_file = "tests/mint_files/valve_test1.mint"
+    mint_device = MINTDevice.from_mint_file(mint_file)
+    # Convert it to Parchmint
+    parchmint_device = mint_device.to_parchmint()
+    # Write the Parchmint to a file
+    with open(mint_file.replace(".mint", ".json"), "r") as data_file:
+        text = data_file.read()
+        device_json = json.loads(text)
+        assert ordered(parchmint_device) == ordered(device_json)
+
+
+
 # def test_full_flow():
 
 #     # Load each of the .mint files in in the tests/mint_files directory
