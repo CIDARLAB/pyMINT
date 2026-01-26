@@ -8,7 +8,7 @@ packages = [ {include = "pymint"}]
 
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.11"
+python = ">=3.8,<3.13"
 antlr4-python3-runtime = "^4.8"
 networkx = "^3.0"
 pygraphviz = "^1.9"
