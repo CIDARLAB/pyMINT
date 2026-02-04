@@ -130,7 +130,12 @@ paramStat:
 	| widthParam
 	| constraintParams
 	| lengthParam
-	| spacingParam;
+	| spacingParam
+	| idParam;
+
+idParam: param_element WS* '=' WS* id_value;
+
+id_value: ID | ID_BIG;
 
 constraintParams:
 	rotationParam
@@ -174,9 +179,9 @@ ufterminal: INT;
 
 uftargets: uftarget WS* (',' WS* uftarget)+;
 
-uftarget: target_name = ID (WS+ target_terminal = INT)?;
+uftarget: target_name = (ID | ID_BIG) (WS+ target_terminal = INT)?;
 
-ufname: ID;
+ufname: (ID | ID_BIG);
 
 ufnames: ufname WS* (',' WS* ufname)* WS*;
 
@@ -200,7 +205,7 @@ ID: ('a' ..'z' | '_') (
 		| '_'
 	)*;
 
-ID_BIG: ('A' ..'Z' | '_') ('A' ..'Z' | '_' | '0' ..'9')*;
+ID_BIG: ('A' ..'Z' | '_') ('A' ..'Z' | 'a' ..'z' | '_' | '0' ..'9')*;
 
 INT: [0-9]+; // Define token INT as one or more digits
 

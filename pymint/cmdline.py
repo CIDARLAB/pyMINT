@@ -40,9 +40,9 @@ def convert_to_parchmint(
         # Save the device parchmint v1_2 to a file
         parchmint_text = current_device.to_parchmint()
 
-        # Create new file in outpath with the same name as the current device
+        # Create new file in outpath with _fromMINT suffix (distinct from LFR output _fromLFR.json)
         outpath.mkdir(parents=True, exist_ok=True)
-        with open(str(outpath.joinpath(input_file.stem + ".json")), "w") as f:
+        with open(str(outpath.joinpath(input_file.stem + "_fromMINT.json")), "w") as f:
             print("Writing to file: {}".format(f.name))
 
             json.dump(parchmint_text, f, indent=4)

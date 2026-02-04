@@ -323,6 +323,24 @@ class mintListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by mintParser#idParam.
+    def enterIdParam(self, ctx:mintParser.IdParamContext):
+        pass
+
+    # Exit a parse tree produced by mintParser#idParam.
+    def exitIdParam(self, ctx:mintParser.IdParamContext):
+        pass
+
+
+    # Enter a parse tree produced by mintParser#id_value.
+    def enterId_value(self, ctx:mintParser.Id_valueContext):
+        pass
+
+    # Exit a parse tree produced by mintParser#id_value.
+    def exitId_value(self, ctx:mintParser.Id_valueContext):
+        pass
+
+
     # Enter a parse tree produced by mintParser#constraintParams.
     def enterConstraintParams(self, ctx:mintParser.ConstraintParamsContext):
         pass

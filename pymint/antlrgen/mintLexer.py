@@ -242,5 +242,24 @@ class mintLexer(Lexer):
         self._interp = LexerATNSimulator(self, self.atn, self.decisionsToDFA, PredictionContextCache())
         self._actions = None
         self._predicates = None
+        self._pending_token = None
+
+    def nextToken(self):
+        """Override to merge single-char ID_BIG with following ID (e.g. C + port_0 -> Cport_0)."""
+        if self._pending_token is not None:
+            t = self._pending_token
+            self._pending_token = None
+            return t
+        t = super().nextToken()
+        if t.type == mintLexer.ID_BIG and t.text and len(t.text) == 1 and t.text[0].isupper():
+            n = super().nextToken()
+            if n.type == mintLexer.ID and n.text:
+                merged = t.clone()
+                merged.type = mintLexer.ID_BIG
+                merged.stop = n.stop
+                merged._text = t.text + n.text
+                return merged
+            self._pending_token = n
+        return t
 
 

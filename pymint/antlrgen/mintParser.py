@@ -520,6 +520,8 @@ class mintParser ( Parser ):
     RULE_positionConstraintStat = 54
     RULE_setCoordinate = 55
     RULE_orientation = 56
+    RULE_idParam = 57
+    RULE_id_value = 58
 
     ruleNames =  [ "netlist", "importBlock", "importStat", "header", "ufmoduleBlock", 
                    "globalStats", "ufmoduleStat", "layerBlocks", "layerBlock", 
@@ -1365,6 +1367,7 @@ class mintParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
+            self._ctx = localctx  # keep controlBlock context in case error recovery clears it
             self.state = 212
             self._errHandler.sync(self)
             _la = self._input.LA(1)
@@ -1378,34 +1381,31 @@ class mintParser ( Parser ):
             self.state = 215
             self.match(mintParser.T__5)
             self.state = 225
-            self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,18,self._ctx)
+            _alt = 1
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
-                if _alt==1:
-                    self.state = 219
-                    self._errHandler.sync(self)
+                self.state = 219
+                self._ctx = localctx  # restore after possible controlStat() / error recovery
+                _la = self._input.LA(1)
+                while _la==mintParser.WS:
+                    self.state = 216
+                    self.match(mintParser.WS)
                     _la = self._input.LA(1)
-                    while _la==mintParser.WS:
-                        self.state = 216
-                        self.match(mintParser.WS)
-                        self.state = 221
-                        self._errHandler.sync(self)
-                        _la = self._input.LA(1)
-
+                if _la == mintParser.T__4:  # 'END LAYER' - no more statements
+                    break
+                if _alt==1:
                     self.state = 222
-                    self.controlStat() 
+                    self.controlStat()
+                    self._ctx = localctx  # restore after controlStat in case it left _ctx None
                 self.state = 227
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,18,self._ctx)
 
             self.state = 231
-            self._errHandler.sync(self)
+            self._ctx = localctx  # ensure valid context before matching trailing WS and END LAYER
             _la = self._input.LA(1)
             while _la==mintParser.WS:
                 self.state = 228
                 self.match(mintParser.WS)
-                self.state = 233
-                self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
             self.state = 234
@@ -1756,6 +1756,25 @@ class mintParser ( Parser ):
         try:
             self.state = 275
             self._errHandler.sync(self)
+            # Prefer primitiveStat for PORT/NODE, channelStat for CHANNEL (so CONTROL layer parses correctly)
+            la1 = self._input.LA(1)
+            if la1 == mintParser.ID_BIG:
+                tok = self._input.LT(1)
+                if tok and tok.text == "PORT":
+                    self.enterOuterAlt(localctx, 9)
+                    self.primitiveStat()
+                    self.exitRule()
+                    return localctx
+                if tok and tok.text == "NODE":
+                    self.enterOuterAlt(localctx, 10)
+                    self.nodeStat()
+                    self.exitRule()
+                    return localctx
+            if la1 == mintParser.T__16:  # 'CHANNEL'
+                self.enterOuterAlt(localctx, 2)
+                self.channelStat()
+                self.exitRule()
+                return localctx
             la_ = self._interp.adaptivePredict(self._input,22,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
@@ -1995,21 +2014,22 @@ class mintParser ( Parser ):
             self.state = 291 
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while True:
+            while _la==mintParser.WS:
                 self.state = 290
                 self.match(mintParser.WS)
+                _la = self._input.LA(1)
+                if _la != mintParser.WS:
+                    break
                 self.state = 293 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not (_la==mintParser.WS):
-                    break
 
             self.state = 295
             self.ufnames()
             self.state = 302
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,28,self._ctx)
-            if la_ == 1:
+            if la_ == 1 and self._input.LA(1) == mintParser.WS:
                 self.state = 297 
                 self._errHandler.sync(self)
                 _alt = 1
@@ -3725,72 +3745,72 @@ class mintParser ( Parser ):
                 raise NoViableAltException(self)
 
             self.state = 686 
-            self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while True:
+            while _la==mintParser.WS:
                 self.state = 685
                 self.match(mintParser.WS)
+                _la = self._input.LA(1)
+                if _la != mintParser.WS:
+                    break
                 self.state = 688 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not (_la==mintParser.WS):
-                    break
 
             self.state = 690
             self.ufname()
             self.state = 692 
-            self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while True:
+            while _la==mintParser.WS:
                 self.state = 691
                 self.match(mintParser.WS)
+                _la = self._input.LA(1)
+                if _la != mintParser.WS:
+                    break
                 self.state = 694 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not (_la==mintParser.WS):
-                    break
 
             self.state = 696
             self.match(mintParser.T__17)
             self.state = 698 
-            self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while True:
+            while _la==mintParser.WS:
                 self.state = 697
                 self.match(mintParser.WS)
+                _la = self._input.LA(1)
+                if _la != mintParser.WS:
+                    break
                 self.state = 700 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not (_la==mintParser.WS):
-                    break
 
             self.state = 702
             localctx.source = self.uftarget()
             self.state = 704 
-            self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while True:
+            while _la==mintParser.WS:
                 self.state = 703
                 self.match(mintParser.WS)
+                _la = self._input.LA(1)
+                if _la != mintParser.WS:
+                    break
                 self.state = 706 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not (_la==mintParser.WS):
-                    break
 
             self.state = 708
             self.match(mintParser.T__11)
             self.state = 710 
-            self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while True:
+            while _la==mintParser.WS:
                 self.state = 709
                 self.match(mintParser.WS)
+                _la = self._input.LA(1)
+                if _la != mintParser.WS:
+                    break
                 self.state = 712 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not (_la==mintParser.WS):
-                    break
 
             self.state = 714
             localctx.sink = self.uftarget()
@@ -4078,10 +4098,21 @@ class mintParser ( Parser ):
             _alt = self._interp.adaptivePredict(self._input,112,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1:
+                    # Do not consume WS+ID_BIG(lowercase) so "PORT Cport_0" leaves WS for primitiveStat
+                    if self._input.LA(1) == mintParser.WS:
+                        _tok2 = self._input.LT(2)
+                        if _tok2 and _tok2.type == mintParser.ID_BIG and _tok2.text and any(c.islower() for c in _tok2.text):
+                            break
                     self.state = 777
                     self.match(mintParser.WS)
+                    # Do not consume ID_BIG with lowercase (e.g. Cport_0) as entity; leave for ufnames
+                    _la = self._input.LA(1)
+                    if _la == mintParser.ID_BIG:
+                        _tok = self._input.LT(1)
+                        if _tok and _tok.text and any(c.islower() for c in _tok.text):
+                            break
                     self.state = 778
-                    self.entity_element() 
+                    self.entity_element()
                 self.state = 783
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,112,self._ctx)
@@ -4272,15 +4303,11 @@ class mintParser ( Parser ):
             self.state = 804
             self.match(mintParser.T__2)
             self.state = 808
-            self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,116,self._ctx)
-            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
-                if _alt==1:
-                    self.state = 805
-                    self.match(mintParser.WS) 
-                self.state = 810
-                self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,116,self._ctx)
+            _la = self._input.LA(1)
+            while _la==mintParser.WS:
+                self.state = 805
+                self.match(mintParser.WS)
+                _la = self._input.LA(1)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -4370,6 +4397,10 @@ class mintParser ( Parser ):
             return self.getTypedRuleContext(mintParser.SpacingParamContext,0)
 
 
+        def idParam(self):
+            return self.getTypedRuleContext(mintParser.IdParamContext,0)
+
+
         def getRuleIndex(self):
             return mintParser.RULE_paramStat
 
@@ -4397,6 +4428,23 @@ class mintParser ( Parser ):
         try:
             self.state = 819
             self._errHandler.sync(self)
+            # Prefer idParam when value is ID/ID_BIG (e.g. controlPort=Cport_0) - use LA() only
+            idx = 1
+            while self._input.LA(idx) == mintParser.WS:
+                idx += 1
+            if self._input.LA(idx) == mintParser.ID:
+                # Look ahead: ID WS* '=' WS* (ID|ID_BIG) -> idParam
+                idx += 1
+                while self._input.LA(idx) == mintParser.WS:
+                    idx += 1
+                if self._input.LA(idx) == mintParser.T__20:  # '='
+                    idx += 1
+                    while self._input.LA(idx) == mintParser.WS:
+                        idx += 1
+                    if self._input.LA(idx) in (mintParser.ID, mintParser.ID_BIG):
+                        self.enterOuterAlt(localctx, 7)
+                        self.idParam()
+                        return localctx
             la_ = self._interp.adaptivePredict(self._input,117,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
@@ -4432,6 +4480,12 @@ class mintParser ( Parser ):
                 self.enterOuterAlt(localctx, 6)
                 self.state = 818
                 self.spacingParam()
+                pass
+
+            else:
+                self.enterOuterAlt(localctx, 7)
+                self.state = 819
+                self.idParam()
                 pass
 
 
@@ -4719,6 +4773,138 @@ class mintParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 849
             self.match(mintParser.ID)
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.exitRule()
+        return localctx
+
+
+    class IdParamContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+        def param_element(self):
+            return self.getTypedRuleContext(mintParser.Param_elementContext,0)
+
+
+        def id_value(self):
+            return self.getTypedRuleContext(mintParser.Id_valueContext,0)
+
+
+        def WS(self, i:int=None):
+            if i is None:
+                return self.getTokens(mintParser.WS)
+            else:
+                return self.getToken(mintParser.WS, i)
+
+        def getRuleIndex(self):
+            return mintParser.RULE_idParam
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterIdParam" ):
+                listener.enterIdParam(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitIdParam" ):
+                listener.exitIdParam(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitIdParam" ):
+                return visitor.visitIdParam(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class Id_valueContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+        def ID(self):
+            return self.getToken(mintParser.ID, 0)
+
+        def ID_BIG(self):
+            return self.getToken(mintParser.ID_BIG, 0)
+
+        def getRuleIndex(self):
+            return mintParser.RULE_id_value
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterId_value" ):
+                listener.enterId_value(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitId_value" ):
+                listener.exitId_value(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitId_value" ):
+                return visitor.visitId_value(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    def idParam(self):
+        localctx = mintParser.IdParamContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 57, self.RULE_idParam)
+        self._la = 0
+        try:
+            self.enterOuterAlt(localctx, 1)
+            self.state = 853
+            self.param_element()
+            self.state = 857
+            self._errHandler.sync(self)
+            _la = self._input.LA(1)
+            while _la==mintParser.WS:
+                self.state = 854
+                self.match(mintParser.WS)
+                self.state = 859
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
+            self.state = 860
+            self.match(mintParser.T__20)
+            self.state = 864
+            _la = self._input.LA(1)
+            while _la==mintParser.WS:
+                self.state = 861
+                self.match(mintParser.WS)
+                _la = self._input.LA(1)
+                if _la in (mintParser.ID, mintParser.ID_BIG):
+                    break
+                self.state = 866
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
+            self.state = 867
+            self.id_value()
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.exitRule()
+        return localctx
+
+
+    def id_value(self):
+        localctx = mintParser.Id_valueContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 58, self.RULE_id_value)
+        try:
+            self.enterOuterAlt(localctx, 1)
+            self.state = 869
+            _la = self._input.LA(1)
+            if _la in [mintParser.ID, mintParser.ID_BIG]:
+                self.match(_la)
+            else:
+                self._errHandler.reportInputMismatch(self)
+                raise RecognitionException()
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -5527,6 +5713,9 @@ class mintParser ( Parser ):
         def ID(self):
             return self.getToken(mintParser.ID, 0)
 
+        def ID_BIG(self):
+            return self.getToken(mintParser.ID_BIG, 0)
+
         def INT(self):
             return self.getToken(mintParser.INT, 0)
 
@@ -5564,7 +5753,12 @@ class mintParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 1002
-            localctx.target_name = self.match(mintParser.ID)
+            _la = self._input.LA(1)
+            if not(_la in [mintParser.ID, mintParser.ID_BIG]):
+                self._errHandler.reportInputMismatch(self)
+                raise RecognitionException()
+            localctx.target_name = self.getCurrentToken()
+            self.consume()
             self.state = 1009
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,142,self._ctx)
@@ -5604,6 +5798,9 @@ class mintParser ( Parser ):
         def ID(self):
             return self.getToken(mintParser.ID, 0)
 
+        def ID_BIG(self):
+            return self.getToken(mintParser.ID_BIG, 0)
+
         def getRuleIndex(self):
             return mintParser.RULE_ufname
 
@@ -5631,7 +5828,12 @@ class mintParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 1011
-            self.match(mintParser.ID)
+            _la = self._input.LA(1)
+            if _la in [mintParser.ID, mintParser.ID_BIG]:
+                self.match(_la)
+            else:
+                self._errHandler.reportInputMismatch(self)
+                raise RecognitionException()
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
