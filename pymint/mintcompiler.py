@@ -100,9 +100,13 @@ class MINTCompiler(mintListener):
         self.current_params = {}
 
     def enterIntParam(self, ctx: mintParser.IntParamContext):
-        value = ctx.value().getText()  # type: ignore
+        value_str = ctx.value().getText()  # type: ignore
         key = ctx.param_element().getText()  # type: ignore
-        self.current_params[key] = int(value)
+        # Grammar allows value to be INT | Real_number; accept both (e.g. 1000.0 from LFR output)
+        if "." in value_str or "e" in value_str.lower():
+            self.current_params[key] = float(value_str)
+        else:
+            self.current_params[key] = int(value_str)
 
     def enterBoolParam(self, ctx: mintParser.BoolParamContext):
         if ctx.boolvalue.getText() == "YES":
@@ -121,7 +125,7 @@ class MINTCompiler(mintListener):
         self.current_params["spacing"] = value
 
     def enterWidthParam(self, ctx: mintParser.WidthParamContext):
-        value = ctx.value().getText()  # type: ignore
+        value_str = ctx.value().getText()  # type: ignore
         if ctx.key is None:
             raise AssertionError
         key = ctx.key.text
@@ -129,8 +133,10 @@ class MINTCompiler(mintListener):
             raise Exception("Error in parsing the width parameter")
         if key == "w":
             key = "width"
-
-        self.current_params[key] = int(value)
+        if "." in value_str or "e" in value_str.lower():
+            self.current_params[key] = float(value_str)
+        else:
+            self.current_params[key] = int(value_str)
 
     def enterIdParam(self, ctx: mintParser.IdParamContext):
         key = ctx.param_element().getText()  # type: ignore
