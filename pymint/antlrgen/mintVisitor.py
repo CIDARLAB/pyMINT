@@ -1,4 +1,4 @@
-# Generated from ./mint.g4 by ANTLR 4.10.1
+# Generated from mint.g4 by ANTLR 4.10
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .mintParser import mintParser
@@ -181,6 +181,16 @@ class mintVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by mintParser#paramStat.
     def visitParamStat(self, ctx:mintParser.ParamStatContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by mintParser#idParam.
+    def visitIdParam(self, ctx:mintParser.IdParamContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by mintParser#id_value.
+    def visitId_value(self, ctx:mintParser.Id_valueContext):
         return self.visitChildren(ctx)
 
 

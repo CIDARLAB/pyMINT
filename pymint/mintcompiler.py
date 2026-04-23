@@ -24,6 +24,7 @@ class MINTCompiler(mintListener):
         self.current_entity: Optional[str] = None
         self.current_params: Dict = {}
         self._current_layer: Optional[Layer] = None
+        self._bank_base_names: set = set()
 
     def enterNetlist(self, ctx: mintParser.NetlistContext):
         self.current_device = MINTDevice("DEFAULT_NAME")
@@ -207,6 +208,7 @@ class MINTCompiler(mintListener):
         dim = int(ctx.dim.text)
 
         name = ctx.ufname().getText()  # type: ignore
+        self._bank_base_names.add(name)
 
         for i in range(1, dim + 1):
             component_name = name + "_" + str(i)
@@ -259,18 +261,31 @@ class MINTCompiler(mintListener):
         source_id = (
             _sn.text if _sn is not None else (source_target.ID() or source_target.ID_BIG()).getText()
         )
+        if source_target.INT():
+            source_port = source_target.INT().getText()
+        else:
+            source_port = None
+
+        # BANK indexing: if `b N` names a bank element (component `b_N`), rewrite
+        # the channel target to that component (with no specific port), matching
+        # user intent `V BANK b of K ...` followed by `CHANNEL ... from b N ...`.
+        if (
+            source_id in self._bank_base_names
+            and source_port is not None
+            and self.current_device.device.component_exists(source_id) is False
+        ):
+            bank_elem = "{}_{}".format(source_id, source_port)
+            if self.current_device.device.component_exists(bank_elem):
+                source_id = bank_elem
+                source_port = None
+
         if self.current_device.device.component_exists(source_id) is False:
             raise Exception(
                 "Error ! - Could not find the component '{}' in device '{}'".format(
                     source_id, self.current_device.device.name
                 )
             )
-        if source_target.INT():
-            source_port = source_target.INT().getText()
-        else:
-            source_port = None
 
-        # source_uftarget = Target(component_id=source_id, port=source_port)
         source_uftarget = Target(component_id=source_id, port=source_port)
 
         sink_target = ctx.uftarget()[1]  # type: ignore
@@ -278,16 +293,27 @@ class MINTCompiler(mintListener):
         sink_id = (
             _sn2.text if _sn2 is not None else (sink_target.ID() or sink_target.ID_BIG()).getText()
         )
+        if sink_target.INT():
+            sink_port = sink_target.INT().getText()
+        else:
+            sink_port = None
+
+        if (
+            sink_id in self._bank_base_names
+            and sink_port is not None
+            and self.current_device.device.component_exists(sink_id) is False
+        ):
+            bank_elem = "{}_{}".format(sink_id, sink_port)
+            if self.current_device.device.component_exists(bank_elem):
+                sink_id = bank_elem
+                sink_port = None
+
         if self.current_device.device.component_exists(sink_id) is False:
             raise Exception(
                 "Error ! - Could not find the component '{}' in device '{}'".format(
                     sink_id, self.current_device.device.name
                 )
             )
-        if sink_target.INT():
-            sink_port = sink_target.INT().getText()
-        else:
-            sink_port = None
 
         sink_uftarget = Target(component_id=sink_id, port=sink_port)
 

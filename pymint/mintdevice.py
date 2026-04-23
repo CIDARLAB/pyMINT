@@ -317,7 +317,7 @@ class MINTDevice(MINTProtocol):
         from pymint.mintcompiler import MINTCompiler
         from pymint.mintErrorListener import MINTErrorListener
 
-        finput = FileStream(filepath)
+        finput = FileStream(filepath, encoding="utf-8")
 
         lexer = mintLexer(finput)
 
