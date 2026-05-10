@@ -87,6 +87,8 @@ class OrthogonalConstraint(LayoutConstraint):
             Args:
                 root_node (str): node from which we need to do the traversal
             """
+            if root_node not in graph:
+                return
             neighbors = list(nx.neighbors(graph, root_node))
             for neighbor in neighbors:
                 component = current_device.device.get_component(neighbor)

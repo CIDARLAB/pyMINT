@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 from typing import Dict, List, Optional
 
 from parchmint import Component, Connection, Layer, Params, Target
@@ -335,8 +334,11 @@ class MINTDevice(MINTProtocol):
         tree = parser.netlist()
 
         if error_listener.pass_through is False:
+            err_text = parse_output.getvalue()
+            if err_text.strip():
+                print(err_text)
             print("STOPPED: Syntax Error(s) Found")
-            sys.exit(0)
+            raise ValueError(f"MINT syntax error(s) while parsing {filepath!r}")
 
         walker = ParseTreeWalker()
 

@@ -10,7 +10,7 @@ importBlock: importStat+;
 
 importStat: WS* 'IMPORT' WS+ ufmodulename;
 
-header: WS* 'DEVICE' WS+ device_name = ID;
+header: WS* 'DEVICE' WS+ device_name = (ID | ID_BIG);
 
 ufmoduleBlock: globalStats+;
 
@@ -31,24 +31,23 @@ integrationBlock:
 	'LAYER INTEGRATION' (integrationStat)* 'END LAYER';
 
 flowStat:
-	primitiveStat
-	| nodeStat
+	nodeStat
 	| channelStat
 	| netStat
 	| bankDeclStat
-	| gridStat
-	| spanStat
-	| positionConstraintStat
+	| bankStat
+	| bankGenStat
 	| gridStat
 	| gridGenStat
 	| gridDeclStat
-	| bankStat
-	| bankGenStat
-	| bankDeclStat
-	| terminalStat;
+	| spanStat
+	| positionConstraintStat
+	| terminalStat
+	| primitiveStat;
 
 controlStat:
 	valveStat
+	| viaStat
 	| channelStat
 	| netStat
 	| bankDeclStat
@@ -56,11 +55,10 @@ controlStat:
 	| bankGenStat
 	| gridStat
 	| gridGenStat
-	| primitiveStat
-	| nodeStat
-	| viaStat
 	| positionConstraintStat
-	| terminalStat;
+	| terminalStat
+	| nodeStat
+	| primitiveStat;
 
 integrationStat: primitiveStat | positionConstraintStat;
 
@@ -179,11 +177,22 @@ ufterminal: INT;
 
 uftargets: uftarget WS* (',' WS* uftarget)+;
 
-uftarget: target_name = (ID | ID_BIG) (WS+ target_terminal = INT)?;
+uftarget: target_name = (ID | ID_BIG | 'X' | 'Y' | 'Z') (
+		WS+ target_terminal = INT
+	)?;
 
-ufname: (ID | ID_BIG);
+// Comma-separated instance names for primitives, BANK, GRID, NODE, CHANNEL, etc.
+// Split 1-element vs N-element variants so parsers disambiguate from other commas (e.g. uftargets).
+ufnames:
+	ufname (WS* ',' WS* ufname)+ WS*
+	| ufname WS*;
 
-ufnames: ufname WS* (',' WS* ufname)* WS*;
+ufname:
+	ID
+	| ID_BIG
+	| 'X'
+	| 'Y'
+	| 'Z';
 
 value: INT | Real_number;
 

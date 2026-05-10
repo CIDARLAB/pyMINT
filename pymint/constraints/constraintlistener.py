@@ -2,7 +2,7 @@ import logging
 import re
 from typing import List
 
-from parchmint import Component
+from parchmint import Component, Connection
 
 from pymint import MINTDevice
 from pymint.antlrgen.mintListener import mintListener
@@ -59,7 +59,8 @@ class ConstraintListener(mintListener):
         self._zpos = 0
 
     def enterSetCoordinate(self, ctx: mintParser.SetCoordinateContext):
-        coordinate_label = ctx.coordinate
+        tok = ctx.coordinate
+        coordinate_label = tok.text if tok is not None else ""
         coordinate_value = int(ctx.INT().getText())  # type: ignore
 
         if coordinate_label == "X":
@@ -115,18 +116,38 @@ class ConstraintListener(mintListener):
 
         self.current_device.add_constraint(constraint)
 
+    def enterGridStat(self, ctx: mintParser.GridStatContext):
+        self._constrained_components = []
+
+    def enterGridDeclStat(self, ctx: mintParser.GridDeclStatContext):
+        self._constrained_components = []
+
+    def enterGridGenStat(self, ctx: mintParser.GridGenStatContext):
+        self._constrained_components = []
+
+    def enterBankGenStat(self, ctx: mintParser.BankGenStatContext):
+        self._constrained_components = []
+
+    def enterBankStat(self, ctx: mintParser.BankStatContext):
+        self._constrained_components = []
+
     def exitBankStat(self, ctx: mintParser.BankStatContext):
-        dim = 1
-        if ctx.dim is not None:  # type: ignore
-            dim = int(ctx.dim.text)  # type: ignore
-        else:
-            logging.warning("No dimension found for BANK stat, setting dimension to 1")
-        # We need to add all the parameters here
+        dim = len(self._constrained_components)
+        if dim == 0:
+            logging.warning(
+                "No components matched for BANK stat; skipping ARRAY constraint"
+            )
+            return
         constraint = ArrayConstraint(
-            self._constrained_components, dim, horizontal_spacing=self._spacing
+            self._constrained_components,
+            dim,
+            horizontal_spacing=self._spacing,
         )
 
         self.current_device.add_constraint(constraint)
+
+    def enterBankDeclStat(self, ctx: mintParser.BankDeclStatContext):
+        self._constrained_components = []
 
     def exitBankDeclStat(self, ctx: mintParser.BankDeclStatContext):
         contraint = ArrayConstraint(
@@ -195,6 +216,7 @@ class ConstraintListener(mintListener):
     def exitFlowStat(self, ctx: mintParser.FlowStatContext):
         # Skip if there's no orientation set
         if self._orientation is None:
+            self._constrained_components = []
             return
 
         # In general check whats there and set the constraint for all the items
@@ -204,11 +226,20 @@ class ConstraintListener(mintListener):
             constraint.add_component_orientation_pair(component, self._orientation)
 
         self.current_device.add_constraint(constraint)
+        self._constrained_components = []
+
+    def enterControlStat(self, ctx: mintParser.ControlStatContext):
+        self._constrained_components = []
+
+    def exitControlStat(self, ctx: mintParser.ControlStatContext):
+        self._constrained_components = []
 
     def exitNodeStat(self, ctx: mintParser.NodeStatContext):
         # TODO: Expand on neighbours until we hit all the components on the node
         # periphery
         for component in self._constrained_components:
+            if isinstance(component, Connection):
+                continue
             if component is None:
                 raise Exception(
                     "Could not apply Orthogonal Constraint, {} component not found !".format(

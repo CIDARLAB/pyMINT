@@ -1,6 +1,7 @@
 import json
 import os
 import pathlib
+import subprocess
 from pathlib import Path
 from typing import List
 
@@ -59,10 +60,12 @@ def printgraph(G, filename: str) -> None:
     print("output:", str(tt.absolute()))
     nx.nx_agraph.to_agraph(G).write(str(tt.absolute()))
 
-    os.system(
-        "dot -Tpdf {} -o {}.pdf".format(
-            str(tt.absolute()), pathlib.Path(OUTPUT_DIR).joinpath(tt.stem)
-        )
+    pdf_out = pathlib.Path(OUTPUT_DIR).joinpath(tt.stem + ".pdf")
+    subprocess.run(
+        ["dot", "-Tpdf", str(tt.resolve()), "-o", str(pdf_out.resolve())],
+        check=False,
+        capture_output=True,
+        text=True,
     )
 
 

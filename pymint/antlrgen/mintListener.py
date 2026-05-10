@@ -1,4 +1,4 @@
-# Generated from mint.g4 by ANTLR 4.10
+# Generated from mint.g4 by ANTLR 4.10.1
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .mintParser import mintParser
@@ -476,21 +476,21 @@ class mintListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by mintParser#ufname.
-    def enterUfname(self, ctx:mintParser.UfnameContext):
-        pass
-
-    # Exit a parse tree produced by mintParser#ufname.
-    def exitUfname(self, ctx:mintParser.UfnameContext):
-        pass
-
-
     # Enter a parse tree produced by mintParser#ufnames.
     def enterUfnames(self, ctx:mintParser.UfnamesContext):
         pass
 
     # Exit a parse tree produced by mintParser#ufnames.
     def exitUfnames(self, ctx:mintParser.UfnamesContext):
+        pass
+
+
+    # Enter a parse tree produced by mintParser#ufname.
+    def enterUfname(self, ctx:mintParser.UfnameContext):
+        pass
+
+    # Exit a parse tree produced by mintParser#ufname.
+    def exitUfname(self, ctx:mintParser.UfnameContext):
         pass
 
 

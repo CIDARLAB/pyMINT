@@ -231,7 +231,7 @@ class DistanceDictionaries:
         ref_group = self.dictionaries[0]
         found_flag = False
         limit = 0
-        for distance_key in ref_group.keys():
+        for distance_key in list(ref_group.keys()):
             ref_component_type_set = set(
                 [
                     self.device.get_component(cid).entity
@@ -240,6 +240,10 @@ class DistanceDictionaries:
             )
             for group_index in range(1, len(self.dictionaries)):
                 group_to_test = self.dictionaries[group_index]
+                if distance_key not in group_to_test:
+                    found_flag = True
+                    limit = distance_key
+                    break
                 type_set_to_test = set(
                     [
                         self.device.get_component(cid).entity
@@ -274,22 +278,29 @@ class DistanceDictionaries:
         for test_group_index in range(1, len(self.dictionaries)):
             test_group = self.dictionaries[test_group_index]
 
-            for distance_key in test_group.keys():
+            for distance_key in list(test_group.keys()):
+                # After trim_dictionaries, reference group may no longer have this
+                # distance; skip type-matching for orphaned levels.
+                if distance_key not in ref_group_types:
+                    continue
                 ref_types_list = ref_group_types[distance_key].copy()
                 test_nodes = test_group[distance_key]
-                # Loop through the test nodes and remove their corresponding types from the ref_types_list
-                for node_index in range(len(test_nodes)):
+                node_index = 0
+                while node_index < len(test_nodes):
                     test_node = test_nodes[node_index]
-                    ref_types_list.remove(self.device.get_component(test_node).entity)
+                    entity = self.device.get_component(test_node).entity
+                    try:
+                        ref_types_list.remove(entity)
+                    except ValueError:
+                        self.remove_node_from_group(test_group_index, test_node)
+                        continue
                     if len(ref_types_list) == 0:
-                        # Remove all the remaining nodes and break from the loop
-                        for node_to_remove_index in range(
-                            node_index + 1, len(test_nodes)
-                        ):
+                        for j in range(len(test_nodes) - 1, node_index, -1):
                             self.remove_node_from_group(
-                                test_group_index, test_nodes[node_to_remove_index]
+                                test_group_index, test_nodes[j]
                             )
                         break
+                    node_index += 1
 
     def is_node_in_group(self, group_index: int, node: str) -> bool:
         group_dictionary = self.dictionaries[group_index]
