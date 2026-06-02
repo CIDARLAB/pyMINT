@@ -259,7 +259,9 @@ class MINTCompiler(mintListener):
         source_target = ctx.uftarget()[0]  # type: ignore
         _sn = getattr(source_target, "target_name", None)
         source_id = (
-            _sn.text if _sn is not None else (source_target.ID() or source_target.ID_BIG()).getText()
+            _sn.text
+            if _sn is not None
+            else (source_target.ID() or source_target.ID_BIG()).getText()
         )
         if source_target.INT():
             source_port = source_target.INT().getText()
@@ -291,7 +293,9 @@ class MINTCompiler(mintListener):
         sink_target = ctx.uftarget()[1]  # type: ignore
         _sn2 = getattr(sink_target, "target_name", None)
         sink_id = (
-            _sn2.text if _sn2 is not None else (sink_target.ID() or sink_target.ID_BIG()).getText()
+            _sn2.text
+            if _sn2 is not None
+            else (sink_target.ID() or sink_target.ID_BIG()).getText()
         )
         if sink_target.INT():
             sink_port = sink_target.INT().getText()
@@ -341,7 +345,9 @@ class MINTCompiler(mintListener):
         source_target = ctx.uftarget()
         _sn = getattr(source_target, "target_name", None)
         source_id = (
-            _sn.text if _sn is not None else (source_target.ID() or source_target.ID_BIG()).getText()
+            _sn.text
+            if _sn is not None
+            else (source_target.ID() or source_target.ID_BIG()).getText()
         )
         if source_target.INT():  # type: ignore
             source_port = source_target.INT().getText()  # type: ignore
@@ -355,7 +361,9 @@ class MINTCompiler(mintListener):
         for sink_target in ctx.uftargets().uftarget():  # type: ignore
             _sn2 = getattr(sink_target, "target_name", None)
             sink_id = (
-                _sn2.text if _sn2 is not None else (sink_target.ID() or sink_target.ID_BIG()).getText()
+                _sn2.text
+                if _sn2 is not None
+                else (sink_target.ID() or sink_target.ID_BIG()).getText()
             )
             if sink_target.INT():
                 sink_port = sink_target.INT().getText()
