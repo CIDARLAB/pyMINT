@@ -1,6 +1,6 @@
 DEVICE node_test2
 
-LAYER FLOW
+LAYER flow
 
 NODE n1, n2, n3;
 
@@ -32,4 +32,4 @@ CHANNEL c10 from n6 to p4;
 
 CHANNEL c11 from lct2 to n5;
 
-END LAYER
+END layer

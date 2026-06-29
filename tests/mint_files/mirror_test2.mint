@@ -1,6 +1,6 @@
 DEVICE mirror_test2
 
-LAYER FLOW
+LAYER flow
 
 PORT p_in1, p_out1, p_out2, p_out3, p_out4;
 
@@ -27,4 +27,4 @@ CHANNEL c_out3 from lct3 to p_out3;
 CHANNEL c_out4 from lct4 to p_out4;
 
 
-END LAYER
+END layer
