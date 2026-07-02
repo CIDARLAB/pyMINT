@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, Optional
+from typing import Dict, List, Optional, Set, Tuple
 
 from parchmint import Layer, Target
 from parchmint.device import ValveType
@@ -25,9 +25,13 @@ class MINTCompiler(mintListener):
         self.current_params: Dict = {}
         self._current_layer: Optional[Layer] = None
         self._bank_base_names: set = set()
+        self._imported_modules: Set[str] = set()
+        self._pending_ufmodule_instances: List[Tuple[str, str]] = []
 
     def enterNetlist(self, ctx: mintParser.NetlistContext):
         self.current_device = MINTDevice("DEFAULT_NAME")
+        self._imported_modules = set()
+        self._pending_ufmodule_instances = []
 
     def exitNetlist(self, ctx: mintParser.NetlistContext):
         if self.current_device is None:
@@ -59,6 +63,7 @@ class MINTCompiler(mintListener):
             MINTLayerType.FLOW,
         )
         self._current_layer = layer
+        self._flush_pending_ufmodule_instances_to_layer(layer)
         self.flow_layer_count += 1
         self.current_layer_id += 1
 
@@ -75,6 +80,7 @@ class MINTCompiler(mintListener):
             MINTLayerType.CONTROL,
         )
         self._current_layer = layer
+        self._flush_pending_ufmodule_instances_to_layer(layer)
         self.control_layer_count += 1
         self.current_layer_id += 1
 
@@ -91,8 +97,32 @@ class MINTCompiler(mintListener):
             MINTLayerType.INTEGRATION,
         )
         self._current_layer = layer
+        self._flush_pending_ufmodule_instances_to_layer(layer)
         self.integration_layer_count += 1
         self.current_layer_id += 1
+
+    def enterImportStat(self, ctx: mintParser.ImportStatContext):
+        module_name = ctx.ufmodulename().getText()
+        self._imported_modules.add(module_name)
+
+    def exitUfmoduleStat(self, ctx: mintParser.UfmoduleStatContext):
+        module_name = ctx.ufmodulename().getText()
+        if module_name not in self._imported_modules:
+            logging.warning(
+                "UF module '%s' used without prior IMPORT statement", module_name
+            )
+
+        instances = [u.getText() for u in ctx.ufnames().ufname()]  # type: ignore
+        for instance_name in instances:
+            if self._current_layer is not None:
+                self.current_device.create_mint_component(
+                    instance_name,
+                    module_name,
+                    {},
+                    [self._current_layer.ID],
+                )
+            else:
+                self._pending_ufmodule_instances.append((module_name, instance_name))
 
     def enterEntity(self, ctx: mintParser.EntityContext):
         self.current_entity = ctx.getText()
@@ -244,6 +274,36 @@ class MINTCompiler(mintListener):
                 self.current_params,
                 [self._current_layer.ID],
             )
+
+    def exitGridGenStat(self, ctx: mintParser.GridGenStatContext):
+        if self.current_device is None:
+            raise Exception(
+                "Error Initializing the device. Could not find the current device"
+            )
+
+        entity = self.current_entity
+        if entity is None:
+            raise Exception("Could not find the technology for the primitive")
+
+        if ctx.xdim is None or ctx.ydim is None:
+            raise AssertionError
+        xdim = int(ctx.xdim.text)
+        ydim = int(ctx.ydim.text)
+        base_name = ctx.ufname().getText()  # type: ignore
+
+        self._cleanup_grid_params()
+        if self._current_layer is None:
+            raise AssertionError
+
+        for x in range(1, xdim + 1):
+            for y in range(1, ydim + 1):
+                component_name = f"{base_name}_{x}_{y}"
+                self.current_device.create_mint_component(
+                    component_name,
+                    entity,
+                    self.current_params,
+                    [self._current_layer.ID],
+                )
 
     def exitChannelStat(self, ctx: mintParser.ChannelStatContext):
         if self.current_device is None:
@@ -492,3 +552,22 @@ class MINTCompiler(mintListener):
     def _cleanup_channel_params(self):
         if "length" in self.current_params:
             del self.current_params["length"]
+
+    def _flush_pending_ufmodule_instances_to_layer(self, layer: Layer) -> None:
+        if self.current_device is None:
+            raise Exception(
+                "Error Initializing the device. Could not find the current device"
+            )
+        if layer.ID is None:
+            raise AssertionError
+        if not self._pending_ufmodule_instances:
+            return
+
+        for module_name, instance_name in self._pending_ufmodule_instances:
+            self.current_device.create_mint_component(
+                instance_name,
+                module_name,
+                {},
+                [layer.ID],
+            )
+        self._pending_ufmodule_instances = []

@@ -16,7 +16,7 @@ ufmoduleBlock: globalStats+;
 
 globalStats: ufmoduleStat | viaStat;
 
-ufmoduleStat: ufmodulename ufnames ';';
+ufmoduleStat: ufmodulename WS+ ufnames WS* ';';
 
 layerBlocks: layerBlock+;
 

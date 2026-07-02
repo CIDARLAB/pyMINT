@@ -1090,13 +1090,36 @@ class mintParser ( Parser ):
 
         localctx = mintParser.UfmoduleStatContext(self, self._ctx, self.state)
         self.enterRule(localctx, 12, self.RULE_ufmoduleStat)
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 170
             self.ufmodulename()
-            self.state = 171
+            self.state = 172 
+            self._errHandler.sync(self)
+            _la = self._input.LA(1)
+            while True:
+                self.state = 171
+                self.match(mintParser.WS)
+                self.state = 174 
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
+                if not (_la==mintParser.WS):
+                    break
+
+            self.state = 176
             self.ufnames()
-            self.state = 172
+            self.state = 178
+            self._errHandler.sync(self)
+            _la = self._input.LA(1)
+            while _la==mintParser.WS:
+                self.state = 177
+                self.match(mintParser.WS)
+                self.state = 180
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
+
+            self.state = 181
             self.match(mintParser.T__2)
         except RecognitionException as re:
             localctx.exception = re
