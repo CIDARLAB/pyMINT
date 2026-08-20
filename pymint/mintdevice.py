@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Dict, List, Optional
 
 from parchmint import Component, Connection, Layer, Params, Target
@@ -17,6 +18,24 @@ from pymint.mintwriter import (
     to_valve_MINT,
     to_via_MINT,
 )
+
+
+def strip_mint_line_comments(text: str) -> str:
+    """Remove MINT line comments so the lexer never sees them.
+
+    ``mint.g4`` skips both ``#`` (original) and ``//`` (LFR-style headers that
+    ``compile_lfr`` writes onto generated MINT, e.g. PORT COUNT CORRECTION).
+    Strip here as well so files parse even before ANTLR is regenerated.
+    """
+    out: List[str] = []
+    for line in text.splitlines():
+        if "//" in line:
+            line = line.split("//", 1)[0]
+        hash_at = line.find("#")
+        if hash_at != -1:
+            line = line[:hash_at]
+        out.append(line)
+    return "\n".join(out)
 
 
 class MINTDevice(MINTProtocol):
@@ -308,7 +327,7 @@ class MINTDevice(MINTProtocol):
         """
         import io
 
-        from antlr4 import CommonTokenStream, FileStream, ParseTreeWalker
+        from antlr4 import CommonTokenStream, InputStream, ParseTreeWalker
 
         from pymint.antlrgen.mintLexer import mintLexer
         from pymint.antlrgen.mintParser import mintParser
@@ -316,7 +335,9 @@ class MINTDevice(MINTProtocol):
         from pymint.mintcompiler import MINTCompiler
         from pymint.mintErrorListener import MINTErrorListener
 
-        finput = FileStream(filepath, encoding="utf-8")
+        raw = Path(filepath).read_text(encoding="utf-8")
+        finput = InputStream(strip_mint_line_comments(raw))
+        finput.name = filepath
 
         lexer = mintLexer(finput)
 

@@ -13,7 +13,7 @@ def to_params_MINT(params: Params) -> str:
     Returns:
         str: MINT string fragment
     """
-    skip_list = ["paths", "wayPoints", "position"]
+    skip_list = ["paths", "wayPoints", "position", "start", "end", "segments"]
     ret = ""
     for key in params.data:
         if key in skip_list:
@@ -61,8 +61,15 @@ def to_connection_MINT(connection: Connection) -> str:
     Returns:
         str: This is the MINT string for the serialization
     """
+    # mint.g4 channelStat is `(entity | 'CHANNEL')`. The CHANNEL keyword is a
+    # distinct lexer token, so `ROUNDED CHANNEL name from ...` does not parse.
+    # Emit the CHANNEL keyword and carry the rounded 3DuF profile as crossSection.
+    entity = connection.entity or "CHANNEL"
+    mint_entity = "CHANNEL" if "ROUND" in str(entity).upper() else entity
+    if "ROUND" in str(entity).upper() and not connection.params.exists("crossSection"):
+        connection.params.set_param("crossSection", 1)
     ret = "{} {} from {} to {} {} ;".format(
-        connection.entity,
+        mint_entity,
         connection.ID,
         to_target_MINT(connection.source) if connection.source is not None else "",
         ", ".join([to_target_MINT(item) for item in connection.sinks]),

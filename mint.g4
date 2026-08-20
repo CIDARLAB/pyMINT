@@ -222,7 +222,7 @@ WS: [ \t]+;
 
 NL: [\r\n]+ -> skip; // Define whitespace rule, toss it out
 
-COMMENT: '#' ~[\r\n]* -> skip;
+COMMENT: ('//' | '#') ~[\r\n]* -> skip;
 
 Real_number:
 	Unsigned_number '.' Unsigned_number
