@@ -152,7 +152,7 @@ class MINTDevice(MINTProtocol):
         Returns:
             Layer: [description]
         """
-        name = "{}_{}".format(str(MINTLayerType.FLOW), name_postfix)
+        name = "{}_{}".format(str(layer_type), name_postfix)
         layer = Layer()
         layer.ID = ID
         layer.name = name

@@ -26,6 +26,8 @@ class MINTCompiler(mintListener):
         self.current_params: Dict = {}
         self._current_layer: Optional[Layer] = None
         self._bank_base_names: set = set()
+        # (layer_id, bank_base, index) -> uniquified component id
+        self._bank_members: Dict[Tuple[str, str, str], str] = {}
         self._imported_modules: Set[str] = set()
         self._pending_ufmodule_instances: List[Tuple[str, str]] = []
 
@@ -39,6 +41,8 @@ class MINTCompiler(mintListener):
         self.integration_layer_count = 0
         self._imported_modules = set()
         self._pending_ufmodule_instances = []
+        self._bank_base_names = set()
+        self._bank_members = {}
 
     def exitNetlist(self, ctx: mintParser.NetlistContext):
         if self.current_device is None:
@@ -164,6 +168,13 @@ class MINTCompiler(mintListener):
         value = float(ctx.value().getText())  # type: ignore
         self.current_params["spacing"] = value
 
+    def enterRotationParam(self, ctx: mintParser.RotationParamContext):
+        value_str = ctx.value().getText()  # type: ignore
+        if "." in value_str or "e" in value_str.lower():
+            self.current_params["rotation"] = float(value_str)
+        else:
+            self.current_params["rotation"] = int(value_str)
+
     def enterWidthParam(self, ctx: mintParser.WidthParamContext):
         value_str = ctx.value().getText()  # type: ignore
         if ctx.key is None:
@@ -257,9 +268,32 @@ class MINTCompiler(mintListener):
                 self._current_layer is not None and self._current_layer.ID is not None
             ):
                 raise AssertionError
+            layer_id = str(self._current_layer.ID)
+            # FLOW and CONTROL may both declare `BANK b1 of N`. Keep both
+            # banks by uniquifying the CONTROL (or later) copies.
+            if self.current_device.device.component_exists(component_name):
+                component_name = "{}_{}__L{}".format(name, i, layer_id)
+            self._bank_members[(layer_id, name, str(i))] = component_name
             self.current_device.create_mint_component(
                 component_name, entity, self.current_params, [self._current_layer.ID]
             )
+
+    def _rewrite_bank_target(self, target_id: str, target_port: Optional[str]):
+        """Map ``b N`` onto the bank element declared on the current layer."""
+        if (
+            target_id not in self._bank_base_names
+            or target_port is None
+            or self.current_device.device.component_exists(target_id)
+        ):
+            return target_id, target_port
+        layer_id = str(self._current_layer.ID) if self._current_layer is not None else ""
+        mapped = self._bank_members.get((layer_id, target_id, str(target_port)))
+        if mapped:
+            return mapped, None
+        bank_elem = "{}_{}".format(target_id, target_port)
+        if self.current_device.device.component_exists(bank_elem):
+            return bank_elem, None
+        return target_id, target_port
 
     def exitGridDeclStat(self, ctx: mintParser.GridDeclStatContext):
         if self.current_device is None:
@@ -338,15 +372,9 @@ class MINTCompiler(mintListener):
         # BANK indexing: if `b N` names a bank element (component `b_N`), rewrite
         # the channel target to that component (with no specific port), matching
         # user intent `V BANK b of K ...` followed by `CHANNEL ... from b N ...`.
-        if (
-            source_id in self._bank_base_names
-            and source_port is not None
-            and self.current_device.device.component_exists(source_id) is False
-        ):
-            bank_elem = "{}_{}".format(source_id, source_port)
-            if self.current_device.device.component_exists(bank_elem):
-                source_id = bank_elem
-                source_port = None
+        # Prefer the bank declared on the current layer so FLOW/CONTROL banks
+        # that reuse a name (Logic_Test_03) stay distinct.
+        source_id, source_port = self._rewrite_bank_target(source_id, source_port)
 
         if self.current_device.device.component_exists(source_id) is False:
             raise Exception(
@@ -367,15 +395,7 @@ class MINTCompiler(mintListener):
         else:
             sink_port = None
 
-        if (
-            sink_id in self._bank_base_names
-            and sink_port is not None
-            and self.current_device.device.component_exists(sink_id) is False
-        ):
-            bank_elem = "{}_{}".format(sink_id, sink_port)
-            if self.current_device.device.component_exists(bank_elem):
-                sink_id = bank_elem
-                sink_port = None
+        sink_id, sink_port = self._rewrite_bank_target(sink_id, sink_port)
 
         if self.current_device.device.component_exists(sink_id) is False:
             raise Exception(
