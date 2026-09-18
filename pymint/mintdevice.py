@@ -6,6 +6,7 @@ from typing import Dict, List, Optional
 from parchmint import Component, Connection, Layer, Params, Target
 from parchmint.device import Device, ValveType
 
+from pymint.channel_type import normalize_mint_channel_type_tokens
 from pymint.constraints.layoutconstraint import LayoutConstraint
 from pymint.mintlayer import MINTLayerType
 from pymint.mintprotocol import MINTProtocol
@@ -336,7 +337,9 @@ class MINTDevice(MINTProtocol):
         from pymint.mintErrorListener import MINTErrorListener
 
         raw = Path(filepath).read_text(encoding="utf-8")
-        finput = InputStream(strip_mint_line_comments(raw))
+        finput = InputStream(
+            normalize_mint_channel_type_tokens(strip_mint_line_comments(raw))
+        )
         finput.name = filepath
 
         lexer = mintLexer(finput)

@@ -1,7 +1,24 @@
 from parchmint import Component, Connection, Layer, Params, Target
 
+from pymint.channel_type import (
+    connection_explicit_rounded,
+    mint_rounded_channel_token,
+)
 from pymint.mintterminal import MINTTerminal
 from pymint.mintvia import MINTVia
+
+
+_CONNECTION_PARAM_SKIP = (
+    "paths",
+    "wayPoints",
+    "position",
+    "start",
+    "end",
+    "segments",
+    "crossSection",
+    "roundedChannel",
+    "RoundedChannel",
+)
 
 
 def to_params_MINT(params: Params) -> str:
@@ -17,6 +34,22 @@ def to_params_MINT(params: Params) -> str:
     ret = ""
     for key in params.data:
         if key in skip_list:
+            continue
+        ret += "{}={} ".format(key, params.data[key])
+    return ret
+
+
+def to_connection_params_MINT(connection: Connection) -> str:
+    """CHANNEL params for MINT: RoundedChannel=True/False, never JSON crossSection."""
+    params = connection.params
+    explicit = connection_explicit_rounded(connection)
+    ret = ""
+    if explicit is not None:
+        ret = mint_rounded_channel_token(explicit) + " "
+    if params is None:
+        return ret
+    for key in params.data:
+        if key in _CONNECTION_PARAM_SKIP:
             continue
         ret += "{}={} ".format(key, params.data[key])
     return ret
@@ -63,17 +96,15 @@ def to_connection_MINT(connection: Connection) -> str:
     """
     # mint.g4 channelStat is `(entity | 'CHANNEL')`. The CHANNEL keyword is a
     # distinct lexer token, so `ROUNDED CHANNEL name from ...` does not parse.
-    # Emit the CHANNEL keyword and carry the rounded 3DuF profile as crossSection.
+    # Emit CHANNEL plus RoundedChannel=True/False (JSON still uses crossSection).
     entity = connection.entity or "CHANNEL"
     mint_entity = "CHANNEL" if "ROUND" in str(entity).upper() else entity
-    if "ROUND" in str(entity).upper() and not connection.params.exists("crossSection"):
-        connection.params.set_param("crossSection", 1)
     ret = "{} {} from {} to {} {} ;".format(
         mint_entity,
         connection.ID,
         to_target_MINT(connection.source) if connection.source is not None else "",
         ", ".join([to_target_MINT(item) for item in connection.sinks]),
-        to_params_MINT(connection.params),
+        to_connection_params_MINT(connection),
     )
     return ret
 

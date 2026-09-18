@@ -153,11 +153,11 @@ class MINTCompiler(mintListener):
             self.current_params[key] = int(value_str)
 
     def enterBoolParam(self, ctx: mintParser.BoolParamContext):
-        if ctx.boolvalue.getText() == "YES":
+        if ctx.boolvalue().getText() == "YES":
             value = True
         else:
             value = False
-        key = ctx.param_element.getText()
+        key = ctx.param_element().getText()
         self.current_params[key] = value
 
     def enterLengthParam(self, ctx: mintParser.LengthParamContext):
