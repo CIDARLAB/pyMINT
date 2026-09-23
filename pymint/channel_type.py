@@ -1,12 +1,13 @@
 """MINT channel-type flag vs JSON ``crossSection``.
 
-MINT: ``RoundedChannel=True`` / ``False`` on a ``CHANNEL`` statement.
+MINT: ``RoundedChannel=1`` / ``0`` on a ``CHANNEL`` statement.
 JSON / 3DuF: ``crossSection`` 1 = rounded stadium, 0 = square ends.
 
 The MINT grammar only accepts lowercase ``param_element`` keys and boolean
-``YES`` / ``NO``, so handwritten ``RoundedChannel=True`` is rewritten to
-``roundedChannel=YES`` before parse. After parse, fluigi maps that back to
-JSON ``crossSection``. Legacy MINT ``crossSection=1`` is still accepted.
+``YES`` / ``NO``, so handwritten ``RoundedChannel=1`` (and legacy
+``True`` / ``False``) is rewritten to ``roundedChannel=YES`` before parse.
+After parse, fluigi maps that back to JSON ``crossSection``. Legacy MINT
+``crossSection=1`` is still accepted.
 """
 from __future__ import annotations
 
@@ -93,4 +94,4 @@ def connection_is_rounded(connection) -> bool:
 
 
 def mint_rounded_channel_token(rounded: bool) -> str:
-    return "RoundedChannel={}".format("True" if rounded else "False")
+    return "RoundedChannel={}".format(1 if rounded else 0)

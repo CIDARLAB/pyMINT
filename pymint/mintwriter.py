@@ -8,6 +8,13 @@ from pymint.mintterminal import MINTTerminal
 from pymint.mintvia import MINTVia
 
 
+def _format_mint_param_value(value):
+    """MINT params are numbers; emit 1/0 instead of True/False."""
+    if isinstance(value, bool):
+        return 1 if value else 0
+    return value
+
+
 _CONNECTION_PARAM_SKIP = (
     "paths",
     "wayPoints",
@@ -35,12 +42,12 @@ def to_params_MINT(params: Params) -> str:
     for key in params.data:
         if key in skip_list:
             continue
-        ret += "{}={} ".format(key, params.data[key])
+        ret += "{}={} ".format(key, _format_mint_param_value(params.data[key]))
     return ret
 
 
 def to_connection_params_MINT(connection: Connection) -> str:
-    """CHANNEL params for MINT: RoundedChannel=True/False, never JSON crossSection."""
+    """CHANNEL params for MINT: RoundedChannel=1/0, never JSON crossSection."""
     params = connection.params
     explicit = connection_explicit_rounded(connection)
     ret = ""
@@ -51,7 +58,7 @@ def to_connection_params_MINT(connection: Connection) -> str:
     for key in params.data:
         if key in _CONNECTION_PARAM_SKIP:
             continue
-        ret += "{}={} ".format(key, params.data[key])
+        ret += "{}={} ".format(key, _format_mint_param_value(params.data[key]))
     return ret
 
 
@@ -96,7 +103,7 @@ def to_connection_MINT(connection: Connection) -> str:
     """
     # mint.g4 channelStat is `(entity | 'CHANNEL')`. The CHANNEL keyword is a
     # distinct lexer token, so `ROUNDED CHANNEL name from ...` does not parse.
-    # Emit CHANNEL plus RoundedChannel=True/False (JSON still uses crossSection).
+    # Emit CHANNEL plus RoundedChannel=1/0 (JSON still uses crossSection).
     entity = connection.entity or "CHANNEL"
     mint_entity = "CHANNEL" if "ROUND" in str(entity).upper() else entity
     ret = "{} {} from {} to {} {} ;".format(

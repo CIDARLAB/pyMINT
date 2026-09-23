@@ -85,8 +85,8 @@ for connection in mint_device.device.connections:
 ```
 
 
-`from_mint_file` rewrites user-facing `RoundedChannel=True/False` (and legacy
-`crossSection=0|1`) into grammar-legal `roundedChannel=YES/NO` before parse.
+`from_mint_file` rewrites user-facing `RoundedChannel=1/0` (and legacy
+`True`/`False` plus `crossSection=0|1`) into grammar-legal `roundedChannel=YES/NO` before parse.
 JSON still stores `crossSection`.
 
 
