@@ -32,6 +32,7 @@ integrationBlock:
 
 flowStat:
 	nodeStat
+	| viaStat
 	| channelStat
 	| netStat
 	| bankDeclStat
@@ -95,9 +96,9 @@ spanStat: (orientation WS+)? entity WS+ ufnames WS+ indim = INT WS+ 'to' WS+ out
 valveStat:
 	entity WS+ ufname WS+ 'on' WS+ ufname (WS+ paramsStat)? statTerminaion;
 
-nodeStat: 'NODE' WS+ ufnames statTerminaion;
+nodeStat: 'NODE' WS+ ufnames (WS+ paramsStat)? statTerminaion;
 
-viaStat: 'VIA' WS+ ufnames statTerminaion;
+viaStat: 'VIA' WS+ ufnames (WS+ paramsStat)? statTerminaion;
 
 terminalStat:
 	'TERMINAL' WS+ ufname WS+ pin = INT statTerminaion;

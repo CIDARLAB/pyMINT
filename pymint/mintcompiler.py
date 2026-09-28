@@ -543,14 +543,26 @@ class MINTCompiler(mintListener):
             valve_type=ValveType.NORMALLY_OPEN,
         )
 
-    def enterViaStat(self, ctx: mintParser.ViaStatContext):
+    def exitViaStat(self, ctx: mintParser.ViaStatContext):
+        """FLOW or CONTROL VIA: centre-hole punch on the current layer.
+
+        Params (radius / portRadius / height / …) come from ``paramsStat`` the
+        same way as PORT / NODE. Empty layer list used to drop VIAs from
+        TREE-PLACE; always attach the active layer.
+        """
         if self.current_device is None:
             raise Exception(
                 "Error Initializing the device. Could not find the current device"
             )
-
-        for ufname in ctx.ufnames().ufname():
-            self.current_device.add_via(ufname.getText(), [])
+        if not (self._current_layer is not None and self._current_layer.ID is not None):
+            raise AssertionError
+        for ufname in ctx.ufnames().ufname():  # type: ignore
+            self.current_device.create_mint_component(
+                ufname.getText(),
+                "VIA",
+                self.current_params,
+                [self._current_layer.ID],
+            )
 
     def enterTerminalStat(self, ctx: mintParser.TerminalStatContext):
         if self.current_device is None:
