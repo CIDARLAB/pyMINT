@@ -546,7 +546,7 @@ class MINTCompiler(mintListener):
     def exitViaStat(self, ctx: mintParser.ViaStatContext):
         """FLOW or CONTROL VIA: centre-hole punch on the current layer.
 
-        Params (radius / portRadius / height / …) come from ``paramsStat`` the
+        Params (radius / portRadius / depth / …) come from ``paramsStat`` the
         same way as PORT / NODE. Empty layer list used to drop VIAs from
         TREE-PLACE; always attach the active layer.
         """
